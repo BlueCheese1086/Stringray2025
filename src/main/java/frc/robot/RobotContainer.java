@@ -7,20 +7,36 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Subsystems.Carriage.*;
+import frc.robot.Subsystems.Carriage.Commands.*;
+import frc.robot.Subsystems.Drivetrain.*;
+import frc.robot.Subsystems.Drivetrain.Commands.*;
+import frc.robot.Subsystems.Gyro.*;
 
 public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
     private CommandXboxController operatorController = new CommandXboxController(1);
 
     public RobotContainer() {
+        if (Robot.isReal()) {
+            new Gyro(new GyroIOPigeon2());
+            new Drivetrain(new ModuleIOTalonFX(0), new ModuleIOTalonFX(1), new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
+            new CarriageSubsystem(new CarriageIOSparkMax());
+        } else {
+            new Drivetrain(new ModuleIOSim(0), new ModuleIOSim(1), new ModuleIOSim(2), new ModuleIOSim(3));
+            new CarriageSubsystem(new CarriageIOSim());
+        }
+
         configureBindings();
     }
 
     private void configureBindings() {
-        driverController.button(1).whileTrue(Commands.print("command 1"));
-        driverController.button(2).whileTrue(Commands.print("command 2"));
-        driverController.button(3).whileTrue(Commands.print("command 3"));
-        driverController.button(4).toggleOnTrue(Commands.print("command 4"));
+        // driverController.button(1).whileTrue(Commands.print("command 1"));
+        // driverController.button(2).whileTrue(Commands.print("command 2"));
+        // driverController.button(3).whileTrue(Commands.print("command 3"));
+        // driverController.button(4).toggleOnTrue(Commands.print("command 4"));
+        driverController.a().whileTrue(new RunCarriage(true, 1));
+        driverController.a().whileTrue(new RunCarriage(true, -1));
     }
 
     public Command getAutonomousCommand() {
@@ -28,6 +44,6 @@ public class RobotContainer {
     }
 
     public Command getTeleopCommand() {
-        return Commands.print("No teleop command configured");
+        return new SwerveDrive(driverController::getLeftX, driverController::getLeftY, driverController::getRightX);
     }
 }

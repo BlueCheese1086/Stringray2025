@@ -4,3 +4,6 @@
 [submodule "Gyro"]
 	path = src/main/java/frc/robot/Subsystems/Gyro
 	url = https://github.com/Turbojax07/1086Gyro
+[submodule "Carriage"]
+	path = src/main/java/frc/robot/Subsystems/Carriage
+	url = https://github.com/DepressedFrog12/1086Carriage

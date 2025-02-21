@@ -99,4 +99,9 @@ public class Constants {
             {RobotMap.DT_BRDrive, RobotMap.DT_BRSteer, RobotMap.DT_BREncoder, DriveConstants.brEncoderOffset}  // BR: drive id, steer id, encoder id, encoder offset
         };
     }
+
+    public class CarriageConstants {
+        public static final int CARRIAGE_MOTOR_ID = 21;
+        public static final double maxPercent = 1;
+    }
 }

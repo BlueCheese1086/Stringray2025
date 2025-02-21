@@ -31,6 +31,9 @@ public class Constants {
         public static final int DT_BREncoder = 14; // CAN
 
         public static final int GYRO_Pigeon2Id = 15; // CAN
+
+        public static final int ELEV_LeftId = 31; // CAN
+        public static final int ELEV_RightId = 32; // CAN
     }
 
     public class DriveConstants {

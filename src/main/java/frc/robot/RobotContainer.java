@@ -4,9 +4,9 @@
 
 package frc.robot;
 
+import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.carriage.*;
@@ -14,8 +14,9 @@ import frc.robot.subsystems.carriage.commands.*;
 import frc.robot.subsystems.drivetrain.*;
 import frc.robot.subsystems.drivetrain.commands.*;
 import frc.robot.subsystems.elevator.*;
+import frc.robot.subsystems.elevator.Elevator.ElevatorPosition;
+import frc.robot.subsystems.elevator.commands.SetPosition;
 import frc.robot.subsystems.gyro.*;
-import choreo.auto.AutoFactory;
 
 public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
@@ -45,17 +46,18 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // driverController.button(1).whileTrue(Commands.print("command 1"));
-        // driverController.button(2).whileTrue(Commands.print("command 2"));
-        // driverController.button(3).whileTrue(Commands.print("command 3"));
-        // driverController.button(4).toggleOnTrue(Commands.print("command 4"));
-        driverController.a().whileTrue(new RunCarriage(1));
-        driverController.b().whileTrue(new RunCarriage(-1));
-        
-        driverController.povUp().onTrue(new InstantCommand(() -> elevator.setPosition(1), elevator));
-        driverController.povLeft().onTrue(new InstantCommand(() -> elevator.setPosition(0.6), elevator));
-        driverController.povRight().onTrue(new InstantCommand(() -> elevator.setPosition(0.4), elevator));
-        driverController.povDown().onTrue(new InstantCommand(() -> elevator.setPosition(0.1), elevator));
+        operatorController.a().whileTrue(new RunCarriage(1));
+        operatorController.b().whileTrue(new RunCarriage(-1));
+
+        // Move up/down with pov up/down
+        //driverController.povUp().onTrue(new MoveUp(elevator));
+        //driverController.povDown().onTrue(new MoveDown(elevator));
+
+        // Button per state
+        operatorController.povUp().onTrue(new SetPosition(ElevatorPosition.L4, elevator));
+        operatorController.povLeft().onTrue(new SetPosition(ElevatorPosition.L3, elevator));
+        operatorController.povRight().onTrue(new SetPosition(ElevatorPosition.L2, elevator));
+        operatorController.povDown().onTrue(new SetPosition(ElevatorPosition.STOW, elevator));
     }
 
     public Command getAutonomousCommand() {

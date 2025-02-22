@@ -1,6 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import static frc.robot.subsystems.elevator.ElevatorConstants.*;
+import static edu.wpi.first.units.Units.*;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -16,18 +16,33 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
+    public enum ElevatorPosition {
+        STOW(0),
+        L1(0.33),
+        L2(0.65),
+        L3(1.10),
+        L4(1.75);
+
+        public Distance value;
+
+        private ElevatorPosition(double value) {
+            this.value = Meters.of(value);
+        }
+    }
+
     private final ElevatorIO io;
     private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
-    private final ExponentialProfile profile = new ExponentialProfile(ExponentialProfile.Constraints.fromCharacteristics(maxProfileVoltage - s - g, v, a));
-    private ExponentialProfile.State profileState = new ExponentialProfile.State(0.0, 0.0);
-    private ExponentialProfile.State futureProfileState = new ExponentialProfile.State(0.0, 0.0);
+    private final ExponentialProfile profile = new ExponentialProfile(ExponentialProfile.Constraints.fromCharacteristics(ElevatorConstants.maxProfileVoltage - ElevatorConstants.kS - ElevatorConstants.kG, ElevatorConstants.kV, ElevatorConstants.kA));
+    private ExponentialProfile.State currentState = new ExponentialProfile.State(0.0, 0.0);
+    private ExponentialProfile.State futureState = new ExponentialProfile.State(0.0, 0.0);
 
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(s, g, v);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(ElevatorConstants.kS, ElevatorConstants.kG, ElevatorConstants.kV);
 
-    private double position;
+    private ExponentialProfile.State goalState;
 
     private final SysIdRoutine routine;
 
@@ -36,21 +51,21 @@ public class Elevator extends SubsystemBase {
 
         periodic();
 
-        profileState.position = inputs.position;
+        currentState.position = inputs.position.in(Meters);
 
         routine = new SysIdRoutine(
             new SysIdRoutine.Config(
-                Velocity.ofRelativeUnits(sysIdRampUp, Units.Volts.per(Units.Seconds)), 
-                Voltage.ofRelativeUnits(sysIdStep, Units.Volts), 
-                Time.ofRelativeUnits(sysIdTimeout, Units.Seconds)
+                Velocity.ofRelativeUnits(ElevatorConstants.sysIdRampUp, Units.Volts.per(Units.Seconds)), 
+                Voltage.ofRelativeUnits(ElevatorConstants.sysIdStep, Units.Volts), 
+                Time.ofRelativeUnits(ElevatorConstants.sysIdTimeout, Units.Seconds)
             ), 
             new SysIdRoutine.Mechanism(
-                voltage -> io.setPosition(0, voltage.magnitude()),
+                voltage -> io.setPosition(Meters.zero(), voltage.magnitude()),
                 log -> {
                     log.motor("elevator")
-                        .voltage(Voltage.ofRelativeUnits(inputs.voltages[0], Units.Volts))
-                        .linearPosition(Distance.ofRelativeUnits(inputs.position, Units.Meters))
-                        .linearVelocity(LinearVelocity.ofRelativeUnits(inputs.velocity, Units.MetersPerSecond));
+                        .voltage(inputs.leftVoltage)
+                        .linearPosition(inputs.position)
+                        .linearVelocity(inputs.velocity);
                 },
                 this
             )
@@ -59,30 +74,42 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        futureProfileState = profile.calculate(0.02, profileState, new ExponentialProfile.State(position, 0.0));
-        Logger.recordOutput("Elevator/Position/Setpoint", profileState.position);
-        Logger.recordOutput("Elevator/Velocity/Setpoint", profileState.velocity);
-        double feedforwardValue = feedforward.calculateWithVelocities(profileState.velocity, futureProfileState.velocity);
-        Logger.recordOutput("Elevator/Feedforward", feedforwardValue);
-        io.setPosition(futureProfileState.position, feedforwardValue);
-        profileState = futureProfileState;
+        currentState = new ExponentialProfile.State(inputs.position.in(Meters), inputs.velocity.in(MetersPerSecond));
+
+        futureState = profile.calculate(0.02, currentState, goalState);
+        double feedForward = feedforward.calculateWithVelocities(currentState.velocity, futureState.velocity);
+        io.setPosition(Meters.of(futureState.position), feedForward);
+
+        Logger.recordOutput("Elevator/Position/Setpoint", futureState.position);
+        Logger.recordOutput("Elevator/Velocity/Setpoint", futureState.velocity);
+        Logger.recordOutput("Elevator/Position/Goal", goalState.position);
+        Logger.recordOutput("Elevator/Velocity/Goal", goalState.velocity);
+        Logger.recordOutput("Elevator/Feedforward", feedForward);
+
 
         io.updateInputs(inputs);
         Logger.processInputs("Elevator", inputs);
     }
 
     @AutoLogOutput(key="Elevator/Position/Measured")
-    public double getPosition() {
+    public Distance getPosition() {
         return inputs.position;
     }
 
-    public void setPosition(double position) {
-        Logger.recordOutput("Elevator/Position/Ideal", position);
-        this.position = position;
+    public void setPosition(Distance position) {
+        this.goalState = new ExponentialProfile.State(position.in(Meters), 0);
+    }
+
+    public void setPosition(ElevatorPosition position) {
+        this.goalState = new ExponentialProfile.State(position.value.in(Meters), 0);
+    }
+
+    public Distance getGoalPose() {
+        return Meters.of(goalState.position);
     }
 
     @AutoLogOutput(key="Elevator/Velocity/Measured")
-    public double getVelocity() {
+    public LinearVelocity getVelocity() {
         return inputs.velocity;
     }
 
@@ -92,10 +119,10 @@ public class Elevator extends SubsystemBase {
 
     public Command sysIdRoutine() {
         return Commands.sequence(
-            routine.quasistatic(SysIdRoutine.Direction.kForward).until(() -> inputs.position > sysIdMaxPosition),
-            routine.quasistatic(SysIdRoutine.Direction.kReverse).until(() -> inputs.position < sysIdMinPosition),
-            routine.dynamic(SysIdRoutine.Direction.kForward).until(() -> inputs.position > sysIdMaxPosition),
-            routine.dynamic(SysIdRoutine.Direction.kReverse).until(() -> inputs.position < sysIdMinPosition)
+            routine.quasistatic(SysIdRoutine.Direction.kForward).until(() -> inputs.position.gt(ElevatorConstants.sysIdMaxPosition)),
+            routine.quasistatic(SysIdRoutine.Direction.kReverse).until(() -> inputs.position.lt(ElevatorConstants.sysIdMinPosition)),
+            routine.dynamic(SysIdRoutine.Direction.kForward).until(() -> inputs.position.gt(ElevatorConstants.sysIdMaxPosition)),
+            routine.dynamic(SysIdRoutine.Direction.kReverse).until(() -> inputs.position.lt(ElevatorConstants.sysIdMinPosition))
         );
     }
 }

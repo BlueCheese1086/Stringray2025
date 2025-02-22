@@ -1,6 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import static frc.robot.subsystems.elevator.ElevatorConstants.*;
+import static edu.wpi.first.units.Units.*;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
@@ -11,10 +11,10 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-import frc.robot.Constants.PIDValues;
-
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.units.measure.Distance;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.PIDValues;
 
 public class ElevatorIOReal implements ElevatorIO {
     private final SparkMax leftMotor;
@@ -33,15 +33,18 @@ public class ElevatorIOReal implements ElevatorIO {
             .smartCurrentLimit(60)
             .idleMode(IdleMode.kCoast);
         config.encoder
-            .positionConversionFactor(positionConversionFactor)
-            .velocityConversionFactor(velocityConversionFactor);
+            .positionConversionFactor(ElevatorConstants.positionConversionFactor)
+            .velocityConversionFactor(ElevatorConstants.velocityConversionFactor);
         config.closedLoop
             .p(PIDValues.kPElev)
             .i(PIDValues.kIElev)
             .d(PIDValues.kDElev);
+
         leftMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
         config
             .follow(leftMotor, true);
+
         rightMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         encoder = leftMotor.getEncoder();
@@ -50,19 +53,25 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
-        inputs.position = encoder.getPosition();
-        inputs.velocity = encoder.getVelocity();
-        inputs.voltages = new double[] {leftMotor.getAppliedOutput() * leftMotor.getBusVoltage() , rightMotor.getAppliedOutput() * rightMotor.getBusVoltage()};
-        inputs.currents = new double[] {leftMotor.getOutputCurrent(), rightMotor.getOutputCurrent()};
+        inputs.position = Meters.of(encoder.getPosition());
+        inputs.velocity = MetersPerSecond.of(encoder.getVelocity());
+
+        inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
+        inputs.leftTemperature = Celsius.of(leftMotor.getMotorTemperature());
+        inputs.leftVoltage = Volts.of(leftMotor.getAppliedOutput() * leftMotor.getBusVoltage());
+
+        inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
+        inputs.rightTemperature = Celsius.of(rightMotor.getMotorTemperature());
+        inputs.rightVoltage = Volts.of(rightMotor.getAppliedOutput() * rightMotor.getBusVoltage());
     }
 
     @Override
-    public void setPosition(double position, double ffVoltage) {
-        feedback.setReference(position, ControlType.kPosition, ClosedLoopSlot.kSlot0, ffVoltage);
+    public void setPosition(Distance position, double ffVoltage) {
+        feedback.setReference(position.in(Meters), ControlType.kPosition, ClosedLoopSlot.kSlot0, ffVoltage);
     }
 
     @Override
     public void reset() {
-        encoder.setPosition(0.0);
+        encoder.setPosition(0);
     }
 }

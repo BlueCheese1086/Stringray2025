@@ -1,22 +1,20 @@
 package frc.robot.subsystems.elevator;
 
-import static frc.robot.subsystems.elevator.ElevatorConstants.*;
+import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PIDValues;
 
 public class ElevatorIOSim implements ElevatorIO {
     private ElevatorSim sim = new ElevatorSim(
-        LinearSystemId.createElevatorSystem(motor, mass, radius, gearing),
-        motor,
-        minHeight,
-        maxHeight,
-        true,
-        startingHeight
-    );
+        LinearSystemId.createElevatorSystem(DCMotor.getNEO(2), ElevatorConstants.mass.in(Kilograms), ElevatorConstants.radius.in(Meters), ElevatorConstants.gearRatio),
+        DCMotor.getNEO(2), 0, ElevatorConstants.maxHeight.in(Meters), true, 0);
 
     private PIDController feedback = new PIDController(PIDValues.kPElev, PIDValues.kIElev, PIDValues.kDElev);
     private double feedforward = 0.0;
@@ -29,15 +27,24 @@ public class ElevatorIOSim implements ElevatorIO {
         sim.setInputVoltage(voltage);
         sim.update(0.02);
 
-        inputs.position = position;
-        inputs.velocity = sim.getVelocityMetersPerSecond();
-        inputs.voltages = new double[] {voltage};
-        inputs.currents = new double[] {sim.getCurrentDrawAmps()};
+        inputs.position = Meters.of(position);
+        inputs.velocity = MetersPerSecond.of(sim.getVelocityMetersPerSecond());
+
+        inputs.leftCurrent = Amps.of(sim.getCurrentDrawAmps());
+        inputs.leftVoltage = Volts.of(voltage);
+
+        inputs.rightCurrent = inputs.leftCurrent;
+        inputs.rightVoltage = inputs.leftVoltage.unaryMinus();
     }
 
     @Override
-    public void setPosition(double position, double ffVoltage) {
+    public void setPosition(Distance height, double ffVoltage) {
         feedforward = ffVoltage;
-        feedback.setSetpoint(position);
+        feedback.setSetpoint(height.in(Meters));
+    }
+
+    @Override
+    public void reset() {
+        sim.setState(0, sim.getVelocityMetersPerSecond());
     }
 }

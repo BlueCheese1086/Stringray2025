@@ -85,7 +85,6 @@ public class Constants {
         public static final double driveMOI = 0.025;
         public static final double steerMOI = 0.004;
 
-
         public static final double metersPerRotation = wheelRadius.in(Meters) / driveGearRatio;
 
         public static final Translation2d flModuleOffset = new Translation2d(robotWidth.div( 2), robotLength.div( 2));
@@ -115,8 +114,30 @@ public class Constants {
     }
 
     public class ElevatorConstants {
+        public static final Mass mass = Pounds.of(30.0);
+        public static final Distance radius = Inches.of(1.025);
+        public static final Distance maxHeight = Meters.of(10);
+        public static final double gearRatio = 5.0;
+
+        public static final double positionConversionFactor = 2.0 * Math.PI * radius.in(Meters) / gearRatio;
+        public static final double velocityConversionFactor = positionConversionFactor / 60.0;
+
         public static final double kPDefault = 0;
         public static final double kIDefault = 0;
         public static final double kDDefault = 0;
+
+        public static final double kS = 0.27117;
+        public static final double kG = 0.42059;
+        public static final double kV = 6.049;
+        public static final double kA = 0.75;
+
+        public static final double maxProfileVoltage = 6.0;
+
+        public static final Distance sysIdMinPosition = Meters.of(0.1);
+        public static final Distance sysIdMaxPosition = Meters.of(1.5);
+
+        public static final double sysIdRampUp = 2.5;
+        public static final double sysIdStep = 5.5;
+        public static final double sysIdTimeout = 20.0;
     }
 }

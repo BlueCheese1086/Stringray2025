@@ -6,6 +6,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.Constants.PIDValues;
 
 public class ElevatorIOSim implements ElevatorIO {
     private ElevatorSim sim = new ElevatorSim(
@@ -17,7 +18,7 @@ public class ElevatorIOSim implements ElevatorIO {
         startingHeight
     );
 
-    private PIDController feedback = new PIDController(p, i, d);
+    private PIDController feedback = new PIDController(PIDValues.kPElev, PIDValues.kIElev, PIDValues.kDElev);
     private double feedforward = 0.0;
     
     @Override

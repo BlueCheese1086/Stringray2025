@@ -36,6 +36,20 @@ public class Constants {
         public static final int ELEV_RightId = 32; // CAN
     }
 
+    public class PIDValues {
+        public static double kPDrive = DriveConstants.kPDriveDefault;
+        public static double kIDrive = DriveConstants.kIDriveDefault;
+        public static double kDDrive = DriveConstants.kDDriveDefault;
+
+        public static double kPSteer = DriveConstants.kPSteerDefault;
+        public static double kISteer = DriveConstants.kISteerDefault;
+        public static double kDSteer = DriveConstants.kDSteerDefault;
+
+        public static double kPElev = ElevatorConstants.kPDefault;
+        public static double kIElev = ElevatorConstants.kIDefault;
+        public static double kDElev = ElevatorConstants.kDDefault;
+    }
+
     public class DriveConstants {
         public static final Distance robotWidth = Inches.of(24);
         public static final Distance robotLength = Inches.of(24);
@@ -53,21 +67,13 @@ public class Constants {
         public static final Current driveCurrentLimit = Amps.of(60);
         public static final Current steerCurrentLimit = Amps.of(30);
 
-        public static final double kPDriveReal = 0.05;
-        public static final double kIDriveReal = 0;
-        public static final double kDDriveReal = 0;
+        public static final double kPDriveDefault = 0.05;
+        public static final double kIDriveDefault = 0;
+        public static final double kDDriveDefault = 0;
 
-        public static final double kPSteerReal = 8;
-        public static final double kISteerReal = 0;
-        public static final double kDSteerReal = 0;
-
-        public static final double kPDriveSim = 0.05;
-        public static final double kIDriveSim = 0;
-        public static final double kDDriveSim = 0;
-
-        public static final double kPSteerSim = 8;
-        public static final double kISteerSim = 0;
-        public static final double kDSteerSim = 0;
+        public static final double kPSteerDefault = 8;
+        public static final double kISteerDefault = 0;
+        public static final double kDSteerDefault = 0;
 
         // TODO Find using SysID
         // public static final double kVDrive = 0;
@@ -106,5 +112,11 @@ public class Constants {
     public class CarriageConstants {
         public static final int CARRIAGE_MOTOR_ID = 21;
         public static final double maxPercent = 1;
+    }
+
+    public class ElevatorConstants {
+        public static final double kPDefault = 0;
+        public static final double kIDefault = 0;
+        public static final double kDDefault = 0;
     }
 }

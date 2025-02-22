@@ -7,13 +7,28 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.PIDValues;
+
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     private Command teleopCommand;
+
+    private LoggedNetworkNumber driveP = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kPDrive");
+    private LoggedNetworkNumber steerP = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kPSteer");
+    private LoggedNetworkNumber driveI = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kIDrive");
+    private LoggedNetworkNumber steerI = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kISteer");
+    private LoggedNetworkNumber driveD = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kDDrive");
+    private LoggedNetworkNumber steerD = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kDSteer");
+    private LoggedNetworkNumber elevP = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Elevator/kP");
+    private LoggedNetworkNumber elevI = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Elevator/kI");
+    private LoggedNetworkNumber elevD = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Elevator/kD");
+    
 
     CommandTracker tracker = new CommandTracker("Commands");
 
@@ -30,6 +45,18 @@ public class Robot extends LoggedRobot {
         if (teleopCommand == null) {
             teleopCommand = Commands.print("No teleop command configured.");
         }
+        
+        // Setting default PID values
+        driveP.setDefault(DriveConstants.kPDriveDefault);
+        steerP.setDefault(DriveConstants.kPSteerDefault);
+
+        driveI.setDefault(DriveConstants.kIDriveDefault);
+        steerI.setDefault(DriveConstants.kISteerDefault);
+        
+        driveD.setDefault(DriveConstants.kDDriveDefault);
+        steerD.setDefault(DriveConstants.kDSteerDefault);
+
+
 
         Logger.addDataReceiver(new NT4Publisher());
         Logger.start();
@@ -38,6 +65,19 @@ public class Robot extends LoggedRobot {
     /** Runs every tick while the robot is on. */
     @Override
     public void robotPeriodic() {
+        // Updating PID values
+        PIDValues.kPDrive = driveP.get();
+        PIDValues.kIDrive = steerP.get();
+        PIDValues.kDDrive = driveI.get();
+
+        PIDValues.kPSteer = steerI.get();
+        PIDValues.kISteer = driveD.get();
+        PIDValues.kDSteer = steerD.get();
+
+        PIDValues.kPElev = elevP.get();
+        PIDValues.kIElev = elevI.get();
+        PIDValues.kDElev = elevD.get();
+        
         // Running the scheduled commands
         CommandScheduler.getInstance().run();
     }

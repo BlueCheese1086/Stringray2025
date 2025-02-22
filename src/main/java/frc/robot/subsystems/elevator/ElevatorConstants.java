@@ -25,10 +25,6 @@ public class ElevatorConstants {
     // public static final double v = 5.87;
     // public static final double a = 0.12;
 
-    public static final double p = 0.0;
-    public static final double i = 0.0;
-    public static final double d = 0.0;
-
     public static final double s = 0.27117;
     public static final double g = 0.42059;
     public static final double v = 6.049;

@@ -11,6 +11,9 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import frc.robot.Constants.PIDValues;
+
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class ElevatorIOReal implements ElevatorIO {
@@ -33,9 +36,9 @@ public class ElevatorIOReal implements ElevatorIO {
             .positionConversionFactor(positionConversionFactor)
             .velocityConversionFactor(velocityConversionFactor);
         config.closedLoop
-            .p(p)
-            .i(i)
-            .d(d);
+            .p(PIDValues.kPElev)
+            .i(PIDValues.kIElev)
+            .d(PIDValues.kDElev);
         leftMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         config
             .follow(leftMotor, true);

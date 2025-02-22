@@ -15,6 +15,7 @@ import frc.robot.subsystems.drivetrain.*;
 import frc.robot.subsystems.drivetrain.commands.*;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.gyro.*;
+import choreo.auto.AutoFactory;
 
 public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
@@ -23,16 +24,22 @@ public class RobotContainer {
     private Elevator elevator;
 
     public RobotContainer() {
+        Drivetrain drivetrain;
         if (Robot.isReal()) {
             new Gyro(new GyroIOPigeon2());
-            new Drivetrain(new ModuleIOTalonFX(0), new ModuleIOTalonFX(1), new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
+            drivetrain = new Drivetrain(new ModuleIOTalonFX(0), new ModuleIOTalonFX(1), new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
             new CarriageSubsystem(new CarriageIOSparkMax());
             elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
         } else {
-            new Drivetrain(new ModuleIOSim(0), new ModuleIOSim(1), new ModuleIOSim(2), new ModuleIOSim(3));
+            drivetrain = new Drivetrain(new ModuleIOSim(0), new ModuleIOSim(1), new ModuleIOSim(2), new ModuleIOSim(3));
             new CarriageSubsystem(new CarriageIOSim());
             elevator = new Elevator(new ElevatorIOSim());
         }
+
+        AutoFactory autoFactory = new AutoFactory(drivetrain::getPose, drivetrain::resetPose, drivetrain::followTrajectory, false, drivetrain);
+
+        autoFactory.trajectoryCmd("My Trajectory");
+        autoFactory.newRoutine("My Auto");
 
         configureBindings();
     }

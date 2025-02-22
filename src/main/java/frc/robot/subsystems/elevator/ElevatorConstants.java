@@ -1,4 +1,4 @@
-package frc.robot.Subsystems.Elevator;
+package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;

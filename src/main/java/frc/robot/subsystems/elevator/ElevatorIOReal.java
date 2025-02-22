@@ -1,6 +1,6 @@
-package frc.robot.Subsystems.Elevator;
+package frc.robot.subsystems.elevator;
 
-import static frc.robot.Subsystems.Elevator.ElevatorConstants.*;
+import static frc.robot.subsystems.elevator.ElevatorConstants.*;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;

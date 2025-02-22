@@ -7,18 +7,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
-import frc.robot.Subsystems.Carriage.*;
-import frc.robot.Subsystems.Carriage.Commands.*;
-import frc.robot.Subsystems.Drivetrain.*;
-import frc.robot.Subsystems.Drivetrain.Commands.*;
-import frc.robot.Subsystems.Elevator.Elevator;
-import frc.robot.Subsystems.Elevator.ElevatorIOReal;
-import frc.robot.Subsystems.Elevator.ElevatorIOSim;
-import frc.robot.Subsystems.Gyro.*;
+import frc.robot.subsystems.carriage.*;
+import frc.robot.subsystems.carriage.commands.*;
+import frc.robot.subsystems.drivetrain.*;
+import frc.robot.subsystems.drivetrain.commands.*;
+import frc.robot.subsystems.elevator.*;
+import frc.robot.subsystems.gyro.*;
 
 public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
@@ -46,8 +42,8 @@ public class RobotContainer {
         // driverController.button(2).whileTrue(Commands.print("command 2"));
         // driverController.button(3).whileTrue(Commands.print("command 3"));
         // driverController.button(4).toggleOnTrue(Commands.print("command 4"));
-        driverController.a().whileTrue(new RunCarriage(true, 1));
-        driverController.b().whileTrue(new RunCarriage(true, -1));
+        driverController.a().whileTrue(new RunCarriage(1));
+        driverController.b().whileTrue(new RunCarriage(-1));
         
         driverController.povUp().onTrue(new InstantCommand(() -> elevator.setPosition(1), elevator));
         driverController.povLeft().onTrue(new InstantCommand(() -> elevator.setPosition(0.6), elevator));

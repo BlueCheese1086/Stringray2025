@@ -1,9 +1,9 @@
 [submodule "Drivetrain"]
-	path = src/main/java/frc/robot/Subsystems/Drivetrain
+	path = src/main/java/frc/robot/subsystems/drivetrain
 	url = https://github.com/Turbojax07/1086Drivetrain
 [submodule "Gyro"]
-	path = src/main/java/frc/robot/Subsystems/Gyro
+	path = src/main/java/frc/robot/subsystems/gyro
 	url = https://github.com/Turbojax07/1086Gyro
 [submodule "Carriage"]
-	path = src/main/java/frc/robot/Subsystems/Carriage
+	path = src/main/java/frc/robot/subsystems/carriage
 	url = https://github.com/DepressedFrog12/1086Carriage

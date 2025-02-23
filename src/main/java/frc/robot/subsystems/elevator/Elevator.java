@@ -37,21 +37,24 @@ public class Elevator extends SubsystemBase {
     private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
     private final ExponentialProfile profile = new ExponentialProfile(ExponentialProfile.Constraints.fromCharacteristics(ElevatorConstants.maxProfileVoltage - ElevatorConstants.kS - ElevatorConstants.kG, ElevatorConstants.kV, ElevatorConstants.kA));
-    private ExponentialProfile.State currentState = new ExponentialProfile.State(0.0, 0.0);
-    private ExponentialProfile.State futureState = new ExponentialProfile.State(0.0, 0.0);
+    private ExponentialProfile.State currentState = new ExponentialProfile.State(0, 0);
+    private ExponentialProfile.State goalState = new ExponentialProfile.State(0, 0);
+    private ExponentialProfile.State futureState = new ExponentialProfile.State(0, 0);
 
     private ElevatorFeedforward feedforward = new ElevatorFeedforward(ElevatorConstants.kS, ElevatorConstants.kG, ElevatorConstants.kV);
-
-    private ExponentialProfile.State goalState;
 
     private final SysIdRoutine routine;
 
     public Elevator(ElevatorIO io) {
         this.io = io;
 
-        periodic();
+        io.updateInputs(inputs);
 
         currentState.position = inputs.position.in(Meters);
+        goalState.position = inputs.position.in(Meters);
+
+        currentState.velocity = inputs.velocity.in(MetersPerSecond);
+        goalState.velocity = inputs.velocity.in(MetersPerSecond);
 
         routine = new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -88,7 +91,7 @@ public class Elevator extends SubsystemBase {
 
 
         io.updateInputs(inputs);
-        Logger.processInputs("Elevator", inputs);
+        Logger.processInputs("/Subsystems/Elevator", inputs);
     }
 
     @AutoLogOutput(key="Elevator/Position/Measured")

@@ -2,6 +2,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -11,6 +13,7 @@ import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.MomentOfInertia;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class Constants {
     public static final boolean isReplay = false;
@@ -139,5 +142,28 @@ public class Constants {
         public static final double sysIdRampUp = 2.5;
         public static final double sysIdStep = 5.5;
         public static final double sysIdTimeout = 20.0;
+    }
+
+    public class Poses {
+        public static final Pose2d REEF_Side1Left  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(3.106, 4.175, Rotation2d.fromDegrees(  0)) : new Pose2d(14.442, 4.175, Rotation2d.fromDegrees(180));
+        public static final Pose2d REEF_Side1Right = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(3.106, 3.847, Rotation2d.fromDegrees(  0)) : new Pose2d(14.442, 3.847, Rotation2d.fromDegrees(180));
+        public static final Pose2d REEF_Side2Left  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(3.926, 5.350, Rotation2d.fromDegrees(300)) : new Pose2d(14.622, 5.350, Rotation2d.fromDegrees(120));
+        public static final Pose2d REEF_Side2Right = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(3.675, 5.160, Rotation2d.fromDegrees(300)) : new Pose2d(13.873, 5.160, Rotation2d.fromDegrees(120));
+        public static final Pose2d REEF_Side3Left  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(5.374, 5.160, Rotation2d.fromDegrees(240)) : new Pose2d(12.174, 5.160, Rotation2d.fromDegrees( 60));
+        public static final Pose2d REEF_Side3Right = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(5.066, 5.350, Rotation2d.fromDegrees(240)) : new Pose2d(12.482, 5.350, Rotation2d.fromDegrees( 60));
+        public static final Pose2d REEF_Side4Left  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(5.915, 3.870, Rotation2d.fromDegrees(180)) : new Pose2d(11.633, 3.870, Rotation2d.fromDegrees(  0));
+        public static final Pose2d REEF_Side4Right = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(5.915, 4.175, Rotation2d.fromDegrees(180)) : new Pose2d(11.633, 4.175, Rotation2d.fromDegrees(  0));
+        public static final Pose2d REEF_Side5Left  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(5.066, 2.699, Rotation2d.fromDegrees(120)) : new Pose2d(12.482, 2.699, Rotation2d.fromDegrees(300));
+        public static final Pose2d REEF_Side5Right = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(5.374, 2.867, Rotation2d.fromDegrees(120)) : new Pose2d(12.174, 2.867, Rotation2d.fromDegrees(300));
+        public static final Pose2d REEF_Side6Left  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(3.675, 2.867, Rotation2d.fromDegrees( 60)) : new Pose2d(13.873, 2.867, Rotation2d.fromDegrees(240));
+        public static final Pose2d REEF_Side6Right = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(3.926, 2.669, Rotation2d.fromDegrees( 60)) : new Pose2d(13.622, 2.669, Rotation2d.fromDegrees(240));
+
+        public static final Pose2d STATION_Top_Left   = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(0.749, 6.570, Rotation2d.fromDegrees(305)) : new Pose2d(16.799, 6.570, Rotation2d.fromDegrees(-125));
+        public static final Pose2d STATION_Top_Center = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.134, 6.899, Rotation2d.fromDegrees(305)) : new Pose2d(16.414, 6.899, Rotation2d.fromDegrees(-125));
+        public static final Pose2d STATION_Top_Right  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.639, 7.247, Rotation2d.fromDegrees(305)) : new Pose2d(15.909, 7.247, Rotation2d.fromDegrees(-125));
+
+        public static final Pose2d STATION_Bottom_Left   = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(0.749, 1.685, Rotation2d.fromDegrees(55)) : new Pose2d(16.799, 1.685, Rotation2d.fromDegrees(125));
+        public static final Pose2d STATION_Bottom_Center = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.134, 1.081, Rotation2d.fromDegrees(55)) : new Pose2d(16.414, 1.081, Rotation2d.fromDegrees(125));
+        public static final Pose2d STATION_Bottom_Right  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.639, 1.397, Rotation2d.fromDegrees(55)) : new Pose2d(15.909, 1.397, Rotation2d.fromDegrees(125));
     }
 }

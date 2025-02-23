@@ -4,12 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PIDValues;
-
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
@@ -19,15 +21,15 @@ public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     private Command teleopCommand;
 
-    private LoggedNetworkNumber driveP = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kPDrive");
-    private LoggedNetworkNumber steerP = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kPSteer");
-    private LoggedNetworkNumber driveI = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kIDrive");
-    private LoggedNetworkNumber steerI = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kISteer");
-    private LoggedNetworkNumber driveD = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kDDrive");
-    private LoggedNetworkNumber steerD = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Drivetrain/kDSteer");
-    private LoggedNetworkNumber elevP = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Elevator/kP");
-    private LoggedNetworkNumber elevI = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Elevator/kI");
-    private LoggedNetworkNumber elevD = new LoggedNetworkNumber("/AdvantageKit/PIDValues/Elevator/kD");
+    private LoggedNetworkNumber driveP = new LoggedNetworkNumber("/PIDValues/Drivetrain/kPDrive", DriveConstants.kPDriveDefault);
+    private LoggedNetworkNumber steerP = new LoggedNetworkNumber("/PIDValues/Drivetrain/kPSteer", DriveConstants.kPSteerDefault);
+    private LoggedNetworkNumber driveI = new LoggedNetworkNumber("/PIDValues/Drivetrain/kIDrive", DriveConstants.kIDriveDefault);
+    private LoggedNetworkNumber steerI = new LoggedNetworkNumber("/PIDValues/Drivetrain/kISteer", DriveConstants.kISteerDefault);
+    private LoggedNetworkNumber driveD = new LoggedNetworkNumber("/PIDValues/Drivetrain/kDDrive", DriveConstants.kDDriveDefault);
+    private LoggedNetworkNumber steerD = new LoggedNetworkNumber("/PIDValues/Drivetrain/kDSteer", DriveConstants.kDSteerDefault);
+    private LoggedNetworkNumber elevP = new LoggedNetworkNumber("/PIDValues/Elevator/kP", ElevatorConstants.kPDefault);
+    private LoggedNetworkNumber elevI = new LoggedNetworkNumber("/PIDValues/Elevator/kI", ElevatorConstants.kIDefault);
+    private LoggedNetworkNumber elevD = new LoggedNetworkNumber("/PIDValues/Elevator/kD", ElevatorConstants.kDDefault);
     
 
     CommandTracker tracker = new CommandTracker("Commands");
@@ -46,20 +48,16 @@ public class Robot extends LoggedRobot {
             teleopCommand = Commands.print("No teleop command configured.");
         }
         
-        // Setting default PID values
-        driveP.setDefault(DriveConstants.kPDriveDefault);
-        steerP.setDefault(DriveConstants.kPSteerDefault);
-
-        driveI.setDefault(DriveConstants.kIDriveDefault);
-        steerI.setDefault(DriveConstants.kISteerDefault);
-        
-        driveD.setDefault(DriveConstants.kDDriveDefault);
-        steerD.setDefault(DriveConstants.kDSteerDefault);
-
-
-
         Logger.addDataReceiver(new NT4Publisher());
         Logger.start();
+    }
+
+    public static Alliance getAlliance() {
+        if (DriverStation.getAlliance().isPresent()) {
+            return DriverStation.getAlliance().get();
+        }
+
+        return Alliance.Blue;
     }
 
     /** Runs every tick while the robot is on. */

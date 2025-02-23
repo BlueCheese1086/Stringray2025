@@ -5,9 +5,14 @@
 package frc.robot;
 
 import choreo.auto.AutoFactory;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.carriage.*;
 import frc.robot.subsystems.carriage.commands.*;
@@ -39,8 +44,14 @@ public class RobotContainer {
 
         AutoFactory autoFactory = new AutoFactory(drivetrain::getPose, drivetrain::resetPose, drivetrain::followTrajectory, false, drivetrain);
 
-        autoFactory.trajectoryCmd("My Trajectory");
-        autoFactory.newRoutine("My Auto");
+        // autoFactory.trajectoryCmd("My Trajectory");
+        // TrajectoryGenerator.generateTrajectory(
+        //     drivetrain.getPose(),
+        //     null,
+        //     Constants.Poses.REEF_Side1Right,
+        //     new TrajectoryConfig(DriveConstants.maxLinearVelocity, DriveConstants.maxLinearAcceleration));
+
+        // autoFactory.newRoutine("My Auto").cmd();
 
         configureBindings();
     }

@@ -5,14 +5,8 @@
 package frc.robot;
 
 import choreo.auto.AutoFactory;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.carriage.*;
 import frc.robot.subsystems.carriage.commands.*;
@@ -27,32 +21,33 @@ public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
     private CommandXboxController operatorController = new CommandXboxController(1);
 
+    private Carriage carriage;
+    private Drivetrain drivetrain;
     private Elevator elevator;
+    private Gyro gyro;
 
     public RobotContainer() {
-        Drivetrain drivetrain;
+        // Initializing subsystems
         if (Robot.isReal()) {
-            new Gyro(new GyroIOPigeon2());
+            gyro = new Gyro(new GyroIOPigeon2());
             drivetrain = new Drivetrain(new ModuleIOTalonFX(0), new ModuleIOTalonFX(1), new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
-            new CarriageSubsystem(new CarriageIOSparkMax());
+            carriage = new Carriage(new CarriageIOSparkMax());
             elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
         } else {
             drivetrain = new Drivetrain(new ModuleIOSim(0), new ModuleIOSim(1), new ModuleIOSim(2), new ModuleIOSim(3));
-            new CarriageSubsystem(new CarriageIOSim());
+            carriage = new Carriage(new CarriageIOSim());
             elevator = new Elevator(new ElevatorIOSim());
         }
 
-        AutoFactory autoFactory = new AutoFactory(drivetrain::getPose, drivetrain::resetPose, drivetrain::followTrajectory, false, drivetrain);
+        // Assigning default commands
+        drivetrain.setDefaultCommand(new SwerveDrive(driverController::getLeftX, driverController::getLeftY, driverController::getRightX));
 
+        // Prepping Choreo
+        // AutoFactory autoFactory = new AutoFactory(drivetrain::getPose, drivetrain::resetPose, drivetrain::followTrajectory, true, drivetrain);
         // autoFactory.trajectoryCmd("My Trajectory");
-        // TrajectoryGenerator.generateTrajectory(
-        //     drivetrain.getPose(),
-        //     null,
-        //     Constants.Poses.REEF_Side1Right,
-        //     new TrajectoryConfig(DriveConstants.maxLinearVelocity, DriveConstants.maxLinearAcceleration));
-
         // autoFactory.newRoutine("My Auto").cmd();
 
+        // Configuring controller bindings
         configureBindings();
     }
 
@@ -69,13 +64,16 @@ public class RobotContainer {
         operatorController.povLeft().onTrue(new SetPosition(ElevatorPosition.L3, elevator));
         operatorController.povRight().onTrue(new SetPosition(ElevatorPosition.L2, elevator));
         operatorController.povDown().onTrue(new SetPosition(ElevatorPosition.STOW, elevator));
+
+        // driverController.a().whileTrue(new PathfindToPose());
+        driverController.x().toggleOnTrue(new XStates());
     }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        return null;
     }
 
     public Command getTeleopCommand() {
-        return new SwerveDrive(driverController::getLeftX, driverController::getLeftY, driverController::getRightX);
+        return null;
     }
 }

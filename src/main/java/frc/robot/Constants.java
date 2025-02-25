@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -35,6 +36,9 @@ public class Constants {
 
         public static final int GYRO_Pigeon2Id = 15; // CAN
 
+        public static final int CARRIAGE_MOTOR_ID = 21;
+        public static final int CARRIAGE_CANANDCOLOR_ID = 22; // CAN
+        
         public static final int ELEV_LeftId = 31; // CAN
         public static final int ELEV_RightId = 32; // CAN
     }
@@ -62,8 +66,8 @@ public class Constants {
         public static final AngularVelocity maxAngularVelocity = RadiansPerSecond.of(3);
         public static final AngularAcceleration maxAngularAcceleration = RadiansPerSecondPerSecond.of(2);
 
-        public static final Mass robotMass = Pounds.of(160);
-        public static final MomentOfInertia robotMOI = KilogramSquareMeters.of(0.02);
+        public static final Mass robotMass = Kilograms.of(50);
+        public static final MomentOfInertia robotMOI = KilogramSquareMeters.of(6.8);
 
         public static final Distance wheelRadius = Inches.of(4);
 
@@ -109,10 +113,16 @@ public class Constants {
             {RobotMap.DT_BLDrive, RobotMap.DT_BLSteer, RobotMap.DT_BLEncoder, DriveConstants.blEncoderOffset}, // BL: drive id, steer id, encoder id, encoder offset
             {RobotMap.DT_BRDrive, RobotMap.DT_BRSteer, RobotMap.DT_BREncoder, DriveConstants.brEncoderOffset}  // BR: drive id, steer id, encoder id, encoder offset
         };
+
+        public static final SwerveModuleState[] xStates = {
+            new SwerveModuleState(0, Rotation2d.fromDegrees(-135)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees( 135)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees( 135)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(-135))
+        };
     }
 
     public class CarriageConstants {
-        public static final int CARRIAGE_MOTOR_ID = 21;
         public static final double maxPercent = 1;
     }
 

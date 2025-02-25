@@ -31,9 +31,6 @@ public class Robot extends LoggedRobot {
     private LoggedNetworkNumber elevI = new LoggedNetworkNumber("/PIDValues/Elevator/kI", ElevatorConstants.kIDefault);
     private LoggedNetworkNumber elevD = new LoggedNetworkNumber("/PIDValues/Elevator/kD", ElevatorConstants.kDDefault);
     
-
-    CommandTracker tracker = new CommandTracker("Commands");
-
     public Robot() {
         RobotContainer robotContainer = new RobotContainer();
 
@@ -116,16 +113,7 @@ public class Robot extends LoggedRobot {
 
     /** Runs every tick while the robot is in Teleop mode. */
     @Override
-    public void teleopPeriodic() {
-        Logger.recordOutput("/Commands/Unscheduled", tracker.getUnscheduledCommands());
-        Logger.recordOutput("/Commands/Scheduled", tracker.getScheduledCommands());
-
-        tracker.getAllCommands().forEach((key, val) -> {
-            Logger.recordOutput(String.format("/Commands/All/%s", key), val);
-        });
-
-
-    }
+    public void teleopPeriodic() {}
 
     /** Runs once when the robot exits Teleop mode. */
     @Override

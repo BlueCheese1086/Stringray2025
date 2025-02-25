@@ -16,6 +16,8 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
@@ -46,6 +48,15 @@ public class Robot extends LoggedRobot {
         }
         
         Logger.addDataReceiver(new NT4Publisher());
+
+        if (isReal()) {
+            Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
+        }
+
+        if (isSimulation() && Constants.isReplay) {
+            Logger.setReplaySource(new WPILOGReader("log.wpilog"));
+        }
+
         Logger.start();
     }
 

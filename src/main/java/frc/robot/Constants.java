@@ -63,8 +63,8 @@ public class Constants {
 
         public static final LinearVelocity maxLinearVelocity = MetersPerSecond.of(6);
         public static final LinearAcceleration maxLinearAcceleration = MetersPerSecondPerSecond.of(3);
-        public static final AngularVelocity maxAngularVelocity = RadiansPerSecond.of(3);
-        public static final AngularAcceleration maxAngularAcceleration = RadiansPerSecondPerSecond.of(2);
+        public static final AngularVelocity maxAngularVelocity = RadiansPerSecond.of(3 * Math.PI);
+        public static final AngularAcceleration maxAngularAcceleration = RadiansPerSecondPerSecond.of(Math.PI);
 
         public static final Mass robotMass = Kilograms.of(50);
         public static final MomentOfInertia robotMOI = KilogramSquareMeters.of(6.8);

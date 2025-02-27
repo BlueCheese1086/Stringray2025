@@ -31,7 +31,7 @@ public class RobotContainer {
         if (Robot.isReal()) {
             gyro = new Gyro(new GyroIOPigeon2(RobotMap.GYRO_Pigeon2Id));
             drivetrain = new Drivetrain(new ModuleIOTalonFX(0), new ModuleIOTalonFX(1), new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
-            carriage = new Carriage(new CarriageIOSparkMax());
+            carriage = new Carriage(new CarriageIOSparkMax(RobotMap.CARRIAGE_MOTOR_ID, RobotMap.CARRIAGE_CANANDCOLOR_ID));
             elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
         } else {
             drivetrain = new Drivetrain(new ModuleIOSim(0), new ModuleIOSim(1), new ModuleIOSim(2), new ModuleIOSim(3));

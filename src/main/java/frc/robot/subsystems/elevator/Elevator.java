@@ -90,7 +90,6 @@ public class Elevator extends SubsystemBase {
         Logger.recordOutput("/Subsystems/Elevator/Velocity/Goal", goalState.velocity);
         Logger.recordOutput("/Subsystems/Elevator/Feedforward", feedForward);
 
-
         io.updateInputs(inputs);
         Logger.processInputs("/RealOuptuts/Subsystems/Elevator", inputs);
     }

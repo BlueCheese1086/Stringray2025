@@ -36,7 +36,7 @@ public class Constants {
 
         public static final int GYRO_Pigeon2Id = 15; // CAN
 
-        public static final int CARRIAGE_MOTOR_ID = 21;
+        public static final int CARRIAGE_MOTOR_ID = 21; // CAN
         public static final int CARRIAGE_CANANDCOLOR_ID = 22; // CAN
         
         public static final int ELEV_LeftId = 31; // CAN
@@ -120,10 +120,6 @@ public class Constants {
             new SwerveModuleState(0, Rotation2d.fromDegrees( 135)),
             new SwerveModuleState(0, Rotation2d.fromDegrees(-135))
         };
-    }
-
-    public class CarriageConstants {
-        public static final double maxPercent = 1;
     }
 
     public class ElevatorConstants {

@@ -21,15 +21,15 @@ public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
     private CommandXboxController operatorController = new CommandXboxController(1);
 
-    private Carriage carriage;
-    private Drivetrain drivetrain;
-    private Elevator elevator;
-    private Gyro gyro;
+    public Carriage carriage;
+    public Drivetrain drivetrain;
+    public Elevator elevator;
+    public Gyro gyro;
 
     public RobotContainer() {
         // Initializing subsystems
         if (Robot.isReal()) {
-            gyro = new Gyro(new GyroIOPigeon2());
+            gyro = new Gyro(new GyroIOPigeon2(RobotMap.GYRO_Pigeon2Id));
             drivetrain = new Drivetrain(new ModuleIOTalonFX(0), new ModuleIOTalonFX(1), new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
             carriage = new Carriage(new CarriageIOSparkMax());
             elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));

@@ -2,8 +2,6 @@ package frc.robot.subsystems.elevator;
 
 import static edu.wpi.first.units.Units.*;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.trajectory.ExponentialProfile;
 import edu.wpi.first.units.Units;
@@ -17,10 +15,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ElevatorConstants;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
     public enum ElevatorPosition {
         STOW(0),
+        INTAKE(0.066),
         L1(0.33),
         L2(0.65),
         L3(1.10),
@@ -83,18 +84,18 @@ public class Elevator extends SubsystemBase {
         double feedForward = feedforward.calculateWithVelocities(currentState.velocity, futureState.velocity);
         io.setPosition(Meters.of(futureState.position), feedForward);
 
-        Logger.recordOutput("Elevator/Position/Setpoint", futureState.position);
-        Logger.recordOutput("Elevator/Velocity/Setpoint", futureState.velocity);
-        Logger.recordOutput("Elevator/Position/Goal", goalState.position);
-        Logger.recordOutput("Elevator/Velocity/Goal", goalState.velocity);
-        Logger.recordOutput("Elevator/Feedforward", feedForward);
+        Logger.recordOutput("/Subsystems/Elevator/Position/Setpoint", futureState.position);
+        Logger.recordOutput("/Subsystems/Elevator/Velocity/Setpoint", futureState.velocity);
+        Logger.recordOutput("/Subsystems/Elevator/Position/Goal", goalState.position);
+        Logger.recordOutput("/Subsystems/Elevator/Velocity/Goal", goalState.velocity);
+        Logger.recordOutput("/Subsystems/Elevator/Feedforward", feedForward);
 
 
         io.updateInputs(inputs);
-        Logger.processInputs("/Subsystems/Elevator", inputs);
+        Logger.processInputs("/RealOuptuts/Subsystems/Elevator", inputs);
     }
 
-    @AutoLogOutput(key="Elevator/Position/Measured")
+    @AutoLogOutput(key="/Subsystems/Elevator/Position/Measured")
     public Distance getPosition() {
         return inputs.position;
     }
@@ -111,7 +112,7 @@ public class Elevator extends SubsystemBase {
         return Meters.of(goalState.position);
     }
 
-    @AutoLogOutput(key="Elevator/Velocity/Measured")
+    @AutoLogOutput(key="/Subsystems/Elevator/Velocity/Measured")
     public LinearVelocity getVelocity() {
         return inputs.velocity;
     }

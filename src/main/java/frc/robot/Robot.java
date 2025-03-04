@@ -16,22 +16,12 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 public class Robot extends LoggedRobot {
+    private RobotContainer robotContainer;
     private Command autonomousCommand;
     private Command teleopCommand;
     
     public Robot() {
-        RobotContainer robotContainer = new RobotContainer();
-
-        autonomousCommand = robotContainer.getAutonomousCommand();
-        teleopCommand = robotContainer.getTeleopCommand();
-
-        if (autonomousCommand == null) {
-            autonomousCommand = Commands.print("No autonomous command configured.");
-        }
-
-        if (teleopCommand == null) {
-            teleopCommand = Commands.print("No teleop command configured.");
-        }
+        robotContainer = new RobotContainer();
         
         Logger.addDataReceiver(new NT4Publisher());
 
@@ -72,6 +62,8 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
 
         AdjustableNumbers.updateValues();
+
+        robotContainer.periodic();
     }
 
     /** Runs once when the robot enters Disabled mode. */
@@ -89,6 +81,12 @@ public class Robot extends LoggedRobot {
     /** Runs once when the robot enters Autonomous mode. */
     @Override
     public void autonomousInit() {
+        autonomousCommand = robotContainer.getAutonomousCommand();
+
+        if (autonomousCommand == null) {
+            autonomousCommand = Commands.print("No autonomous command configured.");
+        }
+        
         autonomousCommand.schedule();
     }
 
@@ -105,6 +103,12 @@ public class Robot extends LoggedRobot {
     /** Runs once when the robot enters Teleop mode. */
     @Override
     public void teleopInit() {
+        teleopCommand = robotContainer.getTeleopCommand();
+
+        if (teleopCommand == null) {
+            teleopCommand = Commands.print("No teleop command configured.");
+        }
+
         teleopCommand.schedule();
     }
 

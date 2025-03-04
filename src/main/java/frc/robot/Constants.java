@@ -2,10 +2,18 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -15,6 +23,7 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class Constants {
     public static final boolean isReplay = false;
@@ -134,6 +143,24 @@ public class Constants {
         public static final double sysIdRampUp = 2.5;
         public static final double sysIdStep = 5.5;
         public static final double sysIdTimeout = 20.0;
+    }
+
+    public class VisionConstants {
+        public static final String[] CameraIDs = new String[] {
+            "Camera_Module_v1_l",
+            "Camera_Module_v1_r"
+        };
+
+        public static final Transform3d[] CameraTransforms = new Transform3d[] {
+            new Transform3d(new Translation3d(Meters.of(-15), Meters.of(-9.5), Meters.of(12)), new Rotation3d(Degrees.of(90), Degrees.zero(), Degrees.of(-90))),
+            new Transform3d(new Translation3d(Meters.of( 15), Meters.zero(),   Meters.of( 9)), new Rotation3d())
+        };
+
+        public static final PoseStrategy strategy = PoseStrategy.LOWEST_AMBIGUITY;
+        public static final AprilTagFields field = AprilTagFields.kDefaultField;
+
+        public static final Matrix<N3, N1> singleTagStdDevs = VecBuilder.fill(2, 2, 8);
+        public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.1, 0.1, 1);
     }
 
     public class Poses {

@@ -66,8 +66,9 @@ public class RobotContainer {
         operatorController.povRight().onTrue(new SetPosition(ElevatorPosition.L2, elevator));
         operatorController.povDown().onTrue(new SetPosition(ElevatorPosition.STOW, elevator));
 
-        // driverController.a().whileTrue(new PathfindToPose());
         driverController.x().toggleOnTrue(new XStates(drivetrain));
+
+        driverController.rightStick().toggleOnTrue(new PathfindToPose(drivetrain, drivetrain.getClosestReefPoint()));
     }
 
     public Command getAutonomousCommand() {

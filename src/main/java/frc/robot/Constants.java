@@ -28,7 +28,7 @@ public class Constants {
         public static final int DT_BLSteer = 6; // CAN
         public static final int DT_BRDrive = 7; // CAN
         public static final int DT_BRSteer = 8; // CAN
-        
+
         public static final int DT_FLEncoder = 11; // CAN
         public static final int DT_FREncoder = 12; // CAN
         public static final int DT_BLEncoder = 13; // CAN
@@ -38,23 +38,9 @@ public class Constants {
 
         public static final int CARRIAGE_MOTOR_ID = 21; // CAN
         public static final int CARRIAGE_CANANDCOLOR_ID = 22; // CAN
-        
+
         public static final int ELEV_LeftId = 31; // CAN
         public static final int ELEV_RightId = 32; // CAN
-    }
-
-    public class PIDValues {
-        public static double kPDrive = DriveConstants.kPDriveDefault;
-        public static double kIDrive = DriveConstants.kIDriveDefault;
-        public static double kDDrive = DriveConstants.kDDriveDefault;
-
-        public static double kPSteer = DriveConstants.kPSteerDefault;
-        public static double kISteer = DriveConstants.kISteerDefault;
-        public static double kDSteer = DriveConstants.kDSteerDefault;
-
-        public static double kPElev = ElevatorConstants.kPDefault;
-        public static double kIElev = ElevatorConstants.kIDefault;
-        public static double kDElev = ElevatorConstants.kDDefault;
     }
 
     public class DriveConstants {

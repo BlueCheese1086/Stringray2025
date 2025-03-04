@@ -9,12 +9,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.PIDValues;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
@@ -22,16 +18,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     private Command teleopCommand;
-
-    private LoggedNetworkNumber driveP = new LoggedNetworkNumber("/PIDValues/Drivetrain/kPDrive", DriveConstants.kPDriveDefault);
-    private LoggedNetworkNumber steerP = new LoggedNetworkNumber("/PIDValues/Drivetrain/kPSteer", DriveConstants.kPSteerDefault);
-    private LoggedNetworkNumber driveI = new LoggedNetworkNumber("/PIDValues/Drivetrain/kIDrive", DriveConstants.kIDriveDefault);
-    private LoggedNetworkNumber steerI = new LoggedNetworkNumber("/PIDValues/Drivetrain/kISteer", DriveConstants.kISteerDefault);
-    private LoggedNetworkNumber driveD = new LoggedNetworkNumber("/PIDValues/Drivetrain/kDDrive", DriveConstants.kDDriveDefault);
-    private LoggedNetworkNumber steerD = new LoggedNetworkNumber("/PIDValues/Drivetrain/kDSteer", DriveConstants.kDSteerDefault);
-    private LoggedNetworkNumber elevP = new LoggedNetworkNumber("/PIDValues/Elevator/kP", ElevatorConstants.kPDefault);
-    private LoggedNetworkNumber elevI = new LoggedNetworkNumber("/PIDValues/Elevator/kI", ElevatorConstants.kIDefault);
-    private LoggedNetworkNumber elevD = new LoggedNetworkNumber("/PIDValues/Elevator/kD", ElevatorConstants.kDDefault);
     
     public Robot() {
         RobotContainer robotContainer = new RobotContainer();
@@ -58,6 +44,17 @@ public class Robot extends LoggedRobot {
         }
 
         Logger.start();
+
+        // Adding adjustable PID values
+        AdjustableNumbers.register("kPDrive", "/PIDValues/Drivetrain/kPDrive", Constants.DriveConstants.kPDriveDefault);
+        AdjustableNumbers.register("kIDrive", "/PIDValues/Drivetrain/kIDrive", Constants.DriveConstants.kIDriveDefault);
+        AdjustableNumbers.register("kDDrive", "/PIDValues/Drivetrain/kDDrive", Constants.DriveConstants.kDDriveDefault);
+        AdjustableNumbers.register("kPSteer", "/PIDValues/Drivetrain/kPSteer", Constants.DriveConstants.kPSteerDefault);
+        AdjustableNumbers.register("kISteer", "/PIDValues/Drivetrain/kISteer", Constants.DriveConstants.kISteerDefault);
+        AdjustableNumbers.register("kDSteer", "/PIDValues/Drivetrain/kDSteer", Constants.DriveConstants.kDSteerDefault);
+        AdjustableNumbers.register("kPElev", "/PIDValues/Elevator/kP", Constants.ElevatorConstants.kPDefault);
+        AdjustableNumbers.register("kIElev", "/PIDValues/Elevator/kI", Constants.ElevatorConstants.kIDefault);
+        AdjustableNumbers.register("kDElev", "/PIDValues/Elevator/kD", Constants.ElevatorConstants.kDDefault);
     }
 
     public static Alliance getAlliance() {
@@ -71,21 +68,10 @@ public class Robot extends LoggedRobot {
     /** Runs every tick while the robot is on. */
     @Override
     public void robotPeriodic() {
-        // Updating PID values
-        PIDValues.kPDrive = driveP.get();
-        PIDValues.kIDrive = steerP.get();
-        PIDValues.kDDrive = driveI.get();
-
-        PIDValues.kPSteer = steerI.get();
-        PIDValues.kISteer = driveD.get();
-        PIDValues.kDSteer = steerD.get();
-
-        PIDValues.kPElev = elevP.get();
-        PIDValues.kIElev = elevI.get();
-        PIDValues.kDElev = elevD.get();
-        
         // Running the scheduled commands
         CommandScheduler.getInstance().run();
+
+        AdjustableNumbers.updateValues();
     }
 
     /** Runs once when the robot enters Disabled mode. */

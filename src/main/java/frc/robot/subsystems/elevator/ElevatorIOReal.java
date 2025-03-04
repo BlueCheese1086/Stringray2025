@@ -14,7 +14,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.PIDValues;
+import frc.robot.AdjustableNumbers;
 
 public class ElevatorIOReal implements ElevatorIO {
     private final SparkMax leftMotor;
@@ -36,9 +36,9 @@ public class ElevatorIOReal implements ElevatorIO {
             .positionConversionFactor(ElevatorConstants.positionConversionFactor)
             .velocityConversionFactor(ElevatorConstants.velocityConversionFactor);
         config.closedLoop
-            .p(PIDValues.kPElev)
-            .i(PIDValues.kIElev)
-            .d(PIDValues.kDElev);
+            .p(AdjustableNumbers.getValue("kPElev"))
+            .i(AdjustableNumbers.getValue("kIElev"))
+            .d(AdjustableNumbers.getValue("kDElev"));
 
         leftMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -53,6 +53,14 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
+        if (AdjustableNumbers.hasChanged("kPElev") || AdjustableNumbers.hasChanged("kIElev") || AdjustableNumbers.hasChanged("kDElev")) {
+            SparkMaxConfig pidConfig = new SparkMaxConfig();
+            pidConfig.closedLoop.pid(AdjustableNumbers.getValue("kPElev"), AdjustableNumbers.getValue("kIElev"), AdjustableNumbers.getValue("kDElev"));
+
+            leftMotor.configure(pidConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+            rightMotor.configure(pidConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        }
+
         inputs.position = Meters.of(encoder.getPosition());
         inputs.velocity = MetersPerSecond.of(encoder.getVelocity());
 

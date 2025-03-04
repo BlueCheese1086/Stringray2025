@@ -9,18 +9,20 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.PIDValues;
+import frc.robot.AdjustableNumbers;
 
 public class ElevatorIOSim implements ElevatorIO {
     private ElevatorSim sim = new ElevatorSim(
         LinearSystemId.createElevatorSystem(DCMotor.getNEO(2), ElevatorConstants.mass.in(Kilograms), ElevatorConstants.radius.in(Meters), ElevatorConstants.gearRatio),
         DCMotor.getNEO(2), 0, ElevatorConstants.maxHeight.in(Meters), true, 0);
 
-    private PIDController feedback = new PIDController(PIDValues.kPElev, PIDValues.kIElev, PIDValues.kDElev);
+    private PIDController feedback = new PIDController(AdjustableNumbers.getValue("kPElev"), AdjustableNumbers.getValue("kIElev"), AdjustableNumbers.getValue("kDElev"));
     private double feedforward = 0.0;
-    
+
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
+        feedback.setPID(AdjustableNumbers.getValue("kPElev"), AdjustableNumbers.getValue("kIElev"), AdjustableNumbers.getValue("kDElev"));
+
         double position = sim.getPositionMeters();
 
         double voltage = MathUtil.clamp(feedforward + feedback.calculate(position), -12.0, 12.0);

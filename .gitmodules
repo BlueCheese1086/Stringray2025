@@ -10,3 +10,6 @@
 [submodule "src/main/java/frc/robot/subsystems/vision"]
 	path = src/main/java/frc/robot/subsystems/vision
 	url = https://github.com/SpaceStudios/1086-Vision-2025
+[submodule "Elevator"]
+	path = src/main/java/frc/robot/subsystems/elevator
+	url = https://github.com/turbojax07/1086-elevator

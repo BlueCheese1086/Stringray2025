@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -38,23 +37,23 @@ public class Constants {
         public static final int DT_BRDrive = 7; // CAN
         public static final int DT_BRSteer = 8; // CAN
 
-        public static final int DT_FLEncoder = 11; // CAN
-        public static final int DT_FREncoder = 12; // CAN
-        public static final int DT_BLEncoder = 13; // CAN
-        public static final int DT_BREncoder = 14; // CAN
+        public static final int DT_FLEncoder = 0; // CAN
+        public static final int DT_FREncoder = 1; // CAN
+        public static final int DT_BLEncoder = 2; // CAN
+        public static final int DT_BREncoder = 3; // CAN
 
-        public static final int GYRO_Pigeon2Id = 15; // CAN
+        public static final int GYRO_Pigeon2Id = 0; // CAN
 
-        public static final int CARRIAGE_MOTOR_ID = 21; // CAN
-        public static final int CARRIAGE_CANANDCOLOR_ID = 22; // CAN
+        public static final int CARRIAGE_MOTOR_ID = 20; // CAN
+        public static final int CARRIAGE_CANANDCOLOR_ID = 21; // CAN
 
-        public static final int ELEV_LeftId = 31; // CAN
-        public static final int ELEV_RightId = 32; // CAN
+        public static final int ELEV_LeftId = 10; // CAN
+        public static final int ELEV_RightId = 11; // CAN
     }
 
     public class DriveConstants {
-        public static final Distance robotWidth = Inches.of(24);
-        public static final Distance robotLength = Inches.of(24);
+        public static final Distance robotWidth = Inches.of(22.75);
+        public static final Distance robotLength = Inches.of(22.75);
 
         public static final LinearVelocity maxLinearVelocity = MetersPerSecond.of(6);
         public static final LinearAcceleration maxLinearAcceleration = MetersPerSecondPerSecond.of(3);
@@ -69,13 +68,19 @@ public class Constants {
         public static final Current driveCurrentLimit = Amps.of(60);
         public static final Current steerCurrentLimit = Amps.of(30);
 
-        public static final double kPDriveDefault = 0.05;
+        public static final double kPDriveDefault = 1;
         public static final double kIDriveDefault = 0;
         public static final double kDDriveDefault = 0;
+        public static final double kSDrive = 0.06241;
+        public static final double kVDrive = 0.30278;
+        public static final double kADrive = 0;
 
-        public static final double kPSteerDefault = 8;
+        public static final double kPSteerDefault = 100;
         public static final double kISteerDefault = 0;
-        public static final double kDSteerDefault = 0;
+        public static final double kDSteerDefault = 0.5;
+        public static final double kSSteer = 0.1;
+        public static final double kVSteer = 2.66;
+        public static final double kASteer = 0;
 
         // TODO Find using SysID
         // public static final double kVDrive = 0;
@@ -94,10 +99,10 @@ public class Constants {
         public static final Translation2d blModuleOffset = new Translation2d(robotWidth.div(-2), robotLength.div( 2));
         public static final Translation2d brModuleOffset = new Translation2d(robotWidth.div(-2), robotLength.div(-2));
 
-        public static final double flEncoderOffset = 4.28; // Radians
-        public static final double frEncoderOffset = 1.97; // Radians
-        public static final double blEncoderOffset = 4.06; // Radians
-        public static final double brEncoderOffset = 6.52; // Radians
+        public static final double flEncoderOffset = -0.433105468750; // Rotations
+        public static final double frEncoderOffset =  0.388427734375; // Rotations
+        public static final double blEncoderOffset =  0.114257812500; // Rotations
+        public static final double brEncoderOffset =  0.085205078125; // Rotations
 
         // Arrays for easy configuration access
         public static final Translation2d[] translations = { flModuleOffset, frModuleOffset, blModuleOffset, brModuleOffset };
@@ -118,22 +123,25 @@ public class Constants {
     }
 
     public class ElevatorConstants {
-        public static final Mass mass = Pounds.of(30.0);
-        public static final Distance radius = Inches.of(1.025);
-        public static final Distance maxHeight = Meters.of(10);
-        public static final double gearRatio = 5.0;
+        public static final Mass mass = Pounds.of(25.1);
+        public static final Distance radius = Meters.of(0.02864789);
+        public static final Distance maxHeight = Inches.of(69);
+        public static final double gearRatio = 9;
+
+        public static final double maxVelocity = 1.8; // Meters / Second
+        public static final double maxAcceleration = 6.5; // Metrs / Second / Second
 
         public static final double positionConversionFactor = 2.0 * Math.PI * radius.in(Meters) / gearRatio;
         public static final double velocityConversionFactor = positionConversionFactor / 60.0;
 
-        public static final double kPDefault = 0;
+        public static final double kPDefault = 40;
         public static final double kIDefault = 0;
         public static final double kDDefault = 0;
 
-        public static final double kS = 0.27117;
-        public static final double kG = 0.42059;
-        public static final double kV = 6.049;
-        public static final double kA = 0.75;
+        public static final double[] kS = {0.6, 0.6, 0.9};
+        public static final double[] kG = {0.3, 0.3, 0.3};
+        public static final double kV = 3;
+        public static final double[] kA = {0, 0, 0};
 
         public static final double maxProfileVoltage = 6.0;
 
@@ -146,15 +154,11 @@ public class Constants {
     }
 
     public class VisionConstants {
-        public static final String[] CameraIDs = new String[] {
-            "Camera_Module_v1_l",
-            "Camera_Module_v1_r"
-        };
+        public static final String lCameraName = "Camera_Module_v1_l";
+        public static final String rCameraName = "Camera_Module_v1_r";
 
-        public static final Transform3d[] CameraTransforms = new Transform3d[] {
-            new Transform3d(new Translation3d(Meters.of(-15), Meters.of(-9.5), Meters.of(12)), new Rotation3d(Degrees.of(90), Degrees.zero(), Degrees.of(-90))),
-            new Transform3d(new Translation3d(Meters.of( 15), Meters.zero(),   Meters.of( 9)), new Rotation3d())
-        };
+        public static final Transform3d lCameraTransform = new Transform3d(Inches.of(8.410427), Inches.of(11.276584), Inches.of(8.209095), new Rotation3d(Degrees.zero(), Degrees.of(-36.053760), Degrees.of( 20)));
+        public static final Transform3d rCameraTransform = new Transform3d(Inches.of(8.410427), Inches.of(11.276584), Inches.of(8.209095), new Rotation3d(Degrees.zero(), Degrees.of(-36.053760), Degrees.of(-20)));
 
         public static final PoseStrategy strategy = PoseStrategy.LOWEST_AMBIGUITY;
         public static final AprilTagFields field = AprilTagFields.kDefaultField;
@@ -177,12 +181,12 @@ public class Constants {
         public static final Pose2d REEF_Side6Left  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(3.675, 2.867, Rotation2d.fromDegrees( 60)) : new Pose2d(13.873, 2.867, Rotation2d.fromDegrees(240));
         public static final Pose2d REEF_Side6Right = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(3.926, 2.669, Rotation2d.fromDegrees( 60)) : new Pose2d(13.622, 2.669, Rotation2d.fromDegrees(240));
 
-        public static final Pose2d STATION_Top_Left   = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(0.749, 6.570, Rotation2d.fromDegrees(305)) : new Pose2d(16.799, 6.570, Rotation2d.fromDegrees(-125));
-        public static final Pose2d STATION_Top_Center = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.134, 6.899, Rotation2d.fromDegrees(305)) : new Pose2d(16.414, 6.899, Rotation2d.fromDegrees(-125));
-        public static final Pose2d STATION_Top_Right  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.639, 7.247, Rotation2d.fromDegrees(305)) : new Pose2d(15.909, 7.247, Rotation2d.fromDegrees(-125));
+        public static final Pose2d PROCESSOR_Top_Left   = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(0.749, 6.570, Rotation2d.fromDegrees(305)) : new Pose2d(16.799, 6.570, Rotation2d.fromDegrees(-125));
+        public static final Pose2d PROCESSOR_Top_Center = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.134, 6.899, Rotation2d.fromDegrees(305)) : new Pose2d(16.414, 6.899, Rotation2d.fromDegrees(-125));
+        public static final Pose2d PROCESSOR_Top_Right  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.639, 7.247, Rotation2d.fromDegrees(305)) : new Pose2d(15.909, 7.247, Rotation2d.fromDegrees(-125));
 
-        public static final Pose2d STATION_Bottom_Left   = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(0.749, 1.685, Rotation2d.fromDegrees(55)) : new Pose2d(16.799, 1.685, Rotation2d.fromDegrees(125));
-        public static final Pose2d STATION_Bottom_Center = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.134, 1.081, Rotation2d.fromDegrees(55)) : new Pose2d(16.414, 1.081, Rotation2d.fromDegrees(125));
-        public static final Pose2d STATION_Bottom_Right  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.639, 1.397, Rotation2d.fromDegrees(55)) : new Pose2d(15.909, 1.397, Rotation2d.fromDegrees(125));
+        public static final Pose2d PROCESSOR_Bottom_Left   = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(0.749, 1.685, Rotation2d.fromDegrees(55)) : new Pose2d(16.799, 1.685, Rotation2d.fromDegrees(125));
+        public static final Pose2d PROCESSOR_Bottom_Center = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.134, 1.081, Rotation2d.fromDegrees(55)) : new Pose2d(16.414, 1.081, Rotation2d.fromDegrees(125));
+        public static final Pose2d PROCESSOR_Bottom_Right  = (Robot.getAlliance() == Alliance.Blue) ? new Pose2d(1.639, 1.397, Rotation2d.fromDegrees(55)) : new Pose2d(15.909, 1.397, Rotation2d.fromDegrees(125));
     }
 }

@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -31,16 +32,38 @@ public class Robot extends LoggedRobot {
 
         Logger.start();
 
-        // Adding adjustable PID values
-        AdjustableNumbers.register("kPDrive", "/PIDValues/Drivetrain/kPDrive", Constants.DriveConstants.kPDriveDefault);
-        AdjustableNumbers.register("kIDrive", "/PIDValues/Drivetrain/kIDrive", Constants.DriveConstants.kIDriveDefault);
-        AdjustableNumbers.register("kDDrive", "/PIDValues/Drivetrain/kDDrive", Constants.DriveConstants.kDDriveDefault);
-        AdjustableNumbers.register("kPSteer", "/PIDValues/Drivetrain/kPSteer", Constants.DriveConstants.kPSteerDefault);
-        AdjustableNumbers.register("kISteer", "/PIDValues/Drivetrain/kISteer", Constants.DriveConstants.kISteerDefault);
-        AdjustableNumbers.register("kDSteer", "/PIDValues/Drivetrain/kDSteer", Constants.DriveConstants.kDSteerDefault);
-        AdjustableNumbers.register("kPElev", "/PIDValues/Elevator/kP", Constants.ElevatorConstants.kPDefault);
-        AdjustableNumbers.register("kIElev", "/PIDValues/Elevator/kI", Constants.ElevatorConstants.kIDefault);
-        AdjustableNumbers.register("kDElev", "/PIDValues/Elevator/kD", Constants.ElevatorConstants.kDDefault);
+        // Adding adjustable values
+        AdjustableValues.register("Drive_kP", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kP", Constants.DriveConstants.kPDriveDefault);
+        AdjustableValues.register("Drive_kI", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kI", Constants.DriveConstants.kIDriveDefault);
+        AdjustableValues.register("Drive_kD", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kD", Constants.DriveConstants.kDDriveDefault);
+        AdjustableValues.register("Drive_kS", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kS", Constants.DriveConstants.kSDriveDefault);
+        AdjustableValues.register("Drive_kV", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kV", Constants.DriveConstants.kVDriveDefault);
+        AdjustableValues.register("Drive_kA", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kA", Constants.DriveConstants.kADriveDefault);
+
+        AdjustableValues.register("Steer_kP", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kP", Constants.DriveConstants.kPSteerDefault);
+        AdjustableValues.register("Steer_kI", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kI", Constants.DriveConstants.kISteerDefault);
+        AdjustableValues.register("Steer_kD", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kD", Constants.DriveConstants.kDSteerDefault);
+        AdjustableValues.register("Steer_kS", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kS", Constants.DriveConstants.kSSteerDefault);
+        AdjustableValues.register("Steer_kV", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kV", Constants.DriveConstants.kVSteerDefault);
+        AdjustableValues.register("Steer_kA", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kA", Constants.DriveConstants.kASteerDefault);
+
+        AdjustableValues.register("Elev_kP", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kP", Constants.ElevatorConstants.kPDefault);
+        AdjustableValues.register("Elev_kI", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kI", Constants.ElevatorConstants.kIDefault);
+        AdjustableValues.register("Elev_kD", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kD", Constants.ElevatorConstants.kDDefault);
+
+        AdjustableValues.register("Elev_kS_L1", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kS_L1", Constants.ElevatorConstants.kSDefaults[0]);
+        AdjustableValues.register("Elev_kS_L2", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kS_L2", Constants.ElevatorConstants.kSDefaults[1]);
+        AdjustableValues.register("Elev_kS_L3", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kS_L3", Constants.ElevatorConstants.kSDefaults[2]);
+        
+        AdjustableValues.register("Elev_kG_L1", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kG_L1", Constants.ElevatorConstants.kGDefaults[0]);
+        AdjustableValues.register("Elev_kG_L2", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kG_L2", Constants.ElevatorConstants.kGDefaults[1]);
+        AdjustableValues.register("Elev_kG_L3", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kG_L3", Constants.ElevatorConstants.kGDefaults[2]);
+        
+        AdjustableValues.register("Elev_kV", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kV", Constants.ElevatorConstants.kVDefault);
+        
+        AdjustableValues.register("Elev_kA_L1", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L1", Constants.ElevatorConstants.kADefaults[0]);
+        AdjustableValues.register("Elev_kA_L2", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L2", Constants.ElevatorConstants.kADefaults[1]);
+        AdjustableValues.register("Elev_kA_L3", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L3", Constants.ElevatorConstants.kADefaults[2]);
     }
 
     public static Alliance getAlliance() {
@@ -57,7 +80,9 @@ public class Robot extends LoggedRobot {
         // Running the scheduled commands
         CommandScheduler.getInstance().run();
 
-        AdjustableNumbers.updateValues();
+        robotContainer.periodic();
+        
+        AdjustableValues.updateValues();
     }
 
     /** Runs once when the robot enters Disabled mode. */

@@ -29,7 +29,7 @@ public class AdjustableValues {
 
         loggedNetworkBooleans.put(shortName, new LoggedNetworkBoolean(ntKey, defaultValue));
         loggedBooleans.put(shortName, defaultValue);
-        hasChanged.put(shortName, false);
+        hasChanged.put(shortName, true);
 
         return true;
     }
@@ -48,7 +48,7 @@ public class AdjustableValues {
 
         loggedNetworkNumbers.put(shortName, new LoggedNetworkNumber(ntKey, defaultValue));
         loggedNumbers.put(shortName, defaultValue);
-        hasChanged.put(shortName, false);
+        hasChanged.put(shortName, true);
 
         return true;
     }
@@ -67,7 +67,7 @@ public class AdjustableValues {
 
         loggedNetworkStrings.put(shortName, new LoggedNetworkString(ntKey, defaultValue));
         loggedStrings.put(shortName, defaultValue);
-        hasChanged.put(shortName, false);
+        hasChanged.put(shortName, true);
 
         return true;
     }

@@ -44,8 +44,8 @@ public class Constants {
 
         public static final int GYRO_Pigeon2Id = 0; // CAN
 
-        public static final int CARRIAGE_MOTOR_ID = 20; // CAN
-        public static final int CARRIAGE_CANANDCOLOR_ID = 21; // CAN
+        public static final int CARRIAGE_MotorId = 20; // CAN
+        public static final int CARRIAGE_CandandColorId = 21; // CAN
 
         public static final int ELEV_LeftId = 10; // CAN
         public static final int ELEV_RightId = 11; // CAN
@@ -71,20 +71,16 @@ public class Constants {
         public static final double kPDriveDefault = 1;
         public static final double kIDriveDefault = 0;
         public static final double kDDriveDefault = 0;
-        public static final double kSDrive = 0.06241;
-        public static final double kVDrive = 0.30278;
-        public static final double kADrive = 0;
+        public static final double kSDriveDefault = 0.06241;
+        public static final double kVDriveDefault = 0.30278;
+        public static final double kADriveDefault = 0;
 
-        public static final double kPSteerDefault = 100;
+        public static final double kPSteerDefault = 1;
         public static final double kISteerDefault = 0;
         public static final double kDSteerDefault = 0.5;
-        public static final double kSSteer = 0.1;
-        public static final double kVSteer = 2.66;
-        public static final double kASteer = 0;
-
-        // TODO Find using SysID
-        // public static final double kVDrive = 0;
-        // public static final double kADrive = 0;
+        public static final double kSSteerDefault = 0.1;
+        public static final double kVSteerDefault = 2.66;
+        public static final double kASteerDefault = 0;
 
         public static final double driveGearRatio = 5.14;
         public static final double steerGearRatio = 12.8;
@@ -128,8 +124,8 @@ public class Constants {
         public static final Distance maxHeight = Inches.of(69);
         public static final double gearRatio = 9;
 
-        public static final double maxVelocity = 1.8; // Meters / Second
-        public static final double maxAcceleration = 6.5; // Metrs / Second / Second
+        public static final LinearVelocity maxVelocity = MetersPerSecond.of(1.8);
+        public static final LinearAcceleration maxAcceleration = MetersPerSecondPerSecond.of(6.5);
 
         public static final double positionConversionFactor = 2.0 * Math.PI * radius.in(Meters) / gearRatio;
         public static final double velocityConversionFactor = positionConversionFactor / 60.0;
@@ -138,10 +134,10 @@ public class Constants {
         public static final double kIDefault = 0;
         public static final double kDDefault = 0;
 
-        public static final double[] kS = {0.6, 0.6, 0.9};
-        public static final double[] kG = {0.3, 0.3, 0.3};
-        public static final double kV = 3;
-        public static final double[] kA = {0, 0, 0};
+        public static final double[] kSDefaults = {0.6, 0.6, 0.9};
+        public static final double[] kGDefaults = {0.3, 0.3, 0.3};
+        public static final double kVDefault = 3;
+        public static final double[] kADefaults = {0, 0, 0};
 
         public static final double maxProfileVoltage = 6.0;
 

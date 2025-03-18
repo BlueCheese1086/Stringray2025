@@ -18,4 +18,9 @@ public class RecordPose extends Command {
         x += 1;
         Logger.recordOutput("/RecordedPoses/" + x, drivetrain.getPose());
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

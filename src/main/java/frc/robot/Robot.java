@@ -30,37 +30,37 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         // Adding adjustable values
-        AdjustableValues.registerNumber("Drive_kP", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kP", Constants.DriveConstants.kPDriveDefault, "Drive_kP_0", "Drive_kP_1", "Drive_kP_2", "Drive_kP_3");
-        AdjustableValues.registerNumber("Drive_kI", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kI", Constants.DriveConstants.kIDriveDefault, "Drive_kI_0", "Drive_kI_1", "Drive_kI_2", "Drive_kI_3");
-        AdjustableValues.registerNumber("Drive_kD", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kD", Constants.DriveConstants.kDDriveDefault, "Drive_kD_0", "Drive_kD_1", "Drive_kD_2", "Drive_kD_3");
-        AdjustableValues.registerNumber("Drive_kS", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kS", Constants.DriveConstants.kSDriveDefault, "Drive_kS_0", "Drive_kS_1", "Drive_kS_2", "Drive_kS_3");
-        AdjustableValues.registerNumber("Drive_kV", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kV", Constants.DriveConstants.kVDriveDefault, "Drive_kV_0", "Drive_kV_1", "Drive_kV_2", "Drive_kV_3");
-        AdjustableValues.registerNumber("Drive_kA", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Drive/kA", Constants.DriveConstants.kADriveDefault, "Drive_kA_0", "Drive_kA_1", "Drive_kA_2", "Drive_kA_3");
+        AdjustableValues.registerNumber("Drive_kP", "/Adjustables/Drivetrain/Drive/kP", Constants.DriveConstants.kPDriveDefault, "Drive_kP_0", "Drive_kP_1", "Drive_kP_2", "Drive_kP_3");
+        AdjustableValues.registerNumber("Drive_kI", "/Adjustables/Drivetrain/Drive/kI", Constants.DriveConstants.kIDriveDefault, "Drive_kI_0", "Drive_kI_1", "Drive_kI_2", "Drive_kI_3");
+        AdjustableValues.registerNumber("Drive_kD", "/Adjustables/Drivetrain/Drive/kD", Constants.DriveConstants.kDDriveDefault, "Drive_kD_0", "Drive_kD_1", "Drive_kD_2", "Drive_kD_3");
+        AdjustableValues.registerNumber("Drive_kS", "/Adjustables/Drivetrain/Drive/kS", Constants.DriveConstants.kSDriveDefault, "Drive_kS_0", "Drive_kS_1", "Drive_kS_2", "Drive_kS_3");
+        AdjustableValues.registerNumber("Drive_kV", "/Adjustables/Drivetrain/Drive/kV", Constants.DriveConstants.kVDriveDefault, "Drive_kV_0", "Drive_kV_1", "Drive_kV_2", "Drive_kV_3");
+        AdjustableValues.registerNumber("Drive_kA", "/Adjustables/Drivetrain/Drive/kA", Constants.DriveConstants.kADriveDefault, "Drive_kA_0", "Drive_kA_1", "Drive_kA_2", "Drive_kA_3");
 
-        AdjustableValues.registerNumber("Steer_kP", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kP", Constants.DriveConstants.kPSteerDefault, "Steer_kP_0", "Steer_kP_1", "Steer_kP_2", "Steer_kP_3");
-        AdjustableValues.registerNumber("Steer_kI", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kI", Constants.DriveConstants.kISteerDefault, "Steer_kI_0", "Steer_kI_1", "Steer_kI_2", "Steer_kI_3");
-        AdjustableValues.registerNumber("Steer_kD", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kD", Constants.DriveConstants.kDSteerDefault, "Steer_kD_0", "Steer_kD_1", "Steer_kD_2", "Steer_kD_3");
-        AdjustableValues.registerNumber("Steer_kS", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kS", Constants.DriveConstants.kSSteerDefault, "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
-        AdjustableValues.registerNumber("Steer_kV", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kV", Constants.DriveConstants.kVSteerDefault, "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
-        AdjustableValues.registerNumber("Steer_kA", "/AdvantageKit/RealOutputs/Adjustables/Drivetrain/Steer/kA", Constants.DriveConstants.kASteerDefault, "Steer_kA_0", "Steer_kA_1", "Steer_kA_2", "Steer_kA_3");
+        AdjustableValues.registerNumber("Steer_kP", "/Adjustables/Drivetrain/Steer/kP", Constants.DriveConstants.kPSteerDefault, "Steer_kP_0", "Steer_kP_1", "Steer_kP_2", "Steer_kP_3");
+        AdjustableValues.registerNumber("Steer_kI", "/Adjustables/Drivetrain/Steer/kI", Constants.DriveConstants.kISteerDefault, "Steer_kI_0", "Steer_kI_1", "Steer_kI_2", "Steer_kI_3");
+        AdjustableValues.registerNumber("Steer_kD", "/Adjustables/Drivetrain/Steer/kD", Constants.DriveConstants.kDSteerDefault, "Steer_kD_0", "Steer_kD_1", "Steer_kD_2", "Steer_kD_3");
+        AdjustableValues.registerNumber("Steer_kS", "/Adjustables/Drivetrain/Steer/kS", Constants.DriveConstants.kSSteerDefault, "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
+        AdjustableValues.registerNumber("Steer_kV", "/Adjustables/Drivetrain/Steer/kV", Constants.DriveConstants.kVSteerDefault, "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
+        AdjustableValues.registerNumber("Steer_kA", "/Adjustables/Drivetrain/Steer/kA", Constants.DriveConstants.kASteerDefault, "Steer_kA_0", "Steer_kA_1", "Steer_kA_2", "Steer_kA_3");
 
-        AdjustableValues.registerNumber("Elev_kP", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kP", Constants.ElevatorConstants.kPDefault);
-        AdjustableValues.registerNumber("Elev_kI", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kI", Constants.ElevatorConstants.kIDefault);
-        AdjustableValues.registerNumber("Elev_kD", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kD", Constants.ElevatorConstants.kDDefault);
+        AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", Constants.ElevatorConstants.kPDefault);
+        AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", Constants.ElevatorConstants.kIDefault);
+        AdjustableValues.registerNumber("Elev_kD", "/Adjustables/Elevator/kD", Constants.ElevatorConstants.kDDefault);
 
-        AdjustableValues.registerNumber("Elev_kS_L1", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kS_L1", Constants.ElevatorConstants.kSDefaults[0]);
-        AdjustableValues.registerNumber("Elev_kS_L2", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kS_L2", Constants.ElevatorConstants.kSDefaults[1]);
-        AdjustableValues.registerNumber("Elev_kS_L3", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kS_L3", Constants.ElevatorConstants.kSDefaults[2]);
+        AdjustableValues.registerNumber("Elev_kS_L1", "/Adjustables/Elevator/kS_L1", Constants.ElevatorConstants.kSDefaults[0]);
+        AdjustableValues.registerNumber("Elev_kS_L2", "/Adjustables/Elevator/kS_L2", Constants.ElevatorConstants.kSDefaults[1]);
+        AdjustableValues.registerNumber("Elev_kS_L3", "/Adjustables/Elevator/kS_L3", Constants.ElevatorConstants.kSDefaults[2]);
         
-        AdjustableValues.registerNumber("Elev_kG_L1", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kG_L1", Constants.ElevatorConstants.kGDefaults[0]);
-        AdjustableValues.registerNumber("Elev_kG_L2", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kG_L2", Constants.ElevatorConstants.kGDefaults[1]);
-        AdjustableValues.registerNumber("Elev_kG_L3", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kG_L3", Constants.ElevatorConstants.kGDefaults[2]);
+        AdjustableValues.registerNumber("Elev_kG_L1", "/Adjustables/Elevator/kG_L1", Constants.ElevatorConstants.kGDefaults[0]);
+        AdjustableValues.registerNumber("Elev_kG_L2", "/Adjustables/Elevator/kG_L2", Constants.ElevatorConstants.kGDefaults[1]);
+        AdjustableValues.registerNumber("Elev_kG_L3", "/Adjustables/Elevator/kG_L3", Constants.ElevatorConstants.kGDefaults[2]);
         
-        AdjustableValues.registerNumber("Elev_kV", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kV", Constants.ElevatorConstants.kVDefault);
+        AdjustableValues.registerNumber("Elev_kV", "/Adjustables/Elevator/kV", Constants.ElevatorConstants.kVDefault);
         
-        AdjustableValues.registerNumber("Elev_kA_L1", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L1", Constants.ElevatorConstants.kADefaults[0]);
-        AdjustableValues.registerNumber("Elev_kA_L2", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L2", Constants.ElevatorConstants.kADefaults[1]);
-        AdjustableValues.registerNumber("Elev_kA_L3", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L3", Constants.ElevatorConstants.kADefaults[2]);
+        AdjustableValues.registerNumber("Elev_kA_L1", "/Adjustables/Elevator/kA_L1", Constants.ElevatorConstants.kADefaults[0]);
+        AdjustableValues.registerNumber("Elev_kA_L2", "/Adjustables/Elevator/kA_L2", Constants.ElevatorConstants.kADefaults[1]);
+        AdjustableValues.registerNumber("Elev_kA_L3", "/Adjustables/Elevator/kA_L3", Constants.ElevatorConstants.kADefaults[2]);
     }
 
     /** Runs every tick while the robot is on. */

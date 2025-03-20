@@ -23,6 +23,8 @@ import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotBase;
+
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class Constants {
@@ -69,19 +71,19 @@ public class Constants {
         public static final Current driveCurrentLimit = Amps.of(60);
         public static final Current steerCurrentLimit = Amps.of(30);
 
-        public static final double kPDriveDefault = 1;
-        public static final double kIDriveDefault = 0;
-        public static final double kDDriveDefault = 0;
-        public static final double kSDriveDefault = 0.06241;
-        public static final double kVDriveDefault = 0.30278;
-        public static final double kADriveDefault = 0;
+        public static final double kPDriveDefault = RobotBase.isReal() ? 1       : 0.01;
+        public static final double kIDriveDefault = RobotBase.isReal() ? 0       : 0;
+        public static final double kDDriveDefault = RobotBase.isReal() ? 0       : 0;
+        public static final double kSDriveDefault = RobotBase.isReal() ? 0.06241 : 0;
+        public static final double kVDriveDefault = RobotBase.isReal() ? 0.30278 : 0;
+        public static final double kADriveDefault = RobotBase.isReal() ? 0       : 0;
 
-        public static final double kPSteerDefault = 1;
-        public static final double kISteerDefault = 0;
-        public static final double kDSteerDefault = 0.5;
-        public static final double kSSteerDefault = 0.1;
-        public static final double kVSteerDefault = 2.66;
-        public static final double kASteerDefault = 0;
+        public static final double kPSteerDefault = RobotBase.isReal() ? 1    : 0.01;
+        public static final double kISteerDefault = RobotBase.isReal() ? 0    : 0;
+        public static final double kDSteerDefault = RobotBase.isReal() ? 0.5  : 0;
+        public static final double kSSteerDefault = RobotBase.isReal() ? 0.1  : 0;
+        public static final double kVSteerDefault = RobotBase.isReal() ? 2.66 : 0;
+        public static final double kASteerDefault = RobotBase.isReal() ? 0    : 0;
 
         public static final double driveGearRatio = 5.14;
         public static final double steerGearRatio = 12.8;
@@ -96,10 +98,10 @@ public class Constants {
         public static final Translation2d blModuleOffset = new Translation2d(robotWidth.div(-2), robotLength.div( 2));
         public static final Translation2d brModuleOffset = new Translation2d(robotWidth.div(-2), robotLength.div(-2));
 
-        public static final double flEncoderOffset = -0.433105468750; // Rotations
-        public static final double frEncoderOffset =  0.388427734375; // Rotations
-        public static final double blEncoderOffset =  0.114257812500; // Rotations
-        public static final double brEncoderOffset =  0.085205078125; // Rotations
+        public static final double flEncoderOffset = 0.566894531; // Rotations
+        public static final double frEncoderOffset = 0.388427734; // Rotations
+        public static final double blEncoderOffset = 0.114257813; // Rotations
+        public static final double brEncoderOffset = 0.085205078; // Rotations
 
         // Arrays for easy configuration access
         public static final Translation2d[] translations = { flModuleOffset, frModuleOffset, blModuleOffset, brModuleOffset };

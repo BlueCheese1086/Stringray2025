@@ -91,8 +91,6 @@ public class Constants {
         public static final double driveMOI = 0.025;
         public static final double steerMOI = 0.004;
 
-        public static final double metersPerRotation = wheelRadius.in(Meters) / driveGearRatio;
-
         public static final Translation2d flModuleOffset = new Translation2d(robotWidth.div( 2), robotLength.div( 2));
         public static final Translation2d frModuleOffset = new Translation2d(robotWidth.div( 2), robotLength.div(-2));
         public static final Translation2d blModuleOffset = new Translation2d(robotWidth.div(-2), robotLength.div( 2));

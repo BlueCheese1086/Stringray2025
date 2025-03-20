@@ -137,7 +137,7 @@ public class AdjustableValues {
      * 
      * @return Returns false if the value already exists.
      */
-    public static boolean registerString(String shortName, String ntKey, String... aliases) {
+    public static boolean registerString(String shortName, String ntKey, String[] aliases) {
         return registerString(shortName, ntKey, "", aliases);
     }
 

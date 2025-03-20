@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -63,14 +61,6 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Elev_kA_L1", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L1", Constants.ElevatorConstants.kADefaults[0]);
         AdjustableValues.registerNumber("Elev_kA_L2", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L2", Constants.ElevatorConstants.kADefaults[1]);
         AdjustableValues.registerNumber("Elev_kA_L3", "/AdvantageKit/RealOutputs/Adjustables/Elevator/kA_L3", Constants.ElevatorConstants.kADefaults[2]);
-    }
-
-    public static Alliance getAlliance() {
-        if (DriverStation.getAlliance().isPresent()) {
-            return DriverStation.getAlliance().get();
-        }
-
-        return Alliance.Blue;
     }
 
     /** Runs every tick while the robot is on. */

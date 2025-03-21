@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.carriage.*;
@@ -31,6 +32,7 @@ public class RobotContainer {
     private Gyro gyro;
     private Vision vision;
 
+    private SwerveDrive driveCommand;
     private PathfindToPose pathfindingCommand;
 
     public RobotContainer() {
@@ -52,8 +54,10 @@ public class RobotContainer {
             elevator = new Elevator(new ElevatorIOSim());
         }
 
+        driveCommand = new SwerveDrive(drivetrain, driverController::getLeftX, driverController::getLeftY, driverController::getRightX);
+
         // Assigning default commands
-        drivetrain.setDefaultCommand(new SwerveDrive(drivetrain, driverController::getLeftX, driverController::getLeftY, driverController::getRightX));
+        drivetrain.setDefaultCommand(driveCommand);
 
         pathfindingCommand = new PathfindToPose(drivetrain, new Pose2d());
 
@@ -87,6 +91,7 @@ public class RobotContainer {
         // driverController.x().toggleOnTrue(new XStates(drivetrain));
         // driverController.y().onTrue(new RecordPose(drivetrain));
 
+        driverController.leftStick().onTrue(new InstantCommand(() -> driveCommand.toggleFieldRelative()));
         driverController.rightStick().toggleOnTrue(pathfindingCommand);
     }
 

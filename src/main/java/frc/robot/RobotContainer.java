@@ -5,7 +5,10 @@ import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import choreo.auto.AutoFactory;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotMap;
@@ -28,6 +31,8 @@ public class RobotContainer {
     private Gyro gyro;
     private Vision vision;
 
+    private PathfindToPose pathfindingCommand;
+
     public RobotContainer() {
         // Initializing subsystems
         if (Robot.isReal()) {
@@ -39,16 +44,18 @@ public class RobotContainer {
             // carriage = new Carriage(new CarriageIOSparkMax(RobotMap.CARRIAGE_MotorId, RobotMap.CARRIAGE_CandandColorId));
             elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
         } else {
-            // vision = new Vision(
-            //     new CameraIOReal(Constants.VisionConstants.lCameraName, Constants.VisionConstants.lCameraTransform),
-            //     new CameraIOReal(Constants.VisionConstants.rCameraName, Constants.VisionConstants.rCameraTransform));
-            // drivetrain = new Drivetrain(gyro, vision, new ModuleIOSim(0), new ModuleIOSim(1), new ModuleIOSim(2), new ModuleIOSim(3));
-            // carriage = new Carriage(new CarriageIOSim());
+            vision = new Vision(
+                new CameraIOReal(Constants.VisionConstants.lCameraName, Constants.VisionConstants.lCameraTransform),
+                new CameraIOReal(Constants.VisionConstants.rCameraName, Constants.VisionConstants.rCameraTransform));
+            drivetrain = new Drivetrain(gyro, vision, new ModuleIOSim(0), new ModuleIOSim(1), new ModuleIOSim(2), new ModuleIOSim(3));
+            carriage = new Carriage(new CarriageIOSim());
             elevator = new Elevator(new ElevatorIOSim());
         }
 
         // Assigning default commands
-        // drivetrain.setDefaultCommand(new SwerveDrive(drivetrain, driverController::getLeftX, driverController::getLeftY, driverController::getRightX));
+        drivetrain.setDefaultCommand(new SwerveDrive(drivetrain, driverController::getLeftX, driverController::getLeftY, driverController::getRightX));
+
+        pathfindingCommand = new PathfindToPose(drivetrain, new Pose2d());
 
         // Prepping Choreo
         // AutoFactory autoFactory = new AutoFactory(drivetrain::getPose, drivetrain::resetPose, drivetrain::followTrajectory, true, drivetrain);
@@ -66,10 +73,6 @@ public class RobotContainer {
         // Move up/down with pov up/down
         driverController.povUp().onTrue(new MoveUp(elevator));
         driverController.povDown().onTrue(new MoveDown(elevator));
-        driverController.a().onTrue(new SetPosition(elevator, Elevator.ElevatorPosition.L1));
-        driverController.b().onTrue(new SetPosition(elevator, Elevator.ElevatorPosition.L2));
-        driverController.x().onTrue(new SetPosition(elevator, Elevator.ElevatorPosition.L3));
-        driverController.y().onTrue(new SetPosition(elevator, Elevator.ElevatorPosition.L4));
         driverController.povLeft().onTrue(new SetPosition(elevator, Elevator.ElevatorPosition.STOW));
         driverController.povRight().toggleOnTrue(new ZeroElevator(elevator, Volts.of(-4), Amps.of(18)));
 
@@ -84,15 +87,17 @@ public class RobotContainer {
         // driverController.x().toggleOnTrue(new XStates(drivetrain));
         // driverController.y().onTrue(new RecordPose(drivetrain));
 
-        // driverController.rightStick().toggleOnTrue(new PathfindToPose(drivetrain, drivetrain.getClosestReefPoint()));
+        driverController.rightStick().toggleOnTrue(pathfindingCommand);
     }
 
     public void periodic() {
-        // Logger.recordOutput("/PlaceToGo", drivetrain.getClosestReefPoint());
+        Logger.recordOutput("/PlaceToGo", drivetrain.getClosestReefPoint());
+
+        pathfindingCommand.setGoalPose(drivetrain.getClosestReefPoint());
     }
 
     public Command getAutonomousCommand() {
-        return null;
+        return AutoBuilder.buildAuto("auto");
     }
 
     public Command getTeleopCommand() {

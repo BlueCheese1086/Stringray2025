@@ -58,7 +58,7 @@ public class Constants {
         public static final Distance robotWidth = Inches.of(22.75);
         public static final Distance robotLength = Inches.of(22.75);
 
-        public static final LinearVelocity maxLinearVelocity = MetersPerSecond.of(6);
+        public static final LinearVelocity maxLinearVelocity = MetersPerSecond.of(4.73);
         public static final LinearAcceleration maxLinearAcceleration = MetersPerSecondPerSecond.of(3);
         public static final AngularVelocity maxAngularVelocity = RadiansPerSecond.of(3 * Math.PI);
         public static final AngularAcceleration maxAngularAcceleration = RadiansPerSecondPerSecond.of(Math.PI);
@@ -66,19 +66,19 @@ public class Constants {
         public static final Mass robotMass = Kilograms.of(50);
         public static final MomentOfInertia robotMOI = KilogramSquareMeters.of(6.8);
 
-        public static final Distance wheelRadius = Inches.of(4);
+        public static final Distance wheelRadius = Inches.of(1.931);
 
         public static final Current driveCurrentLimit = Amps.of(60);
         public static final Current steerCurrentLimit = Amps.of(30);
 
-        public static final double kPDriveDefault = RobotBase.isReal() ? 1       : 0.01;
+        public static final double kPDriveDefault = RobotBase.isReal() ? 1       : 0.3;
         public static final double kIDriveDefault = RobotBase.isReal() ? 0       : 0;
-        public static final double kDDriveDefault = RobotBase.isReal() ? 0       : 0;
+        public static final double kDDriveDefault = RobotBase.isReal() ? 0       : 0.01;
         public static final double kSDriveDefault = RobotBase.isReal() ? 0.06241 : 0;
         public static final double kVDriveDefault = RobotBase.isReal() ? 0.30278 : 0;
         public static final double kADriveDefault = RobotBase.isReal() ? 0       : 0;
 
-        public static final double kPSteerDefault = RobotBase.isReal() ? 1    : 0.01;
+        public static final double kPSteerDefault = RobotBase.isReal() ? 1    : 5;
         public static final double kISteerDefault = RobotBase.isReal() ? 0    : 0;
         public static final double kDSteerDefault = RobotBase.isReal() ? 0.5  : 0;
         public static final double kSSteerDefault = RobotBase.isReal() ? 0.1  : 0;
@@ -117,6 +117,18 @@ public class Constants {
             new SwerveModuleState(0, Rotation2d.fromDegrees( 135)),
             new SwerveModuleState(0, Rotation2d.fromDegrees(-135))
         };
+
+        public static final double kPXControllerDefault = 10;
+        public static final double kIXControllerDefault = 0;
+        public static final double kDXControllerDefault = 0;
+
+        public static final double kPYControllerDefault = 10;
+        public static final double kIYControllerDefault = 0;
+        public static final double kDYControllerDefault = 0;
+        
+        public static final double kPThetaControllerDefault = 7;
+        public static final double kIThetaControllerDefault = 0;
+        public static final double kDThetaControllerDefault = 0;
     }
 
     public class ElevatorConstants {

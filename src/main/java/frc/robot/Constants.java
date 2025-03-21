@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -129,6 +130,9 @@ public class Constants {
         public static final double kPThetaControllerDefault = 7;
         public static final double kIThetaControllerDefault = 0;
         public static final double kDThetaControllerDefault = 0;
+
+        // Kraken X44 DCMotor instance
+        public static final DCMotor krakenX44 = new DCMotor(12, 4.05, 275, 1.4, 788.54, 1);
     }
 
     public class ElevatorConstants {

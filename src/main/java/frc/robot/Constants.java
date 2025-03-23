@@ -119,15 +119,15 @@ public class Constants {
             new SwerveModuleState(0, Rotation2d.fromDegrees(-135))
         };
 
-        public static final double kPXControllerDefault = 10;
+        public static final double kPXControllerDefault = 7;
         public static final double kIXControllerDefault = 0;
         public static final double kDXControllerDefault = 0;
 
-        public static final double kPYControllerDefault = 10;
+        public static final double kPYControllerDefault = 7;
         public static final double kIYControllerDefault = 0;
         public static final double kDYControllerDefault = 0;
         
-        public static final double kPThetaControllerDefault = 7;
+        public static final double kPThetaControllerDefault = 15;
         public static final double kIThetaControllerDefault = 0;
         public static final double kDThetaControllerDefault = 0;
 

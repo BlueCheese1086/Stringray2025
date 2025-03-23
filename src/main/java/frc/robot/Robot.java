@@ -73,6 +73,8 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Theta_kP", "/Adjustables/Drivetrain/ThetaController_kP", Constants.DriveConstants.kPThetaControllerDefault);
         AdjustableValues.registerNumber("Theta_kI", "/Adjustables/Drivetrain/ThetaController_kI", Constants.DriveConstants.kIThetaControllerDefault);
         AdjustableValues.registerNumber("Theta_kD", "/Adjustables/Drivetrain/ThetaController_kD", Constants.DriveConstants.kDThetaControllerDefault);
+
+        AdjustableValues.registerNumber("PID_Dampen", "/Adjustables/Controller/PID_Dampen", 0.8);
     }
 
     /** Runs every tick while the robot is on. */

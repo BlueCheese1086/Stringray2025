@@ -25,7 +25,6 @@ import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
-
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class Constants {
@@ -53,6 +52,24 @@ public class Constants {
 
         public static final int ELEV_LeftId = 10; // CAN
         public static final int ELEV_RightId = 11; // CAN
+    }
+
+    public class ClimbConstants {
+        public static final double gearRatio = 338.33;
+
+        public static final LinearVelocity maxVelocity = MetersPerSecond.of(1.8);
+        public static final LinearAcceleration maxAcceleration = MetersPerSecondPerSecond.of(6.5);
+
+        public static final double positionConversionFactor = 2.0 * Math.PI / gearRatio;
+        public static final double velocityConversionFactor = positionConversionFactor / 60.0;
+
+        public static final Current currentLimit = Amps.of(60);
+
+        public static final MomentOfInertia moi = KilogramSquareMeters.of(1);
+
+        public static final double kPDefault = 1;
+        public static final double kIDefault = 0;
+        public static final double kDDefault = 0;
     }
 
     public class DriveConstants {

@@ -47,11 +47,14 @@ public class Constants {
 
         public static final int GYRO_Pigeon2Id = 0; // CAN
 
-        public static final int CARRIAGE_MotorId = 20; // CAN
-        public static final int CARRIAGE_CandandColorId = 21; // CAN
-
         public static final int ELEV_LeftId = 10; // CAN
         public static final int ELEV_RightId = 11; // CAN
+
+        public static final int CARRIAGE_MotorId = 20; // CAN
+        public static final int CARRIAGE_TrackId = 21; // CAN
+        public static final int CARRIAGE_CandandColorId = 22; // CAN
+
+        public static final int CLIMB_MotorId = 31; // CAN
     }
 
     public class ClimbConstants {

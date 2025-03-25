@@ -39,7 +39,7 @@ public class RobotContainer {
                 new CameraIOSim(Constants.VisionConstants.lCameraName, Constants.VisionConstants.lCameraTransform),
                 new CameraIOSim(Constants.VisionConstants.rCameraName, Constants.VisionConstants.rCameraTransform));
             drivetrain = new Drivetrain(gyro, vision, new ModuleIOTalonFX(0), new ModuleIOTalonFX(1), new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
-            carriage = new Carriage(new CarriageIOSparkMax(Constants.RobotMap.CARRIAGE_MotorId, Constants.RobotMap.CARRIAGE_TrackId, Constants.RobotMap.CARRIAGE_CandandColorId));
+            carriage = new Carriage(new CarriageIOReal(Constants.RobotMap.CARRIAGE_CoralId, Constants.RobotMap.CARRIAGE_AlgaeId, Constants.RobotMap.CARRIAGE_TrackId, Constants.RobotMap.CARRIAGE_CandandColorId));
             elevator = new Elevator(new ElevatorIOReal(Constants.RobotMap.ELEV_LeftId, Constants.RobotMap.ELEV_RightId));
         } else {
             vision = new Vision(

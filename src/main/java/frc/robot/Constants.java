@@ -50,9 +50,10 @@ public class Constants {
         public static final int ELEV_LeftId = 10; // CAN
         public static final int ELEV_RightId = 11; // CAN
 
-        public static final int CARRIAGE_MotorId = 20; // CAN
-        public static final int CARRIAGE_TrackId = 21; // CAN
-        public static final int CARRIAGE_CandandColorId = 22; // CAN
+        public static final int CARRIAGE_CoralId = 20; // CAN
+        public static final int CARRIAGE_AlgaeId = 21; // CAN
+        public static final int CARRIAGE_TrackId = 22; // CAN
+        public static final int CARRIAGE_CandandColorId = 23; // CAN
 
         public static final int CLIMB_MotorId = 31; // CAN
     }

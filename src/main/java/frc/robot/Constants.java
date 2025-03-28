@@ -168,6 +168,8 @@ public class Constants {
         public static final double positionConversionFactor = 2.0 * Math.PI * radius.in(Meters) / gearRatio;
         public static final double velocityConversionFactor = positionConversionFactor / 60.0;
 
+        public static final Current currentLimit = Amps.of(60);
+
         public static final double kPDefault = 40;
         public static final double kIDefault = 0;
         public static final double kDDefault = 0;
@@ -185,6 +187,16 @@ public class Constants {
         public static final double sysIdRampUp = 2.5;
         public static final double sysIdStep = 5.5;
         public static final double sysIdTimeout = 20.0;
+
+        public class ElevatorPositions {
+            public static final Distance STOW = Meters.of(0);
+            public static final Distance INTAKE = Meters.of(0.057);
+            public static final Distance L1 = Meters.of(0.33);
+            public static final Distance L2 = Meters.of(0.63);
+            public static final Distance L3 = Meters.of(1.05);
+            public static final Distance L3Algae = Meters.of(0.81);
+            public static final Distance L4 = Meters.of(1.76);
+        }
     }
 
     public class VisionConstants {

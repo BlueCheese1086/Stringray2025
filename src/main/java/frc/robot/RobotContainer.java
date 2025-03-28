@@ -1,19 +1,17 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
 import choreo.auto.AutoFactory;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.carriage.*;
 import frc.robot.subsystems.carriage.commands.*;
 import frc.robot.subsystems.drivetrain.*;
 import frc.robot.subsystems.drivetrain.commands.*;
 import frc.robot.subsystems.elevator.*;
-import frc.robot.subsystems.elevator.commands.*;
 import frc.robot.subsystems.gyro.*;
 import frc.robot.subsystems.vision.*;
 import java.util.function.Supplier;
@@ -75,10 +73,7 @@ public class RobotContainer {
         // driverController.b().whileTrue(new RunCarriage(carriage, -1));
 
         // Move up/down with pov up/down
-        driverController.povUp().onTrue(new MoveUp(elevator));
-        driverController.povDown().onTrue(new MoveDown(elevator));
-        driverController.povLeft().onTrue(new SetPosition(elevator, Elevator.ElevatorPosition.STOW));
-        driverController.povRight().toggleOnTrue(new ZeroElevator(elevator, Volts.of(-4), Amps.of(18)));
+        driverController.povUp().onTrue(elevator.setGoal(ElevatorPositions.STOW));
 
         // Button per state
         // operatorController.povUp().onTrue(new SetPosition(Elevator.ElevatorPosition.L4, elevator));

@@ -2,6 +2,8 @@ package frc.robot;
 
 import choreo.auto.AutoFactory;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -73,7 +75,13 @@ public class RobotContainer {
         // driverController.b().whileTrue(new RunCarriage(carriage, -1));
 
         // Move up/down with pov up/down
-        driverController.povUp().onTrue(elevator.setGoal(ElevatorPositions.STOW));
+        operatorController.povDown().onTrue(elevator.setGoal(ElevatorPositions.STOW));
+
+        operatorController.a().onTrue(elevator.setGoal(ElevatorPositions.L1));
+        operatorController.b().onTrue(elevator.setGoal(ElevatorPositions.L2));
+        operatorController.x().onTrue(elevator.setGoal(ElevatorPositions.L3));
+        operatorController.y().onTrue(elevator.setGoal(ElevatorPositions.L4));
+
 
         // Button per state
         // operatorController.povUp().onTrue(new SetPosition(Elevator.ElevatorPosition.L4, elevator));
@@ -94,7 +102,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return AutoBuilder.buildAuto("auto");
+        return new PathPlannerAuto("middle");
     }
 
     public Command getTeleopCommand() {

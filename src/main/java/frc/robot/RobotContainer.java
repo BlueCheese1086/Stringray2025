@@ -84,6 +84,14 @@ public class RobotContainer {
     private void configureBindings() {
 
         driverController.b().onTrue(Commands.runOnce(()->{gyro.reset();}, gyro));
+        driverController.x().onTrue(new XStates(drivetrain));
+        driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
+        driverController.leftBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));
+
+        driverController.rightBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
+        driverController.rightBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));
+
+
         
 
         // Move up/down with pov up/down
@@ -94,11 +102,6 @@ public class RobotContainer {
         operatorController.x().onTrue(elevator.setGoal(ElevatorPositions.L3));
         operatorController.y().onTrue(elevator.setGoal(ElevatorPositions.L4));
 
-        driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
-        driverController.leftBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));
-
-        driverController.rightBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
-        driverController.rightBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));
 
         // Button per state
         // operatorController.povUp().onTrue(new SetPosition(Elevator.ElevatorPosition.L4, elevator));

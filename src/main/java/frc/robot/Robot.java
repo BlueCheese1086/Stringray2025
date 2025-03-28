@@ -122,15 +122,7 @@ public class Robot extends LoggedRobot {
 
     /** Runs once when the robot enters Teleop mode. */
     @Override
-    public void teleopInit() {
-        teleopCommand = robotContainer.getTeleopCommand();
-
-        if (teleopCommand == null) {
-            teleopCommand = Commands.print("No teleop command configured.");
-        }
-
-        teleopCommand.schedule();
-    }
+    public void teleopInit() {}
 
     /** Runs every tick while the robot is in Teleop mode. */
     @Override

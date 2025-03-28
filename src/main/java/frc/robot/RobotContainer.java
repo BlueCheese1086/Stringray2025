@@ -30,6 +30,7 @@ public class RobotContainer {
     private Gyro gyro;
     private Vision vision;
 
+    private SwerveDrive driveCommand;
     private PathfindToPose pathfindingCommand;
 
     public RobotContainer() {
@@ -51,15 +52,24 @@ public class RobotContainer {
             elevator = new Elevator(new ElevatorIOSim());
         }
 
+        // Anti-Tip command (Cancels if the B button is pressed)
+        new AntiTip(drivetrain, elevator, gyro, () -> driverController.getHID().getAButton()).schedule();
+
+        // Creating the drive command
+        // Creating it here so that I can pass in an adjustable scalar to limit speeds.
+        driveCommand = new SwerveDrive(drivetrain, driverController::getLeftX, driverController::getLeftY, driverController::getRightX, driverController.getHID()::getLeftStickButtonPressed);
+
         // Assigning default commands
-        drivetrain.setDefaultCommand(new SwerveDrive(drivetrain, driverController::getLeftX, driverController::getLeftY, driverController::getRightX, driverController.getHID()::getLeftStickButtonPressed));
+        drivetrain.setDefaultCommand(driveCommand);
 
         // Creating the pathfinding command
         // It has an override condition that causes it to stop when the left joystick gets any input.
         // It is defined this way so that you can change the pose it pathfinds to.
         pathfindingCommand = new PathfindToPose(drivetrain, new Pose2d(), () -> {
             return Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getLeftX).get(), 0.1)) > 0 ||
-                   Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getLeftY).get(), 0.1)) > 0;
+                   Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getLeftY).get(), 0.1)) > 0 ||
+                   Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getRightX).get(), 0.1)) > 0 ||
+                   Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getRightY).get(), 0.1)) > 0;
         });
 
         // Prepping Choreo
@@ -84,6 +94,12 @@ public class RobotContainer {
         operatorController.x().onTrue(elevator.setGoal(ElevatorPositions.L3));
         operatorController.y().onTrue(elevator.setGoal(ElevatorPositions.L4));
 
+        driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
+        driverController.leftBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));
+
+        driverController.rightBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
+        driverController.rightBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));
+
         // Button per state
         // operatorController.povUp().onTrue(new SetPosition(Elevator.ElevatorPosition.L4, elevator));
         // operatorController.povLeft().onTrue(new SetPosition(Elevator.ElevatorPosition.L3, elevator));
@@ -104,9 +120,5 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return new PathPlannerAuto("middle");
-    }
-
-    public Command getTeleopCommand() {
-        return null;
     }
 }

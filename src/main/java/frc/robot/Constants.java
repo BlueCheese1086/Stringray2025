@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -29,6 +30,11 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class Constants {
     public static final boolean isReplay = false;
+
+    public static final Angle TipThreshold = Degrees.of(6);
+    public static final double TipTimeout = 1;
+
+    public static final double PrecisionScalar = 0.75;
 
     public class RobotMap {
         public static final int DT_FLDrive = 1; // CAN
@@ -170,7 +176,7 @@ public class Constants {
 
         public static final Current currentLimit = Amps.of(60);
 
-        public static final double kPDefault = 40;
+        public static final double kPDefault = 110;
         public static final double kIDefault = 0;
         public static final double kDDefault = 0;
 

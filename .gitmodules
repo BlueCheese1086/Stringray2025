@@ -6,13 +6,10 @@
 	url = https://github.com/Turbojax07/1086Gyro
 [submodule "Carriage"]
 	path = src/main/java/frc/robot/subsystems/carriage
-	url = https://github.com/DepressedFrog12/1086Carriage
-[submodule "src/main/java/frc/robot/subsystems/vision"]
+	url = https://github.com/Turbojax07/1086Carriage
+[submodule "Vision"]
 	path = src/main/java/frc/robot/subsystems/vision
-	url = https://github.com/SpaceStudios/1086-Vision-2025
+	url = https://github.com/Turbojax07/1086-Vision-2025
 [submodule "Elevator"]
 	path = src/main/java/frc/robot/subsystems/elevator
-	url = https://github.com/turbojax07/1086-elevator
-[submodule "Climb"]
-	path = src/main/java/frc/robot/subsystems/climb
-	url = https://github.com/Turbojax07/1086Climb
+	url = https://github.com/Blasty25/1086-Elevator

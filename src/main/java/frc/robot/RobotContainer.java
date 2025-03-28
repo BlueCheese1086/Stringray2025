@@ -3,7 +3,6 @@ package frc.robot;
 import choreo.auto.AutoFactory;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -82,17 +81,15 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-
-        driverController.b().onTrue(Commands.runOnce(()->{gyro.reset();}, gyro));
-        
+        driverController.b().onTrue(Commands.runOnce(() -> gyro.reset(), gyro));
 
         // Move up/down with pov up/down
-        operatorController.povDown().onTrue(elevator.setGoal(ElevatorPositions.STOW));
+        operatorController.povDown().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.STOW), elevator));
 
-        operatorController.a().onTrue(elevator.setGoal(ElevatorPositions.L1));
-        operatorController.b().onTrue(elevator.setGoal(ElevatorPositions.L2));
-        operatorController.x().onTrue(elevator.setGoal(ElevatorPositions.L3));
-        operatorController.y().onTrue(elevator.setGoal(ElevatorPositions.L4));
+        operatorController.a().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L1), elevator));
+        operatorController.b().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L2), elevator));
+        operatorController.x().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L3), elevator));
+        operatorController.y().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L4), elevator));
 
         driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
         driverController.leftBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));

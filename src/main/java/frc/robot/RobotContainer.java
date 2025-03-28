@@ -1,7 +1,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -100,8 +99,17 @@ public class RobotContainer {
 
         // Driver Controls
         driverController.y().onTrue(new RecordPose(drivetrain));
-        driverController.b().onTrue(Commands.runOnce(() -> {gyro.reset();}, gyro));
         driverController.x().onTrue(new XStates(drivetrain));
+        driverController.b().onTrue(Commands.runOnce(() -> gyro.reset(), gyro));
+
+        // Move up/down with pov up/down
+        operatorController.povDown().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.STOW), elevator));
+
+        operatorController.a().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L1), elevator));
+        operatorController.b().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L2), elevator));
+        operatorController.x().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L3), elevator));
+        operatorController.y().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L4), elevator));
+
         driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
         driverController.leftBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));
 

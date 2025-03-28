@@ -1,17 +1,15 @@
 package frc.robot;
 
-import choreo.auto.AutoFactory;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.carriage.*;
-import frc.robot.subsystems.carriage.commands.*;
+import frc.robot.subsystems.carriage.commands.RunAlgaeRoller;
+import frc.robot.subsystems.carriage.commands.RunCoralRoller;
 import frc.robot.subsystems.drivetrain.*;
 import frc.robot.subsystems.drivetrain.commands.*;
 import frc.robot.subsystems.elevator.*;
@@ -31,7 +29,8 @@ public class RobotContainer {
     private Vision vision;
 
     private SwerveDrive driveCommand;
-    private PathfindToPose pathfindingCommand;
+    private PathFindToLeft pathFindingLeft;
+    private PathFindToRight pathFindingRight;
 
     public RobotContainer() {
         // Initializing subsystems
@@ -65,7 +64,14 @@ public class RobotContainer {
         // Creating the pathfinding command
         // It has an override condition that causes it to stop when the left joystick gets any input.
         // It is defined this way so that you can change the pose it pathfinds to.
-        pathfindingCommand = new PathfindToPose(drivetrain, new Pose2d(), () -> {
+        pathFindingLeft = new PathFindToLeft(drivetrain, () -> {
+            return Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getLeftX).get(), 0.1)) > 0 ||
+                   Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getLeftY).get(), 0.1)) > 0 ||
+                   Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getRightX).get(), 0.1)) > 0 ||
+                   Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getRightY).get(), 0.1)) > 0;
+        });
+
+        pathFindingRight = new PathFindToRight(drivetrain, () -> {
             return Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getLeftX).get(), 0.1)) > 0 ||
                    Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getLeftY).get(), 0.1)) > 0 ||
                    Math.abs(MathUtil.applyDeadband(((Supplier<Double>) driverController::getRightX).get(), 0.1)) > 0 ||
@@ -90,18 +96,15 @@ public class RobotContainer {
 
         driverController.rightBumper().whileTrue(Commands.runOnce(() -> driveCommand.setScalar(Constants.PrecisionScalar)));
         driverController.rightBumper().onFalse(Commands.runOnce(() -> driveCommand.setScalar(1)));
-
-
+    
+        driverController.back().onTrue(pathFindingLeft);
+        driverController.start().onTrue(pathFindingRight);
         
+        driverController.leftTrigger(0.2).whileTrue(new RunCoralRoller(carriage, ()-> -1.0));
+        driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, ()-> -1.0));
 
-        // Move up/down with pov up/down
-        operatorController.povDown().onTrue(elevator.setGoal(ElevatorPositions.STOW));
-
-        operatorController.a().onTrue(elevator.setGoal(ElevatorPositions.L1));
-        operatorController.b().onTrue(elevator.setGoal(ElevatorPositions.L2));
-        operatorController.x().onTrue(elevator.setGoal(ElevatorPositions.L3));
-        operatorController.y().onTrue(elevator.setGoal(ElevatorPositions.L4));
-
+        driverController.rightTrigger(0.2).whileTrue(new RunCoralRoller(carriage, ()-> 1.0));
+        driverController.rightTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, ()-> 1.0));
 
         // Button per state
         // operatorController.povUp().onTrue(new SetPosition(Elevator.ElevatorPosition.L4, elevator));
@@ -112,13 +115,10 @@ public class RobotContainer {
         // driverController.x().toggleOnTrue(new XStates(drivetrain));
         // driverController.y().onTrue(new RecordPose(drivetrain));
 
-        driverController.rightStick().toggleOnTrue(pathfindingCommand);
     }
 
     public void periodic() {
         Logger.recordOutput("/PlaceToGo", drivetrain.getClosestReefPoint());
-
-        pathfindingCommand.setGoalPose(drivetrain.getClosestReefPoint());
     }
 
     public Command getAutonomousCommand() {

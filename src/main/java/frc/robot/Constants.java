@@ -235,4 +235,10 @@ public class Constants {
         public static final Pose2d PROCESSOR_Bottom_Center = (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) ? new Pose2d(1.134, 1.081, Rotation2d.fromDegrees(55)) : new Pose2d(16.414, 1.081, Rotation2d.fromDegrees(125));
         public static final Pose2d PROCESSOR_Bottom_Right  = (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) ? new Pose2d(1.639, 1.397, Rotation2d.fromDegrees(55)) : new Pose2d(15.909, 1.397, Rotation2d.fromDegrees(125));
     }
+
+    public class CarriageConstants {
+        public static final double proximityThreshold = 0.9;
+        
+    }
+
 }

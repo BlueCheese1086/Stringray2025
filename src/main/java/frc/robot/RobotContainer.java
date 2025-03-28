@@ -7,6 +7,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.carriage.*;
@@ -71,8 +72,9 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // driverController.a().whileTrue(new RunCarriage(carriage, 1));
-        // driverController.b().whileTrue(new RunCarriage(carriage, -1));
+
+        driverController.b().onTrue(Commands.runOnce(()->{gyro.reset();}, gyro));
+        
 
         // Move up/down with pov up/down
         operatorController.povDown().onTrue(elevator.setGoal(ElevatorPositions.STOW));
@@ -81,7 +83,6 @@ public class RobotContainer {
         operatorController.b().onTrue(elevator.setGoal(ElevatorPositions.L2));
         operatorController.x().onTrue(elevator.setGoal(ElevatorPositions.L3));
         operatorController.y().onTrue(elevator.setGoal(ElevatorPositions.L4));
-
 
         // Button per state
         // operatorController.povUp().onTrue(new SetPosition(Elevator.ElevatorPosition.L4, elevator));

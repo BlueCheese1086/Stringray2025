@@ -81,7 +81,7 @@ public class Constants {
 
         public static final MomentOfInertia moi = KilogramSquareMeters.of(1);
 
-        public static final double kPDefault = 1;
+        public static final double kPDefault = 41.75;
         public static final double kIDefault = 0;
         public static final double kDDefault = 0;
 

@@ -49,7 +49,7 @@ public class RobotContainer {
                     new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
             carriage = new Carriage(
                     new CarriageIOReal(Constants.RobotMap.CARRIAGE_CoralId, Constants.RobotMap.CARRIAGE_AlgaeId,
-                            Constants.RobotMap.CARRIAGE_TrackId, Constants.RobotMap.CARRIAGE_CandandColorId));
+                            Constants.RobotMap.CARRIAGE_TrackId, Constants.RobotMap.CARRIAGE_CoralLaserId));
             elevator = new Elevator(
                     new ElevatorIOReal(Constants.RobotMap.ELEV_LeftId, Constants.RobotMap.ELEV_RightId));
             climb = new Climb(new ClimbIOReal(Constants.RobotMap.CLIMB_MotorId));

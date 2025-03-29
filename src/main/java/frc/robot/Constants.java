@@ -46,10 +46,10 @@ public class Constants {
         public static final int DT_BRDrive = 7; // CAN
         public static final int DT_BRSteer = 8; // CAN
 
-        public static final int DT_FLEncoder = 0; // CAN
-        public static final int DT_FREncoder = 1; // CAN
-        public static final int DT_BLEncoder = 2; // CAN
-        public static final int DT_BREncoder = 3; // CAN
+        public static final int DT_FLEncoder = 2; // CAN
+        public static final int DT_FREncoder = 4; // CAN
+        public static final int DT_BLEncoder = 6; // CAN
+        public static final int DT_BREncoder = 8; // CAN
 
         public static final int GYRO_Pigeon2Id = 0; // CAN
 
@@ -57,11 +57,15 @@ public class Constants {
         public static final int ELEV_RightId = 11; // CAN
 
         public static final int CARRIAGE_CoralId = 20; // CAN
-        public static final int CARRIAGE_AlgaeId = 21; // CAN
-        public static final int CARRIAGE_TrackId = 22; // CAN
-        public static final int CARRIAGE_CandandColorId = 23; // CAN
+        public static final int CARRIAGE_CoralLaserId = 21; // CAN (CANandColor)
 
-        public static final int CLIMB_MotorId = 31; // CAN
+        public static final int CARRIAGE_TrackId = 30; // CAN
+        public static final int CARRIAGE_TrackLaserId = 31; // CAN (LaserCAN)
+
+        public static final int CARRIAGE_AlgaeId = 41; // CAN
+        public static final int CARRIAGE_AlgaeLaserId = 42; // CAN (LaserCAN)
+
+        public static final int CLIMB_MotorId = 50; // CAN
     }
 
     public class ClimbConstants {

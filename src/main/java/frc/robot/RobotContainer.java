@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.ClimbConstants;
-import frc.robot.Constants.ElevatorConstants.ElevatorPositions;
+import frc.robot.subsystems.climb.ClimbConstants;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.carriage.*;
 import frc.robot.subsystems.carriage.commands.RunAlgaeRoller;
 import frc.robot.subsystems.carriage.commands.RunCoralRoller;
@@ -43,8 +43,8 @@ public class RobotContainer {
         if (Robot.isReal()) {
             gyro = new Gyro(new GyroIOPigeon2(Constants.RobotMap.GYRO_Pigeon2Id));
             vision = new Vision(
-                    new CameraIOSim(Constants.VisionConstants.lCameraName, Constants.VisionConstants.lCameraTransform),
-                    new CameraIOSim(Constants.VisionConstants.rCameraName, Constants.VisionConstants.rCameraTransform));
+                    new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
+                    new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
             drivetrain = new Drivetrain(gyro, vision, new ModuleIOTalonFX(0), new ModuleIOTalonFX(1),
                     new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
             carriage = new Carriage(
@@ -55,9 +55,9 @@ public class RobotContainer {
             climb = new Climb(new ClimbIOReal(Constants.RobotMap.CLIMB_MotorId));
         } else {
             vision = new Vision(
-                    new CameraIOReal(Constants.VisionConstants.lCameraName, Constants.VisionConstants.lCameraTransform),
-                    new CameraIOReal(Constants.VisionConstants.rCameraName,
-                            Constants.VisionConstants.rCameraTransform));
+                    new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
+                    new CameraIOReal(VisionConstants.rCameraName,
+                            VisionConstants.rCameraTransform));
             drivetrain = new Drivetrain(gyro, vision, new ModuleIOSim(0), new ModuleIOSim(1),
                     new ModuleIOSim(2), new ModuleIOSim(3));
             carriage = new Carriage(new CarriageIOSim());

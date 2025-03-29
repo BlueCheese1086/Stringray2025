@@ -80,6 +80,10 @@ public class Constants {
         public static final double kPDefault = 1;
         public static final double kIDefault = 0;
         public static final double kDDefault = 0;
+
+        public static final Angle extended = Degrees.of(260);
+        public static final Angle stow = Degrees.of(0);
+        public static final Angle tucked = Degree.of(180);
     }
 
     public class DriveConstants {
@@ -201,6 +205,7 @@ public class Constants {
             public static final Distance L2 = Meters.of(0.63);
             public static final Distance L3 = Meters.of(1.05);
             public static final Distance L3Algae = Meters.of(0.81);
+            public static final Distance L2Algae = Meters.zero();
             public static final Distance L4 = Meters.of(1.76);
         }
     }

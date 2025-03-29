@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.climb.ClimbConstants;
 import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 
@@ -74,6 +75,10 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Theta_kP", "/Adjustables/Drivetrain/ThetaController_kP", DriveConstants.kPThetaControllerDefault);
         AdjustableValues.registerNumber("Theta_kI", "/Adjustables/Drivetrain/ThetaController_kI", DriveConstants.kIThetaControllerDefault);
         AdjustableValues.registerNumber("Theta_kD", "/Adjustables/Drivetrain/ThetaController_kD", DriveConstants.kDThetaControllerDefault);
+
+        AdjustableValues.registerNumber("Climb_kP", "/Adjustables/Drivetrain/Climb_kP", ClimbConstants.kPDefault);
+        AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Drivetrain/Climb_kI", ClimbConstants.kIDefault);
+        AdjustableValues.registerNumber("Climb_kD", "/Adjustables/Drivetrain/Climb_kD", ClimbConstants.kDDefault);
     }
 
     /** Runs every tick while the robot is on. */

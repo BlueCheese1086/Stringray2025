@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.util;
 
 import org.littletonrobotics.junction.Logger;
 

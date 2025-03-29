@@ -9,8 +9,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.climb.ClimbConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.carriage.*;
+import frc.robot.subsystems.carriage.commands.OverideCarriage;
 import frc.robot.subsystems.carriage.commands.RunAlgaeRoller;
 import frc.robot.subsystems.carriage.commands.RunCoralRoller;
+import frc.robot.subsystems.carriage.commands.RunIntakeTrack;
+import frc.robot.subsystems.carriage.commands.RunSensorOriantedCarriage;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbIOReal;
 import frc.robot.subsystems.climb.ClimbIOSim;
@@ -51,10 +54,11 @@ public class RobotContainer {
                     new ModuleIOTalonFX(2), new ModuleIOTalonFX(3));
             carriage = new Carriage(
                     new CarriageIOReal(Constants.RobotMap.CARRIAGE_CoralId, Constants.RobotMap.CARRIAGE_AlgaeId,
-                            Constants.RobotMap.CARRIAGE_TrackId, Constants.RobotMap.CARRIAGE_CoralLaserId));
+                            Constants.RobotMap.CARRIAGE_TrackId, Constants.RobotMap.CARRIAGE_CoralLaserId, Constants.RobotMap.CARRIAGE_AlgaeLaserId));
             elevator = new Elevator(
                     new ElevatorIOReal(Constants.RobotMap.ELEV_LeftId, Constants.RobotMap.ELEV_RightId));
             climb = new Climb(new ClimbIOReal(Constants.RobotMap.CLIMB_MotorId));
+            
         } else {
             vision = new Vision(
                     new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
@@ -70,6 +74,8 @@ public class RobotContainer {
         // Anti-Tip command (Cancels if the A button is pressed)
         if (RobotBase.isReal()) {
             new AntiTip(drivetrain, elevator, gyro, () -> driverController.getHID().getAButton()).schedule();
+            new RunIntakeTrack(carriage, ()-> 1.0);
+            new RunCoralRoller(carriage, ()-> 1.0);
         }
 
         // Creating the drive command
@@ -111,7 +117,7 @@ public class RobotContainer {
     private void configureBindings() {
 
         // Driver Controls
-        driverController.y().onTrue(new RecordPose(drivetrain));
+        // driverController.y().onTrue(new RecordPose(drivetrain));
         driverController.x().onTrue(new XStates(drivetrain));
         if (RobotBase.isReal()) {
             driverController.b().onTrue(Commands.runOnce(() -> gyro.reset(), gyro));
@@ -130,14 +136,18 @@ public class RobotContainer {
         driverController.start().onTrue(pathFindingRight);
 
         //Intake Coral & Algae
-        driverController.leftTrigger(0.2).whileTrue(new RunCoralRoller(carriage, () -> -1.0));
+        driverController.leftTrigger(0.2).whileTrue(new RunSensorOriantedCarriage(carriage, () -> -1.0));
         driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, () -> -1.0));
 
         //Outtake Coral & Algae
-        driverController.rightTrigger(0.2).whileTrue(new RunCoralRoller(carriage, () -> 1.0));
+        driverController.rightTrigger(0.2).whileTrue(new RunSensorOriantedCarriage(carriage, () -> 1.0));
         driverController.rightTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, () -> 1.0));
 
-        // Operator Button
+        // Overide Shoot
+        driverController.y().toggleOnTrue(new OverideCarriage(carriage, () -> 1.0));
+
+        // Operator Buttons
+
         // Reset Encoder
         operatorController.start().onTrue(elevator.resetEncoder());
         operatorController.back().onTrue(elevator.resetEncoder());

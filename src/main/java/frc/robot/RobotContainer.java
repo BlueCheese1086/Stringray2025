@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -57,7 +58,9 @@ public class RobotContainer {
         }
 
         // Anti-Tip command (Cancels if the A button is pressed)
-        new AntiTip(drivetrain, elevator, gyro, () -> driverController.getHID().getAButton()).schedule();
+        if (RobotBase.isReal()) {
+            new AntiTip(drivetrain, elevator, gyro, () -> driverController.getHID().getAButton()).schedule();
+        }
 
         // Creating the drive command
         // Creating it here so that I can pass in an adjustable scalar to limit speeds.
@@ -100,7 +103,9 @@ public class RobotContainer {
         // Driver Controls
         driverController.y().onTrue(new RecordPose(drivetrain));
         driverController.x().onTrue(new XStates(drivetrain));
-        driverController.b().onTrue(Commands.runOnce(() -> gyro.reset(), gyro));
+        if (RobotBase.isReal()) {
+            driverController.b().onTrue(Commands.runOnce(() -> gyro.reset(), gyro));
+        }
 
         // Move up/down with pov up/down
         operatorController.povDown().onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.STOW), elevator));

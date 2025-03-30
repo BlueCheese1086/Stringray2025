@@ -1,21 +1,17 @@
 package frc.robot;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.climb.ClimbConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
+import frc.robot.subsystems.algae.Algae;
+import frc.robot.subsystems.algae.AlgaeIOReal;
+import frc.robot.subsystems.algae.AlgaeIOSim;
 import frc.robot.subsystems.carriage.*;
-import frc.robot.subsystems.carriage.commands.OverideCarriage;
 import frc.robot.subsystems.carriage.commands.RunAlgaeRoller;
-import frc.robot.subsystems.carriage.commands.RunCoralRoller;
 import frc.robot.subsystems.carriage.commands.RunIntakeTrack;
 import frc.robot.subsystems.carriage.commands.RunSensorOrientedCarriage;
 import frc.robot.subsystems.climb.Climb;
@@ -29,17 +25,15 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.drive.Commands.AutoLeftFind;
+import frc.robot.subsystems.drive.Commands.AutoRightFind;
 import frc.robot.subsystems.drive.Commands.DriveCommands;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.gyro.*;
-import frc.robot.subsystems.util.AntiTip;
 import frc.robot.subsystems.util.RecordPose;
 import frc.robot.subsystems.vision.*;
 
 import static edu.wpi.first.units.Units.Volts;
 
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
@@ -51,9 +45,7 @@ public class RobotContainer {
     private Gyro gyro;
     private Vision vision;
     private Climb climb;
-
-    // private PathFindToLeft pathFindingLeft;
-    // private PathFindToRight pathFindingRight;
+    private Algae algae;
 
     public RobotContainer() {
         // Initializing subsystems
@@ -66,9 +58,11 @@ public class RobotContainer {
                     new GyroIOPigeon2(),
                     new ModuleIOTalonFX(TunerConstants.FrontLeft),
                     new ModuleIOTalonFX(TunerConstants.FrontRight),
-                    new ModuleIOTalonFX(TunerConstants.BackLeft), new ModuleIOTalonFX(TunerConstants.BackRight));
+                    new ModuleIOTalonFX(TunerConstants.BackLeft),
+                    new ModuleIOTalonFX(TunerConstants.BackRight));
+            algae = new Algae(new AlgaeIOReal(Constants.RobotMap.CARRIAGE_AlgaeId));
             carriage = new Carriage(
-                    new CarriageIOReal(Constants.RobotMap.CARRIAGE_AlgaeId, Constants.RobotMap.CARRIAGE_CoralId,
+                    new CarriageIOReal(Constants.RobotMap.CARRIAGE_CoralId,
                             Constants.RobotMap.CARRIAGE_TrackId, Constants.RobotMap.CARRIAGE_CoralLaserId,
                             Constants.RobotMap.CARRIAGE_AlgaeLaserId));
             elevator = new Elevator(
@@ -76,8 +70,7 @@ public class RobotContainer {
             climb = new Climb(new ClimbIOReal(Constants.RobotMap.CLIMB_MotorId));
 
         } else {
-            drive = new Drive(new GyroIO() {
-            },
+            drive = new Drive(new GyroIO() {},
                     new ModuleIOSim(TunerConstants.FrontLeft), new ModuleIOSim(TunerConstants.FrontLeft),
                     new ModuleIOSim(TunerConstants.FrontLeft), new ModuleIOSim(TunerConstants.FrontLeft));
             vision = new Vision(
@@ -86,48 +79,13 @@ public class RobotContainer {
                             VisionConstants.rCameraTransform));
             carriage = new Carriage(new CarriageIOSim());
             elevator = new Elevator(new ElevatorIOSim());
+            algae = new Algae(new AlgaeIOSim());
             climb = new Climb(new ClimbIOSim());
         }
 
         // Anti-Tip command (Cancels if the A button is pressed)
         if (RobotBase.isReal()) {
-            // new RunIntakeTrack(carriage, ()-> 1.0);
-            // new RunCoralRoller(carriage, ()-> 1.0);
         }
-
-        // Assigning default commands
-
-        // Creating the pathfinding command
-        // It has an override condition that causes it to stop when the left joystick
-        // gets any input.
-        // It is defined this way so that you can change the pose it pathfinds to.
-        // pathFindingLeft = new PathFindToLeft(drivetrain, () -> {
-        // return Math.abs(MathUtil.applyDeadband(((Supplier<Double>)
-        // driverController::getLeftX).get(), 0.1)) > 0 ||
-        // Math.abs(MathUtil.applyDeadband(((Supplier<Double>)
-        // driverController::getLeftY).get(), 0.1)) > 0 ||
-        // Math.abs(MathUtil.applyDeadband(((Supplier<Double>)
-        // driverController::getRightX).get(), 0.1)) > 0 ||
-        // Math.abs(MathUtil.applyDeadband(((Supplier<Double>)
-        // driverController::getRightY).get(), 0.1)) > 0;
-        // });
-
-        // pathFindingRight = new PathFindToRight(drivetrain, () -> {
-        // return Math.abs(MathUtil.applyDeadband(((Supplier<Double>)
-        // driverController::getLeftX).get(), 0.1)) > 0 ||
-        // Math.abs(MathUtil.applyDeadband(((Supplier<Double>)
-        // driverController::getLeftY).get(), 0.1)) > 0 ||
-        // Math.abs(MathUtil.applyDeadband(((Supplier<Double>)
-        // driverController::getRightX).get(), 0.1)) > 0 ||
-        // Math.abs(MathUtil.applyDeadband(((Supplier<Double>)
-        // driverController::getRightY).get(), 0.1)) > 0;
-        // });
-
-        // Prepping Choreo
-        // AutoFactory autoFactory = new AutoFactory(drivetrain::getPose,
-        // drivetrain::resetPose, drivetrain::followTrajectory, true, drivetrain);
-        // autoFactory.trajectoryCmd("My Trajectory");
-        // autoFactory.newRoutine("My Auto").cmd();
 
         // Configuring controller bindings
         configureBindings();
@@ -145,6 +103,7 @@ public class RobotContainer {
                         () -> 0.1,
                         () -> 1));
 
+        //Presice Mode
         driverController.leftBumper().whileTrue(
                 DriveCommands.joystickDrive(
                         drive,
@@ -160,46 +119,27 @@ public class RobotContainer {
             driverController.b().onTrue(Commands.runOnce(() -> gyro.reset(), gyro));
         }
 
-        driverController.start().onTrue(new AutoLeftFind(drive, true)); // False is red
-
-        // Presision Mode = Left
-        // driverController.leftBumper().whileTrue(Commands.runOnce(() ->
-        // driveCommand.setScalar(Constants.PrecisionScalar)));
-        // driverController.leftBumper().onFalse(Commands.runOnce(() ->
-        // driveCommand.setScalar(1)));
-
-        // //Presion
-        // driverController.rightBumper().whileTrue(Commands.runOnce(() ->
-        // driveCommand.setScalar(Constants.PrecisionScalar)));
-        // driverController.rightBumper().onFalse(Commands.runOnce(() ->
-        // driveCommand.setScalar(1)));
-
-        // //PathFind: Overide is joystick
-        // driverController.back().onTrue(pathFindingLeft);
-        // driverController.start().onTrue(pathFindingRight);
+        //Path Find / Overide is joystick
+        driverController.back().onTrue(new AutoLeftFind(drive, true)); // False is red
+        driverController.start().onTrue(new AutoRightFind(drive, true));
 
         // Intake Coral & Algae
-        // driverController.leftTrigger(0.2).whileTrue(new
-        // RunSensorOrientedCarriage(carriage, () -> -.1));
-        // driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, ()
-        // -> -.1));
+        driverController.leftTrigger(0.2).whileTrue(new RunSensorOrientedCarriage(carriage, () -> -0.3)); //Have to confirm base number
+        driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, ()-> -0.3));
 
-        // Outtake Coral & Algae (works)
-        // driverController.rightTrigger(0.2).whileTrue(new
-        // RunSensorOrientedCarriage(carriage, () -> -driverController.getRightY()));
-        // driverController.rightTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, ()
-        // -> -driverController.getRightY()));
-        // driverController.leftTrigger(0.2).whileTrue(new RunIntakeTrack(carriage, ()
-        // -> -driverController.getLeftY()));
 
-        // // Overide Shoot
+        //Outtake Coral & Algae (works)
+        driverController.rightTrigger(0.2).whileTrue(new RunSensorOrientedCarriage(carriage, () -> driverController.getRightTriggerAxis()));
+        driverController.rightTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, ()-> driverController.getRightTriggerAxis()));
+
+        // Overide Shoot
         // driverController.y().toggleOnTrue(new OverideCarriage(carriage, () -> 1.0));
 
-        // // Operator Buttons
+        // Operator Buttons
 
-        // // Reset Encoder
-        // operatorController.start().onTrue(elevator.resetEncoder());
-        // operatorController.back().onTrue(elevator.resetEncoder());
+        // Reset Encoder
+        operatorController.start().onTrue(elevator.resetEncoder());
+        operatorController.back().onTrue(elevator.resetEncoder());
 
         // Stow for Elevator
         operatorController.leftBumper()
@@ -231,12 +171,12 @@ public class RobotContainer {
                         elevator));
 
         // Climb Controls
-        // operatorController.povLeft().whileTrue(new SetClimbAngle(climb,
-        // ClimbConstants.extended));
-        // operatorController.povRight().whileTrue(new SetClimbAngle(climb,
-        // ClimbConstants.tucked));
-        // operatorController.povDown().whileTrue(new SetClimbAngle(climb,
-        // ClimbConstants.stow));
+        operatorController.povLeft().whileTrue(new SetClimbAngle(climb,
+        ClimbConstants.extended));
+        operatorController.povRight().whileTrue(new SetClimbAngle(climb,
+        ClimbConstants.tucked));
+        operatorController.povDown().whileTrue(new SetClimbAngle(climb,
+        ClimbConstants.stow));
     }
 
     public void periodic() {

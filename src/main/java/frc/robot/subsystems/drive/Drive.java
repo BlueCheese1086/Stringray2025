@@ -56,6 +56,9 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.PoseAllignment;
 import frc.robot.subsystems.util.AdjustableValues;
+import frc.robot.subsystems.vision.CameraIO;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.util.VisionResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +112,7 @@ public class Drive extends SubsystemBase {
   public PathConstraints constraints =
       new PathConstraints(5.25, 4.75, Units.degreesToRadians(640), Units.degreesToRadians(820));
 
+
   public TrajectoryConfig trajectoryConfig =
       new TrajectoryConfig(
               LinearVelocity.ofBaseUnits(4.30, MetersPerSecond),
@@ -123,6 +127,7 @@ public class Drive extends SubsystemBase {
 
   public Drive(
       GyroIO gyroIO,
+      Vision vision,
       ModuleIO flModuleIO,
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
@@ -132,6 +137,8 @@ public class Drive extends SubsystemBase {
     modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
     modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
     modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
+
+    poseEstimator = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), null, null);
 
     // Usage reporting for swerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);

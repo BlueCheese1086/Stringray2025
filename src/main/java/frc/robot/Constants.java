@@ -16,6 +16,10 @@ public class Constants {
 
     public static final double PrecisionScalar = 0.75;
 
+    public static final boolean allianceMode = false;
+
+    public static final String currentMode = null;
+
     public class RobotMap {
         public static final int DT_FLDrive = 1; // CAN
         public static final int DT_FLSteer = 2; // CAN
@@ -42,8 +46,8 @@ public class Constants {
         public static final int CARRIAGE_TrackId = 30; // CAN
         public static final int CARRIAGE_TrackLaserId = 31; // CAN (LaserCAN)
 
-        public static final int CARRIAGE_AlgaeId = 41; // CAN
-        public static final int CARRIAGE_AlgaeLaserId = 42; // CAN (LaserCAN)
+        public static final int CARRIAGE_AlgaeId = 40; // CAN
+        public static final int CARRIAGE_AlgaeLaserId = 41; // CAN (LaserCAN)
 
         public static final int CLIMB_MotorId = 50; // CAN
     }

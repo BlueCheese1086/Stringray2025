@@ -50,8 +50,10 @@ public class RobotContainer {
                 // Initializing subsystems
                 if (Robot.isReal()) {
                         // gyro = new Gyro(new GyroIOPigeon2(Constants.RobotMap.GYRO_Pigeon2Id));
-                        vision = new Vision(new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
-                                            new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
+                        vision = new Vision(
+                                        new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
+                                        new CameraIOReal(VisionConstants.rCameraName,
+                                                        VisionConstants.rCameraTransform));
                         drive = new Drive(
                                         new GyroIOPigeon2(),
                                         vision,
@@ -72,14 +74,15 @@ public class RobotContainer {
 
                 } else {
                         vision = new Vision(
-                                new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
-                                new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
-                        drive = new Drive(new GyroIO() {},
-                                vision,
-                                new ModuleIOSim(TunerConstants.FrontLeft),
-                                new ModuleIOSim(TunerConstants.FrontLeft),
-                                new ModuleIOSim(TunerConstants.FrontLeft),
-                                new ModuleIOSim(TunerConstants.FrontLeft));
+                                        new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
+                                        new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
+                        drive = new Drive(new GyroIO() {
+                        },
+                                        vision,
+                                        new ModuleIOSim(TunerConstants.FrontLeft),
+                                        new ModuleIOSim(TunerConstants.FrontLeft),
+                                        new ModuleIOSim(TunerConstants.FrontLeft),
+                                        new ModuleIOSim(TunerConstants.FrontLeft));
 
                         carriage = new Carriage(new CarriageIOSim());
                         elevator = new Elevator(new ElevatorIOSim());

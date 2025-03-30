@@ -24,6 +24,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -84,6 +85,7 @@ public class Drive extends SubsystemBase {
   static final Lock odometryLock = new ReentrantLock();
   private List<Pose2d> poseHistory = new ArrayList<>();
   private final GyroIO gyroIO;
+  private final Vision vision;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
@@ -112,7 +114,6 @@ public class Drive extends SubsystemBase {
   public PathConstraints constraints =
       new PathConstraints(5.25, 4.75, Units.degreesToRadians(640), Units.degreesToRadians(820));
 
-
   public TrajectoryConfig trajectoryConfig =
       new TrajectoryConfig(
               LinearVelocity.ofBaseUnits(4.30, MetersPerSecond),
@@ -133,12 +134,11 @@ public class Drive extends SubsystemBase {
       ModuleIO blModuleIO,
       ModuleIO brModuleIO) {
     this.gyroIO = gyroIO;
+    this.vision = vision;
     modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
     modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
     modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
     modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
-
-    poseEstimator = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), null, null);
 
     // Usage reporting for swerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
@@ -191,6 +191,12 @@ public class Drive extends SubsystemBase {
       module.periodic();
     }
     odometryLock.unlock();
+
+    Logger.recordOutput("Robot/Odometry", poseEstimator.getEstimatedPosition());
+    for(VisionResult result : vision.getUnreadResults()) {
+      poseEstimator.addVisionMeasurement(result.getPose2d(), result.getTimestamp());
+    }
+    Logger.recordOutput("Robot/Vision", poseEstimator.getEstimatedPosition());
 
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {

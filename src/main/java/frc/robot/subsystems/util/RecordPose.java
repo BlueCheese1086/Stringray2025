@@ -1,15 +1,15 @@
-package frc.robot;
+package frc.robot.subsystems.util;
 
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.drive.Drive;
 
 public class RecordPose extends Command {
     int x = 0;
-    Drivetrain drivetrain;
+    Drive drivetrain;
 
-    public RecordPose(Drivetrain drivetrain) {
+    public RecordPose(Drive drivetrain) {
         this.drivetrain = drivetrain;
     }
 

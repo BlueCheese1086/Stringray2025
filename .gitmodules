@@ -13,3 +13,6 @@
 [submodule "Elevator"]
 	path = src/main/java/frc/robot/subsystems/elevator
 	url = https://github.com/Blasty25/1086-Elevator
+[submodule "Climb"]
+	path = src/main/java/frc/robot/subsystems/climb
+	url = https://github.com/Turbojax07/1086Climb

@@ -30,7 +30,7 @@ public class AlgaeIOSim implements AlgaeIO {
     }
 
     @Override
-    public void setVolts(double percent) {
+    public void set(double percent) {
         algae.setInputVoltage(percent * RobotController.getInputVoltage());
     }
 

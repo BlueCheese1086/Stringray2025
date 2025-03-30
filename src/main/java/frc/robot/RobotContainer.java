@@ -10,8 +10,8 @@ import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.algae.Algae;
 import frc.robot.subsystems.algae.AlgaeIOReal;
 import frc.robot.subsystems.algae.AlgaeIOSim;
+import frc.robot.subsystems.algae.commands.RunAlgaeRoller;
 import frc.robot.subsystems.carriage.*;
-import frc.robot.subsystems.carriage.commands.RunAlgaeRoller;
 import frc.robot.subsystems.carriage.commands.RunIntakeTrack;
 import frc.robot.subsystems.carriage.commands.RunSensorOrientedCarriage;
 import frc.robot.subsystems.climb.Climb;
@@ -125,12 +125,12 @@ public class RobotContainer {
 
         // Intake Coral & Algae
         driverController.leftTrigger(0.2).whileTrue(new RunSensorOrientedCarriage(carriage, () -> -0.3)); //Have to confirm base number
-        driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, ()-> -0.3));
+        driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(algae, ()-> -0.3));
 
 
         //Outtake Coral & Algae (works)
         driverController.rightTrigger(0.2).whileTrue(new RunSensorOrientedCarriage(carriage, () -> driverController.getRightTriggerAxis()));
-        driverController.rightTrigger(0.2).whileTrue(new RunAlgaeRoller(carriage, ()-> driverController.getRightTriggerAxis()));
+        driverController.rightTrigger(0.2).whileTrue(new RunAlgaeRoller(algae, ()-> driverController.getRightTriggerAxis()));
 
         // Overide Shoot
         // driverController.y().toggleOnTrue(new OverideCarriage(carriage, () -> 1.0));

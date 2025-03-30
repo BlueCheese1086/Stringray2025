@@ -17,8 +17,8 @@ public class Algae extends SubsystemBase{
         this.io = io;
     }
 
-    public void setVolts(double percent) {
-        io.setVolts(percent);
+    public void set(double percent) {
+        io.set(percent);
     }
 
     @Override

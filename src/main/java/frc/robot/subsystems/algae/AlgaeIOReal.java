@@ -36,8 +36,8 @@ public class AlgaeIOReal implements AlgaeIO{
     }
 
     @Override
-    public void setVolts(double percent) {
-        algae.setVoltage(percent);
+    public void set(double percent) {
+        algae.set(percent);
     }
 
 }

@@ -27,5 +27,5 @@ public interface AlgaeIO {
 
     public void updateInputs(AlgaeIOInputs inputs);
 
-    public void setVolts(double percent);
+    public void set(double percent);
 }

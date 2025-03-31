@@ -12,7 +12,7 @@ import frc.robot.subsystems.algae.AlgaeIOReal;
 import frc.robot.subsystems.algae.AlgaeIOSim;
 import frc.robot.subsystems.algae.commands.RunAlgaeRoller;
 import frc.robot.subsystems.carriage.*;
-import frc.robot.subsystems.carriage.commands.RunIntakeTrack;
+import frc.robot.subsystems.carriage.commands.OverideCarriage;
 import frc.robot.subsystems.carriage.commands.RunSensorOrientedCarriage;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbIOReal;
@@ -29,6 +29,10 @@ import frc.robot.subsystems.drive.Commands.AutoRightFind;
 import frc.robot.subsystems.drive.Commands.DriveCommands;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.gyro.*;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIOReal;
+import frc.robot.subsystems.hopper.HopperIOSim;
+import frc.robot.subsystems.hopper.commands.RunIntakeTrack;
 import frc.robot.subsystems.util.RecordPose;
 import frc.robot.subsystems.vision.*;
 
@@ -45,6 +49,7 @@ public class RobotContainer {
         private Vision vision;
         private Climb climb;
         private Algae algae;
+        private Hopper hopper;
 
         public RobotContainer() {
                 // Initializing subsystems
@@ -62,9 +67,9 @@ public class RobotContainer {
                                         new ModuleIOTalonFX(TunerConstants.BackLeft),
                                         new ModuleIOTalonFX(TunerConstants.BackRight));
                         algae = new Algae(new AlgaeIOReal(Constants.RobotMap.CARRIAGE_AlgaeId));
+                        hopper = new Hopper(new HopperIOReal(Constants.RobotMap.HOPPER_trackiD));
                         carriage = new Carriage(
                                         new CarriageIOReal(Constants.RobotMap.CARRIAGE_CoralId,
-                                                        Constants.RobotMap.CARRIAGE_TrackId,
                                                         Constants.RobotMap.CARRIAGE_CoralLaserId,
                                                         Constants.RobotMap.CARRIAGE_AlgaeLaserId));
                         elevator = new Elevator(
@@ -83,8 +88,8 @@ public class RobotContainer {
                                         new ModuleIOSim(TunerConstants.FrontLeft),
                                         new ModuleIOSim(TunerConstants.FrontLeft),
                                         new ModuleIOSim(TunerConstants.FrontLeft));
-
                         carriage = new Carriage(new CarriageIOSim());
+                        hopper = new Hopper(new HopperIOSim());
                         elevator = new Elevator(new ElevatorIOSim());
                         algae = new Algae(new AlgaeIOSim());
                         climb = new Climb(new ClimbIOSim());
@@ -99,6 +104,10 @@ public class RobotContainer {
         }
 
         private void configureBindings() {
+
+                //Defualt Commands
+                hopper.setDefaultCommand(new RunIntakeTrack(hopper, ()-> 0.1));
+                carriage.setDefaultCommand(new RunSensorOrientedCarriage(carriage));
 
                 // Driver Controls
                 drive.setDefaultCommand(
@@ -119,6 +128,7 @@ public class RobotContainer {
                                                 () -> -driverController.getRightX(),
                                                 () -> 0.1,
                                                 () -> 0.2));
+
                 driverController.rightBumper().whileTrue(
                                 DriveCommands.joystickDrive(
                                                 drive,
@@ -139,21 +149,14 @@ public class RobotContainer {
                 driverController.start().onTrue(new AutoRightFind(drive, true));
 
                 // Intake Coral & Algae
-                driverController.leftTrigger(0.2).whileTrue(new RunSensorOrientedCarriage(carriage, () -> -0.3)); // Have
-                                                                                                                  // to
-                                                                                                                  // confirm
-                                                                                                                  // base
-                                                                                                                  // number
-                driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(algae, () -> -0.3));
+                driverController.leftTrigger(0.2).whileTrue(new OverideCarriage(carriage, () -> driverController.getLeftTriggerAxis())); // Need to figure out the right voltage in order to intake 
+                driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(algae, () -> driverController.getLeftTriggerAxis()));
 
                 // Outtake Coral & Algae (works)
-                driverController.rightTrigger(0.2).whileTrue(
-                                new RunSensorOrientedCarriage(carriage, () -> driverController.getRightTriggerAxis()));
-                driverController.rightTrigger(0.2)
-                                .whileTrue(new RunAlgaeRoller(algae, () -> driverController.getRightTriggerAxis()));
+                driverController.rightTrigger(0.2).whileTrue(new OverideCarriage(carriage, () -> driverController.getRightTriggerAxis()));
+                driverController.rightTrigger(0.2).whileTrue(new RunAlgaeRoller(algae, () -> driverController.getRightTriggerAxis()));
 
-                // Overide Shoot
-                // driverController.y().toggleOnTrue(new OverideCarriage(carriage, () -> 1.0));
+
 
                 // Operator Buttons
 

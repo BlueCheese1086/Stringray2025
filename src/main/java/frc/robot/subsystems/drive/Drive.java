@@ -55,8 +55,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.subsystems.PoseAllignment;
 import frc.robot.subsystems.util.AdjustableValues;
+import frc.robot.subsystems.util.PoseAllignment;
 import frc.robot.subsystems.vision.CameraIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.util.VisionResult;
@@ -133,6 +133,7 @@ public class Drive extends SubsystemBase {
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
       ModuleIO brModuleIO) {
+
     this.gyroIO = gyroIO;
     this.vision = vision;
     modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
@@ -193,11 +194,11 @@ public class Drive extends SubsystemBase {
     }
     odometryLock.unlock();
 
-    Logger.recordOutput("Robot/Odometry", poseEstimator.getEstimatedPosition());
     for(VisionResult result : vision.getUnreadResults()) {
       poseEstimator.addVisionMeasurement(result.getPose2d(), result.getTimestamp());
+      Logger.recordOutput("Robot/Vision/Pose", result.getPose2d());
     }
-    Logger.recordOutput("Robot/Vision", poseEstimator.getEstimatedPosition());
+
 
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {

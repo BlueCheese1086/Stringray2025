@@ -43,7 +43,7 @@ public class Constants {
         public static final int CARRIAGE_CoralId = 20; // CAN
         public static final int CARRIAGE_CoralLaserId = 21; // CAN (CANandColor)
 
-        public static final int CARRIAGE_TrackId = 30; // CAN
+        public static final int HOPPER_trackiD = 30; // CAN
         public static final int CARRIAGE_TrackLaserId = 31; // CAN (LaserCAN)
 
         public static final int CARRIAGE_AlgaeId = 40; // CAN

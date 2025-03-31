@@ -16,3 +16,6 @@
 [submodule "Climb"]
 	path = src/main/java/frc/robot/subsystems/climb
 	url = https://github.com/Turbojax07/1086Climb
+[submodule "Algae"]
+	path = src/main/java/frc/robot/subsystems/algae
+	url = https://github.com/BlueCheese1086/1086-Algae

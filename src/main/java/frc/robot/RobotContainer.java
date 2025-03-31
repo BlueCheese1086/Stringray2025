@@ -10,7 +10,7 @@ import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.algae.Algae;
 import frc.robot.subsystems.algae.AlgaeIOReal;
 import frc.robot.subsystems.algae.AlgaeIOSim;
-import frc.robot.subsystems.algae.commands.RunAlgaeRoller;
+import frc.robot.subsystems.algae.commands.SetAlgaePercent;
 import frc.robot.subsystems.carriage.*;
 import frc.robot.subsystems.carriage.commands.OverideCarriage;
 import frc.robot.subsystems.carriage.commands.RunSensorOrientedCarriage;
@@ -150,11 +150,11 @@ public class RobotContainer {
 
                 // Intake Coral & Algae
                 driverController.leftTrigger(0.2).whileTrue(new OverideCarriage(carriage, () -> driverController.getLeftTriggerAxis())); // Need to figure out the right voltage in order to intake 
-                driverController.leftTrigger(0.2).whileTrue(new RunAlgaeRoller(algae, () -> driverController.getLeftTriggerAxis()));
+                driverController.leftTrigger(0.2).whileTrue(new SetAlgaePercent(algae, () -> driverController.getLeftTriggerAxis()));
 
                 // Outtake Coral & Algae (works)
                 driverController.rightTrigger(0.2).whileTrue(new OverideCarriage(carriage, () -> driverController.getRightTriggerAxis()));
-                driverController.rightTrigger(0.2).whileTrue(new RunAlgaeRoller(algae, () -> driverController.getRightTriggerAxis()));
+                driverController.rightTrigger(0.2).whileTrue(new SetAlgaePercent(algae, () -> driverController.getRightTriggerAxis()));
 
 
 

@@ -19,3 +19,6 @@
 [submodule "Algae"]
 	path = src/main/java/frc/robot/subsystems/algae
 	url = https://github.com/BlueCheese1086/1086-Algae
+[submodule "Hopper"]
+	path = src/main/java/frc/robot/subsystems/hopper
+	url = https://github.com/BlueCheese1086/1086-Hopper

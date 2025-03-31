@@ -32,7 +32,7 @@ import frc.robot.subsystems.gyro.*;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.hopper.HopperIOReal;
 import frc.robot.subsystems.hopper.HopperIOSim;
-import frc.robot.subsystems.hopper.commands.RunIntakeTrack;
+import frc.robot.subsystems.hopper.commands.SetHopperPercent;
 import frc.robot.subsystems.util.RecordPose;
 import frc.robot.subsystems.vision.*;
 
@@ -106,7 +106,7 @@ public class RobotContainer {
         private void configureBindings() {
 
                 //Defualt Commands
-                hopper.setDefaultCommand(new RunIntakeTrack(hopper, ()-> 0.1));
+                hopper.setDefaultCommand(new SetHopperPercent(hopper, ()-> 0.1));
                 carriage.setDefaultCommand(new RunSensorOrientedCarriage(carriage));
 
                 // Driver Controls

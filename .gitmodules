@@ -1,24 +1,15 @@
-[submodule "Drivetrain"]
-	path = src/main/java/frc/robot/subsystems/drivetrain
-	url = https://github.com/Turbojax07/1086Drivetrain
+[submodule "Drive"]
+	path = src/main/java/frc/robot/subsystems/drive
+	url = https://github.com/BlueCheese1086/1086-Drive
 [submodule "Gyro"]
 	path = src/main/java/frc/robot/subsystems/gyro
-	url = https://github.com/Turbojax07/1086Gyro
-[submodule "Carriage"]
-	path = src/main/java/frc/robot/subsystems/carriage
-	url = https://github.com/Turbojax07/1086Carriage
+	url = https://github.com/BlueCheese1086/1086-Gyro
 [submodule "Vision"]
 	path = src/main/java/frc/robot/subsystems/vision
-	url = https://github.com/Turbojax07/1086-Vision-2025
+	url = https://github.com/BlueCheese1086/1086-Vision
 [submodule "Elevator"]
 	path = src/main/java/frc/robot/subsystems/elevator
-	url = https://github.com/Blasty25/1086-Elevator
+	url = https://github.com/BlueCheese1086/1086-Elevator
 [submodule "Climb"]
 	path = src/main/java/frc/robot/subsystems/climb
-	url = https://github.com/Turbojax07/1086Climb
-[submodule "Algae"]
-	path = src/main/java/frc/robot/subsystems/algae
-	url = https://github.com/BlueCheese1086/1086-Algae
-[submodule "Hopper"]
-	path = src/main/java/frc/robot/subsystems/hopper
-	url = https://github.com/BlueCheese1086/1086-Hopper
+	url = https://github.com/BlueCheese1086/1086-Climb

@@ -19,8 +19,6 @@ public class Constants {
 
     public static final double deadband = 0.1;
 
-    public static final String currentMode = null;
-
     public class RobotMap {
         public static final int DT_FLDrive = 1; // CAN (TalonFX)
         public static final int DT_FLSteer = 2; // CAN (TalonFX)

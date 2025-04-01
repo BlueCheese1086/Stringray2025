@@ -51,7 +51,7 @@ public class Constants {
 
         public static final int CLIMB_MotorId = 50; // CAN
     }
-    
+
     public class Poses {
         public static final Pose2d REEF_Side1Left  = (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) ? new Pose2d(3.106, 4.175, Rotation2d.fromDegrees(  0)) : new Pose2d(14.442, 4.175, Rotation2d.fromDegrees(180));
         public static final Pose2d REEF_Side1Right = (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) ? new Pose2d(3.106, 3.847, Rotation2d.fromDegrees(  0)) : new Pose2d(14.442, 3.847, Rotation2d.fromDegrees(180));

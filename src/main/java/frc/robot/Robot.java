@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.climb.ClimbConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
-import frc.robot.subsystems.util.AdjustableValues;
+import frc.robot.util.AdjustableValues;
 
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -28,10 +28,11 @@ public class Robot extends LoggedRobot {
 
         if (isSimulation() && Constants.isReplay) {
             Logger.setReplaySource(new WPILOGReader("log.wpilog"));
-        }Logger.start();
+        }
+
+        Logger.start();
 
         // Adding adjustable values
-
         AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", ElevatorConstants.kPDefault);
         AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
         AdjustableValues.registerNumber("Elev_kD", "/Adjustables/Elevator/kD", ElevatorConstants.kDDefault);
@@ -39,13 +40,13 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Elev_kS_L1", "/Adjustables/Elevator/kS_L1", ElevatorConstants.kSDefaults[0]);
         AdjustableValues.registerNumber("Elev_kS_L2", "/Adjustables/Elevator/kS_L2", ElevatorConstants.kSDefaults[1]);
         AdjustableValues.registerNumber("Elev_kS_L3", "/Adjustables/Elevator/kS_L3", ElevatorConstants.kSDefaults[2]);
-        
+
         AdjustableValues.registerNumber("Elev_kG_L1", "/Adjustables/Elevator/kG_L1", ElevatorConstants.kGDefaults[0]);
         AdjustableValues.registerNumber("Elev_kG_L2", "/Adjustables/Elevator/kG_L2", ElevatorConstants.kGDefaults[1]);
         AdjustableValues.registerNumber("Elev_kG_L3", "/Adjustables/Elevator/kG_L3", ElevatorConstants.kGDefaults[2]);
-        
+
         AdjustableValues.registerNumber("Elev_kV", "/Adjustables/Elevator/kV", ElevatorConstants.kVDefault);
-        
+
         AdjustableValues.registerNumber("Elev_kA_L1", "/Adjustables/Elevator/kA_L1", ElevatorConstants.kADefaults[0]);
         AdjustableValues.registerNumber("Elev_kA_L2", "/Adjustables/Elevator/kA_L2", ElevatorConstants.kADefaults[1]);
         AdjustableValues.registerNumber("Elev_kA_L3", "/Adjustables/Elevator/kA_L3", ElevatorConstants.kADefaults[2]);
@@ -62,7 +63,7 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
 
         robotContainer.periodic();
-        
+
         AdjustableValues.updateValues();
     }
 

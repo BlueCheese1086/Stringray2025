@@ -22,9 +22,11 @@ public class CoralIOReal implements CoralIO {
     /**
      * Creates a new carriage subsystem with real hardware.
      * 
-     * @param algaeId The CAN id of the {@link TalonFX} motor that moves the algae.
-     * @param coralId The CAN id of the {@link TalonFX} motor that puts coral on the reef.
-     * @param trackId The CAN id of the {@link SparkMax} motor that runs in the chute.
+     * @param algaeId  The CAN id of the {@link TalonFX} motor that moves the algae.
+     * @param coralId  The CAN id of the {@link TalonFX} motor that puts coral on
+     *                 the reef.
+     * @param trackId  The CAN id of the {@link SparkMax} motor that runs in the
+     *                 chute.
      * @param sensorId The CAN id of the {@link CANandcolor} sensor to read.
      */
     public CoralIOReal(int coralId, int sensorId, int trackLaserid) {
@@ -38,17 +40,16 @@ public class CoralIOReal implements CoralIO {
         coralConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         coral.getConfigurator().apply(coralConfig);
-        
-
 
         // Create laser can Configs
         // try {
-        //     laser.setRangingMode(LaserCan.RangingMode.SHORT);
-        //     laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16)); //Defualt But we have to Configure in Their App
-        //     laser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+        // laser.setRangingMode(LaserCan.RangingMode.SHORT);
+        // laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+        // //Defualt But we have to Configure in Their App
+        // laser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         // } catch (ConfigurationFailedException e) {
-        //     e.printStackTrace();
-        //     System.out.println("Laser Can Config Failed!");
+        // e.printStackTrace();
+        // System.out.println("Laser Can Config Failed!");
         // }
     }
 
@@ -60,9 +61,11 @@ public class CoralIOReal implements CoralIO {
         inputs.temperature = coral.getDeviceTemp().getValue();
 
         inputs.sensorProximity = sensor.getProximity();
-        inputs.sensorColor = String.format("#%x%x%x", (int) (sensor.getRed() * 255), (int) (sensor.getGreen() * 255), (int) (sensor.getBlue() * 255));
+        inputs.sensorColor = String.format("#%x%x%x", (int) (sensor.getRed() * 255), (int) (sensor.getGreen() * 255),
+                (int) (sensor.getBlue() * 255));
 
-        // inputs.algaeLaserMeasurement = Millimeters.of(laser.getMeasurement().distance_mm);
+        // inputs.algaeLaserMeasurement =
+        // Millimeters.of(laser.getMeasurement().distance_mm);
         // inputs.alageWeakSignal = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
         // inputs.algaeValidMeasurement = LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT;
 

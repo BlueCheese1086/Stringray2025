@@ -5,41 +5,42 @@ import frc.robot.subsystems.coral.CoralConstants;
 import frc.robot.subsystems.coral.Coral;
 
 public class RunSensorOrientedCarriage extends Command {
-  private Coral carriage;
-  private double canandcolorProx;
-  private double algaeMeasurement;
+    private Coral carriage;
+    private double canandcolorProx;
+    private double reefVisible;
 
-  public RunSensorOrientedCarriage(Coral carriage) {
-    this.carriage = carriage;
-    addRequirements(carriage);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    this.canandcolorProx = carriage.getCanandColorProximity();
-    this.algaeMeasurement = carriage.getAlgaeMeasurement();
-    
-    carriage.setPercent(0.4);
-
-    if (canandcolorProx < CoralConstants.proximityThreshold ) {
-      carriage.setPercent(0);
+    public RunSensorOrientedCarriage(Coral carriage) {
+        this.carriage = carriage;
+        addRequirements(carriage);
     }
-  }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    carriage.setPercent(0);
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        this.canandcolorProx = carriage.getCanandColorProximity();
+        this.reefVisible = carriage.getAlgaeMeasurement();
+
+        carriage.setPercent(0.4);
+
+        if (canandcolorProx < CoralConstants.proximityThreshold) {
+            carriage.setPercent(0);
+        }
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        carriage.setPercent(0);
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

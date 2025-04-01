@@ -1,26 +1,28 @@
 package frc.robot.subsystems.coral.commands;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.coral.CoralConstants;
 import frc.robot.subsystems.coral.Coral;
 import java.util.function.Supplier;
 
-public class SetCoralPercent extends Command {
+public class SetCoralVoltage extends Command {
     private Coral coral;
-    private Supplier<Double> percentSupplier;
+    private Supplier<Double> voltageSupplier;
 
     /**
-     * Creates a new SetCoralPercent command.
-     * It sets the percent output of the coral motor and sets it back to 0 when the
+     * Creates a new SetCoralVoltage command.
+     * It sets the voltage output of the coral motor and sets it back to 0 when the
      * command is cancelled.
      * 
      * @param coral           The coral subsystem to control.
-     * @param percentSupplier The percent output to run at. It is a supplier so it
-     *                        can be tuned while running the motors.
+     * @param voltageSupplier The voltage to run at. It is a supplier so it can be
+     *                        tuned while running the motors.
      */
-    public SetCoralPercent(Coral coral, Supplier<Double> percentSupplier) {
+    public SetCoralVoltage(Coral coral, Supplier<Double> voltageSupplier) {
         this.coral = coral;
-        this.percentSupplier = percentSupplier;
+        this.voltageSupplier = voltageSupplier;
     }
 
     /** Called when the command is initially scheduled. */
@@ -31,7 +33,7 @@ public class SetCoralPercent extends Command {
     /** Called every time the scheduler runs while the command is scheduled. */
     @Override
     public void execute() {
-        coral.setPercent(percentSupplier.get() * CoralConstants.maxPercent);
+        coral.setVoltage(Volts.of(voltageSupplier.get() * CoralConstants.maxPercent));
     }
 
     /** Returns true when the command should end. */
@@ -43,6 +45,6 @@ public class SetCoralPercent extends Command {
     /** Called once the command ends or is interrupted. */
     @Override
     public void end(boolean interrupted) {
-        coral.setPercent(0);
+        coral.setVoltage(Volts.zero());
     }
 }

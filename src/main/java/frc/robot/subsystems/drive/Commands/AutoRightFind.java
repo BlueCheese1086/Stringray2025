@@ -12,40 +12,39 @@ import frc.robot.subsystems.drive.DriveConstants.ControlConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoRightFind extends Command {
-  private Drive drive;
-  private Command autoBuilder;
-  private PathConstraints constraints =
-      new PathConstraints(
-          ControlConstants.maxVelocity,
-          ControlConstants.maxAccel,
-          ControlConstants.angleMaxVelocity,
-          ControlConstants.angleMaxAccel);
-  private boolean alliance;
+    private Drive drive;
+    private Command autoBuilder;
+    private PathConstraints constraints = new PathConstraints(
+            ControlConstants.maxVelocity,
+            ControlConstants.maxAccel,
+            ControlConstants.angleMaxVelocity,
+            ControlConstants.angleMaxAccel);
+    private boolean alliance;
 
-  /** Creates a new AutoFind. */
-  public AutoRightFind(Drive drive, boolean alliance) {
-    this.drive = drive;
-    this.alliance = alliance;
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    this.autoBuilder = AutoBuilder.pathfindToPose(drive.autoRightPose(alliance), constraints, 2.0);
-    autoBuilder.schedule();
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    if (interrupted) {
-      autoBuilder.cancel();
+    /** Creates a new AutoFind. */
+    public AutoRightFind(Drive drive, boolean alliance) {
+        this.drive = drive;
+        this.alliance = alliance;
     }
-  }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return autoBuilder.isFinished();
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        this.autoBuilder = AutoBuilder.pathfindToPose(drive.autoRightPose(alliance), constraints, 2.0);
+        autoBuilder.schedule();
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        if (interrupted) {
+            autoBuilder.cancel();
+        }
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return autoBuilder.isFinished();
+    }
 }

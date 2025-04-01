@@ -1,4 +1,4 @@
-package frc.robot.subsystems.util;
+package frc.robot.util;
 
 import static edu.wpi.first.units.Units.Meters;
 

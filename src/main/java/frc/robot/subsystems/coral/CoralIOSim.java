@@ -14,8 +14,10 @@ public class CoralIOSim implements CoralIO {
 
     /** Creates a simulated version of the carriage. */
     public CoralIOSim() {
-        algaeMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1), DCMotor.getNEO(1));
-        coralMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1), DCMotor.getNEO(1));
+        algaeMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1),
+                DCMotor.getNEO(1));
+        coralMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1),
+                DCMotor.getNEO(1));
     }
 
     @Override
@@ -27,7 +29,6 @@ public class CoralIOSim implements CoralIO {
         inputs.voltage = Volts.of(coralMotorSim.getInputVoltage());
         inputs.current = Amps.of(coralMotorSim.getCurrentDrawAmps());
     }
-
 
     @Override
     public void setPercent(double percent) {

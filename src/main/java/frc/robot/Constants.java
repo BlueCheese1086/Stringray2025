@@ -17,7 +17,7 @@ public class Constants {
 
     public static final double PrecisionScalar = 0.75;
 
-    public static final boolean allianceMode = false;
+    public static final double deadband = 0.1;
 
     public static final String currentMode = null;
 
@@ -75,5 +75,33 @@ public class Constants {
         public static final Pose2d PROCESSOR_Bottom_Left   = (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) ? new Pose2d(0.749, 1.685, Rotation2d.fromDegrees(55)) : new Pose2d(16.799, 1.685, Rotation2d.fromDegrees(125));
         public static final Pose2d PROCESSOR_Bottom_Center = (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) ? new Pose2d(1.134, 1.081, Rotation2d.fromDegrees(55)) : new Pose2d(16.414, 1.081, Rotation2d.fromDegrees(125));
         public static final Pose2d PROCESSOR_Bottom_Right  = (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) ? new Pose2d(1.639, 1.397, Rotation2d.fromDegrees(55)) : new Pose2d(15.909, 1.397, Rotation2d.fromDegrees(125));
+
+        public static final ArrayList<Pose2d> REEF_Left = new ArrayList<Pose2d>();
+        public static final ArrayList<Pose2d> REEF_Right = new ArrayList<Pose2d>();
+        public static final ArrayList<Pose2d> PROCESSOR = new ArrayList<Pose2d>();
+
+        // Adding poses to the arrays
+        static {
+            REEF_Left.add(REEF_Side1Left);
+            REEF_Left.add(REEF_Side2Left);
+            REEF_Left.add(REEF_Side3Left);
+            REEF_Left.add(REEF_Side4Left);
+            REEF_Left.add(REEF_Side5Left);
+            REEF_Left.add(REEF_Side6Left);
+
+            REEF_Right.add(REEF_Side1Right);
+            REEF_Right.add(REEF_Side2Right);
+            REEF_Right.add(REEF_Side3Right);
+            REEF_Right.add(REEF_Side4Right);
+            REEF_Right.add(REEF_Side5Right);
+            REEF_Right.add(REEF_Side6Right);
+
+            PROCESSOR.add(PROCESSOR_Bottom_Left);
+            PROCESSOR.add(PROCESSOR_Bottom_Center);
+            PROCESSOR.add(PROCESSOR_Bottom_Right);
+            PROCESSOR.add(PROCESSOR_Top_Left);
+            PROCESSOR.add(PROCESSOR_Top_Center);
+            PROCESSOR.add(PROCESSOR_Top_Right);
+        }
     }
 }

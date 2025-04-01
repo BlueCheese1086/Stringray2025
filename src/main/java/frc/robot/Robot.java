@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.climb.ClimbConstants;
+import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.util.AdjustableValues;
-
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -33,6 +33,18 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         // Adding adjustable values
+        AdjustableValues.registerNumber("X_kP", "/Adjustables/Autos/kP_X", DriveConstants.kPX);
+        AdjustableValues.registerNumber("X_kI", "/Adjustables/Autos/kI_X", DriveConstants.kIX);
+        AdjustableValues.registerNumber("X_kD", "/Adjustables/Autos/kD_X", DriveConstants.kDX);
+
+        AdjustableValues.registerNumber("Y_kP", "/Adjustables/Autos/kP_Y", DriveConstants.kPY);
+        AdjustableValues.registerNumber("Y_kI", "/Adjustables/Autos/kI_Y", DriveConstants.kIY);
+        AdjustableValues.registerNumber("Y_kD", "/Adjustables/Autos/kD_Y", DriveConstants.kDY);
+
+        AdjustableValues.registerNumber("Theta_kP", "/Adjustables/Autos/kP_Theta", DriveConstants.kPTheta);
+        AdjustableValues.registerNumber("Theta_kI", "/Adjustables/Autos/kI_Theta", DriveConstants.kITheta);
+        AdjustableValues.registerNumber("Theta_kD", "/Adjustables/Autos/kD_Theta", DriveConstants.kDTheta);
+
         AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", ElevatorConstants.kPDefault);
         AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
         AdjustableValues.registerNumber("Elev_kD", "/Adjustables/Elevator/kD", ElevatorConstants.kDDefault);

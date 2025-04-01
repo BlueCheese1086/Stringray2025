@@ -1,13 +1,11 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.Poses;
 import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.algae.*;
 import frc.robot.subsystems.algae.commands.*;
@@ -16,7 +14,6 @@ import frc.robot.subsystems.climb.commands.*;
 import frc.robot.subsystems.coral.*;
 import frc.robot.subsystems.coral.commands.*;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.drive.Commands.*;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.gyro.*;
@@ -46,8 +43,7 @@ public class RobotContainer {
             gyro = new Gyro(new GyroIOPigeon2(RobotMap.GYRO_Pigeon2Id));
             vision = new Vision(
                     new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
-                    new CameraIOReal(VisionConstants.rCameraName,
-                            VisionConstants.rCameraTransform));
+                    new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
             drive = new Drive(
                     gyro,
                     vision,
@@ -62,10 +58,9 @@ public class RobotContainer {
                             RobotMap.CORAL_SensorId,
                             RobotMap.CORAL_LaserId));
             elevator = new Elevator(
-                    new ElevatorIOReal(Constants.RobotMap.ELEV_LeftId,
-                            Constants.RobotMap.ELEV_RightId));
-            climb = new Climb(new ClimbIOReal(Constants.RobotMap.CLIMB_MotorId));
-
+                    new ElevatorIOReal(RobotMap.ELEV_LeftId,
+                            RobotMap.ELEV_RightId));
+            climb = new Climb(new ClimbIOReal(RobotMap.CLIMB_MotorId));
         } else {
             vision = new Vision(
                     new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
@@ -86,7 +81,7 @@ public class RobotContainer {
 
         // Anti-Tip command (Cancels if the A button is pressed)
         if (RobotBase.isReal()) {
-            // new AntiTip(drive, elevator, gyro, () -> driverController.getHID().getAButton())
+            new AntiTip(drive, elevator, gyro, () -> driverController.getHID().getAButton());
         }
 
         // Configuring controller bindings
@@ -102,7 +97,7 @@ public class RobotContainer {
                         () -> driverController.getLeftX(),
                         () -> -driverController.getRightX(),
                         () -> 0.1,
-                        () -> 1));
+                        () -> 1.0));
 
         // Presice Mode
         driverController.leftBumper().or(driverController.rightBumper())
@@ -117,12 +112,22 @@ public class RobotContainer {
 
         driverController.y().onTrue(new RecordPose(drive));
 
-        // Path Find / Overide is joystick
-        driverController.back()
-            .onTrue(new AutoLeftFind(drive, DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue));
+        // Path Find / Override is joystick
+        driverController.back() // Pathfind to left side
+            .onTrue(DriveCommands.ppToPose(drive, drive.getPose().nearest(Poses.REEF_Left),
+            () -> (
+                Math.abs(driverController.getLeftX()) < Constants.deadband ||
+                Math.abs(driverController.getLeftY()) < Constants.deadband ||
+                Math.abs(driverController.getRightX()) < Constants.deadband ||
+                Math.abs(driverController.getRightY()) < Constants.deadband)));
 
-        driverController.start()
-            .onTrue(new AutoRightFind(drive, DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue));
+        driverController.start() // Pathfind to right side
+            .onTrue(DriveCommands.ppToPose(drive, drive.getPose().nearest(Poses.REEF_Right),
+            () -> (
+                Math.abs(driverController.getLeftX()) < Constants.deadband ||
+                Math.abs(driverController.getLeftY()) < Constants.deadband ||
+                Math.abs(driverController.getRightX()) < Constants.deadband ||
+                Math.abs(driverController.getRightY()) < Constants.deadband)));
 
         // Intake Coral & Algae
         driverController.leftTrigger(0.2)

@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,8 +23,6 @@ import frc.robot.subsystems.hopper.*;
 import frc.robot.subsystems.hopper.commands.*;
 import frc.robot.subsystems.vision.*;
 import frc.robot.util.*;
-
-import static edu.wpi.first.units.Units.Volts;
 
 public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
@@ -53,13 +53,8 @@ public class RobotContainer {
                     new ModuleIOTalonFX(TunerConstants.BackRight));
             algae = new Algae(new AlgaeIOReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId));
             hopper = new Hopper(new HopperIOReal(RobotMap.HOPPER_MotorId, RobotMap.HOPPER_LaserId));
-            coral = new Coral(
-                    new CoralIOReal(RobotMap.CORAL_MotorId,
-                            RobotMap.CORAL_SensorId,
-                            RobotMap.CORAL_LaserId));
-            elevator = new Elevator(
-                    new ElevatorIOReal(RobotMap.ELEV_LeftId,
-                            RobotMap.ELEV_RightId));
+            coral = new Coral(new CoralIOReal(RobotMap.CORAL_MotorId, RobotMap.CORAL_SensorId, RobotMap.CORAL_LaserId));
+            elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
             climb = new Climb(new ClimbIOReal(RobotMap.CLIMB_MotorId));
         } else {
             vision = new Vision(
@@ -69,9 +64,9 @@ public class RobotContainer {
                     gyro,
                     vision,
                     new ModuleIOSim(TunerConstants.FrontLeft),
-                    new ModuleIOSim(TunerConstants.FrontLeft),
-                    new ModuleIOSim(TunerConstants.FrontLeft),
-                    new ModuleIOSim(TunerConstants.FrontLeft));
+                    new ModuleIOSim(TunerConstants.FrontRight),
+                    new ModuleIOSim(TunerConstants.BackLeft),
+                    new ModuleIOSim(TunerConstants.BackRight));
             coral = new Coral(new CoralIOSim());
             hopper = new Hopper(new HopperIOSim());
             elevator = new Elevator(new ElevatorIOSim());
@@ -81,7 +76,7 @@ public class RobotContainer {
 
         // Anti-Tip command (Cancels if the A button is pressed)
         if (RobotBase.isReal()) {
-            new AntiTip(drive, elevator, gyro, () -> driverController.getHID().getAButton());
+            new AntiTip(drive, elevator, gyro, driverController.getHID()::getAButton);
         }
 
         // Configuring controller bindings

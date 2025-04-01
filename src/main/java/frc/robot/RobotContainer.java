@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.algae.*;
 import frc.robot.subsystems.algae.commands.*;
 import frc.robot.subsystems.climb.*;
@@ -18,6 +19,7 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.drive.Commands.*;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
+import frc.robot.subsystems.gyro.*;
 import frc.robot.subsystems.hopper.*;
 import frc.robot.subsystems.hopper.commands.*;
 import frc.robot.subsystems.vision.*;
@@ -32,6 +34,7 @@ public class RobotContainer {
     private Coral carriage;
     private Drive drive;
     private Elevator elevator;
+    private Gyro gyro;
     private Vision vision;
     private Climb climb;
     private Algae algae;
@@ -40,12 +43,13 @@ public class RobotContainer {
     public RobotContainer() {
         // Initializing subsystems
         if (Robot.isReal()) {
+            gyro = new Gyro(new GyroIOPigeon2(RobotMap.GYRO_Pigeon2Id));
             vision = new Vision(
                     new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOReal(VisionConstants.rCameraName,
                             VisionConstants.rCameraTransform));
             drive = new Drive(
-                    new GyroIOPigeon2(),
+                    gyro,
                     vision,
                     new ModuleIOTalonFX(TunerConstants.FrontLeft),
                     new ModuleIOTalonFX(TunerConstants.FrontRight),
@@ -67,7 +71,7 @@ public class RobotContainer {
                     new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
             drive = new Drive(
-                    new GyroIO() {},
+                    gyro,
                     vision,
                     new ModuleIOSim(TunerConstants.FrontLeft),
                     new ModuleIOSim(TunerConstants.FrontLeft),

@@ -1,6 +1,6 @@
 [submodule "Drive"]
 	path = src/main/java/frc/robot/subsystems/drive
-	url = https://github.com/BlueCheese1086/1086-Drive
+	url = https://github.com/BlueCheese1086/1086-Drivetrain
 [submodule "Gyro"]
 	path = src/main/java/frc/robot/subsystems/gyro
 	url = https://github.com/BlueCheese1086/1086-Gyro

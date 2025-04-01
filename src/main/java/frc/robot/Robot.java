@@ -57,7 +57,9 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Elev_kG_L2", "/Adjustables/Elevator/kG_L2", ElevatorConstants.kGDefaults[1]);
         AdjustableValues.registerNumber("Elev_kG_L3", "/Adjustables/Elevator/kG_L3", ElevatorConstants.kGDefaults[2]);
 
-        AdjustableValues.registerNumber("Elev_kV", "/Adjustables/Elevator/kV", ElevatorConstants.kVDefault);
+        AdjustableValues.registerNumber("Elev_kV_L1", "/Adjustables/Elevator/kV_L1", ElevatorConstants.kVDefaults[0]);
+        AdjustableValues.registerNumber("Elev_kV_L2", "/Adjustables/Elevator/kV_L2", ElevatorConstants.kVDefaults[1]);
+        AdjustableValues.registerNumber("Elev_kV_L3", "/Adjustables/Elevator/kV_L3", ElevatorConstants.kVDefaults[2]);
 
         AdjustableValues.registerNumber("Elev_kA_L1", "/Adjustables/Elevator/kA_L1", ElevatorConstants.kADefaults[0]);
         AdjustableValues.registerNumber("Elev_kA_L2", "/Adjustables/Elevator/kA_L2", ElevatorConstants.kADefaults[1]);

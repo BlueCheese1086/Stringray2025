@@ -15,14 +15,13 @@ import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 import edu.wpi.first.units.measure.Voltage;
 import java.util.Objects;
 
-/** Add your docs here. */
 public class CoralIOReal implements CoralIO {
     private TalonFX coral;
     private Canandcolor sensor;
     private LaserCan laser;
 
     /**
-     * Creates a new carriage subsystem with real hardware.
+     * Creates a new coral subsystem with real hardware.
      * 
      * @param coralId  The CAN ID of the {@link TalonFX} motor that puts coral on the reef.
      * @param sensorId The CAN ID of the {@link CANandcolor} sensor to read.

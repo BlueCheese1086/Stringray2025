@@ -70,6 +70,6 @@ public class Coral extends SubsystemBase {
     @Override
     public void periodic() {
         coralIO.updateInputs(inputs);
-        Logger.processInputs("/RealOutputs/Subsystems/Carriage", inputs);
+        Logger.processInputs("/RealOutputs/Subsystems/Coral", inputs);
     }
 }

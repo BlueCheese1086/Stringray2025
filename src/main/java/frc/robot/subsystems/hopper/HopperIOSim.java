@@ -18,9 +18,9 @@ public class HopperIOSim implements HopperIO {
     @Override
     public void updateInputs(HopperIOInputs inputs) {
         hopper.update(0.02);
-        inputs.trackPercent = hopper.getInputVoltage() / RobotController.getInputVoltage();
-        inputs.trackVoltage = Volts.of(hopper.getInputVoltage());
-        inputs.trackCurrent = Amps.of(hopper.getCurrentDrawAmps());
+        inputs.percent = hopper.getInputVoltage() / RobotController.getInputVoltage();
+        inputs.voltage = Volts.of(hopper.getInputVoltage());
+        inputs.current = Amps.of(hopper.getCurrentDrawAmps());
     }
 
     @Override

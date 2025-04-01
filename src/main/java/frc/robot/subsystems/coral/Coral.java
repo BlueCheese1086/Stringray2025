@@ -1,5 +1,8 @@
 package frc.robot.subsystems.coral;
 
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -27,12 +30,36 @@ public class Coral extends SubsystemBase {
         coralIO.setVoltage(voltage);
     }
 
-    public double getCanandColorProximity() {
+    public double getSensorProximity() {
         return inputs.sensorProximity;
     }
 
-    public int getAlgaeMeasurement() {
-        return inputs.algaeValidMeasurement;
+    public String getSensorColor() {
+        return inputs.sensorColor;
+    }
+
+    public Distance getLaserReading() {
+        return inputs.laserReading;
+    }
+
+    public int getLaserStatus() {
+        return inputs.laserStatus;
+    }
+
+    public double getPercent() {
+        return inputs.percent;
+    }
+
+    public Voltage getVoltage() {
+        return inputs.voltage;
+    }
+
+    public Current getCurrent() {
+        return inputs.current;
+    }
+
+    public Temperature getTemperature() {
+        return inputs.temperature;
     }
 
     /**

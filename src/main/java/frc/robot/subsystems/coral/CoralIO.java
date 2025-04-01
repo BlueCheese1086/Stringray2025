@@ -2,6 +2,7 @@ package frc.robot.subsystems.coral;
 
 import static edu.wpi.first.units.Units.*;
 
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Temperature;
@@ -19,9 +20,8 @@ public interface CoralIO {
         public double sensorProximity = 0;
         public String sensorColor = "";
 
-        public Distance algaeLaserMeasurement = Millimeters.zero();
-        public int alageWeakSignal = 0;
-        public int algaeValidMeasurement = 1;
+        public Distance laserReading = Millimeters.zero();
+        public int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
     }
 
     /**

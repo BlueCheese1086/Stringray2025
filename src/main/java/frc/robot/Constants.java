@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import java.util.ArrayList;
 
 public class Constants {
     public static final boolean isReplay = false;
@@ -21,35 +22,36 @@ public class Constants {
     public static final String currentMode = null;
 
     public class RobotMap {
-        public static final int DT_FLDrive = 1; // CAN
-        public static final int DT_FLSteer = 2; // CAN
-        public static final int DT_FRDrive = 3; // CAN
-        public static final int DT_FRSteer = 4; // CAN
-        public static final int DT_BLDrive = 5; // CAN
-        public static final int DT_BLSteer = 6; // CAN
-        public static final int DT_BRDrive = 7; // CAN
-        public static final int DT_BRSteer = 8; // CAN
+        public static final int DT_FLDrive = 1; // CAN (TalonFX)
+        public static final int DT_FLSteer = 2; // CAN (TalonFX)
+        public static final int DT_FRDrive = 3; // CAN (TalonFX)
+        public static final int DT_FRSteer = 4; // CAN (TalonFX)
+        public static final int DT_BLDrive = 5; // CAN (TalonFX)
+        public static final int DT_BLSteer = 6; // CAN (TalonFX)
+        public static final int DT_BRDrive = 7; // CAN (TalonFX)
+        public static final int DT_BRSteer = 8; // CAN (TalonFX)
 
-        public static final int DT_FLEncoder = 2; // CAN
-        public static final int DT_FREncoder = 4; // CAN
-        public static final int DT_BLEncoder = 6; // CAN
-        public static final int DT_BREncoder = 8; // CAN
+        public static final int DT_FLEncoder = 2; // CAN (CANcoder)
+        public static final int DT_FREncoder = 4; // CAN (CANcoder)
+        public static final int DT_BLEncoder = 6; // CAN (CANcoder)
+        public static final int DT_BREncoder = 8; // CAN (CANcoder)
 
-        public static final int GYRO_Pigeon2Id = 0; // CAN
+        public static final int GYRO_Pigeon2Id = 0; // CAN (Pigeon2)
 
-        public static final int ELEV_LeftId = 10; // CAN
-        public static final int ELEV_RightId = 11; // CAN
+        public static final int ELEV_LeftId = 10; // CAN (TalonFX)
+        public static final int ELEV_RightId = 11; // CAN (TalonFX)
 
-        public static final int CARRIAGE_CoralId = 20; // CAN
-        public static final int CARRIAGE_CoralLaserId = 21; // CAN (CANandColor)
+        public static final int CORAL_MotorId = 20; // CAN (TalonFX)
+        public static final int CORAL_SensorId = 21; // CAN (CANandColor)
+        public static final int CORAL_LaserId = 21; // CAN (LaserCan)
 
-        public static final int HOPPER_trackiD = 30; // CAN
-        public static final int CARRIAGE_TrackLaserId = 31; // CAN (LaserCAN)
+        public static final int HOPPER_MotorId = 30; // CAN (SparkMax)
+        public static final int HOPPER_LaserId = 31; // CAN (LaserCan)
 
-        public static final int CARRIAGE_AlgaeId = 40; // CAN
-        public static final int CARRIAGE_AlgaeLaserId = 41; // CAN (LaserCAN)
+        public static final int ALGAE_MotorId = 40; // CAN (TalonFX)
+        public static final int ALGAE_LaserId = 41; // CAN (LaserCan)
 
-        public static final int CLIMB_MotorId = 50; // CAN
+        public static final int CLIMB_MotorId = 50; // CAN (TalonFX)
     }
 
     public class Poses {

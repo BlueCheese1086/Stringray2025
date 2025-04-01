@@ -1,5 +1,10 @@
 package frc.robot.subsystems.coral;
 
+import static edu.wpi.first.units.Units.Millimeters;
+
+import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -7,50 +12,44 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
-import com.revrobotics.spark.SparkMax;
-// import au.grapplerobotics.ConfigurationFailedException;
-// import au.grapplerobotics.LaserCan;
-
 import edu.wpi.first.units.measure.Voltage;
+import java.util.Objects;
 
 /** Add your docs here. */
 public class CoralIOReal implements CoralIO {
     private TalonFX coral;
     private Canandcolor sensor;
-    // private LaserCan laser;
+    private LaserCan laser;
 
     /**
      * Creates a new carriage subsystem with real hardware.
      * 
-     * @param algaeId  The CAN id of the {@link TalonFX} motor that moves the algae.
-     * @param coralId  The CAN id of the {@link TalonFX} motor that puts coral on
-     *                 the reef.
-     * @param trackId  The CAN id of the {@link SparkMax} motor that runs in the
-     *                 chute.
-     * @param sensorId The CAN id of the {@link CANandcolor} sensor to read.
+     * @param coralId  The CAN ID of the {@link TalonFX} motor that puts coral on the reef.
+     * @param sensorId The CAN ID of the {@link CANandcolor} sensor to read.
+     * @param laserId  The CAN ID of the {@link LaserCan} sensor under the roller.
      */
-    public CoralIOReal(int coralId, int sensorId, int trackLaserid) {
+    public CoralIOReal(int coralId, int sensorId, int laserId) {
         coral = new TalonFX(coralId);
         sensor = new Canandcolor(sensorId);
-        // laser = new LaserCan(trackLaserid);
+        laser = new LaserCan(laserId);
 
         // Creating and applying the config for the coral motor
-        TalonFXConfiguration coralConfig = new TalonFXConfiguration();
-        coralConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        coralConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        coral.getConfigurator().apply(coralConfig);
+        coral.getConfigurator().apply(config);
 
-        // Create laser can Configs
-        // try {
-        // laser.setRangingMode(LaserCan.RangingMode.SHORT);
-        // laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-        // //Defualt But we have to Configure in Their App
-        // laser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-        // } catch (ConfigurationFailedException e) {
-        // e.printStackTrace();
-        // System.out.println("Laser Can Config Failed!");
-        // }
+        // Configuring LaserCan
+        try {
+            laser.setRangingMode(LaserCan.RangingMode.SHORT);
+            laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+            // Default but we have to configure in their app
+            laser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+        } catch (ConfigurationFailedException e) {
+            e.printStackTrace();
+            System.out.println("Coral Laser Can Config Failed!");
+        }
     }
 
     @Override
@@ -61,14 +60,19 @@ public class CoralIOReal implements CoralIO {
         inputs.temperature = coral.getDeviceTemp().getValue();
 
         inputs.sensorProximity = sensor.getProximity();
-        inputs.sensorColor = String.format("#%x%x%x", (int) (sensor.getRed() * 255), (int) (sensor.getGreen() * 255),
-                (int) (sensor.getBlue() * 255));
+        inputs.sensorColor = String.format("#%x%x%x", (int) (sensor.getRed() * 255), (int) (sensor.getGreen() * 255), (int) (sensor.getBlue() * 255));
 
-        // inputs.algaeLaserMeasurement =
-        // Millimeters.of(laser.getMeasurement().distance_mm);
-        // inputs.alageWeakSignal = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
-        // inputs.algaeValidMeasurement = LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT;
+        // This can be null, check before using
+        Measurement measure = laser.getMeasurement();
 
+        if (Objects.isNull(measure)) return;
+
+        inputs.laserStatus = measure.status;
+
+        // Only updating the reading if the sensor has a good read.
+        if (inputs.laserStatus != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return;
+
+        inputs.laserReading = Millimeters.of(measure.distance_mm);
     }
 
     @Override

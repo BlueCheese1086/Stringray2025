@@ -7,7 +7,6 @@ import frc.robot.subsystems.coral.Coral;
 public class RunSensorOrientedCarriage extends Command {
     private Coral carriage;
     private double canandcolorProx;
-    private double reefVisible;
 
     public RunSensorOrientedCarriage(Coral carriage) {
         this.carriage = carriage;
@@ -22,8 +21,7 @@ public class RunSensorOrientedCarriage extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        this.canandcolorProx = carriage.getCanandColorProximity();
-        this.reefVisible = carriage.getAlgaeMeasurement();
+        this.canandcolorProx = carriage.getSensorProximity();
 
         carriage.setPercent(0.4);
 

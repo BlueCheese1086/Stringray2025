@@ -2,7 +2,9 @@ package frc.robot.subsystems.algae;
 
 import static edu.wpi.first.units.Units.*;
 
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
@@ -14,6 +16,9 @@ public interface AlgaeIO {
         public Voltage voltage = Volts.zero();
         public Current current = Amps.zero();
         public Temperature temperature = Celsius.zero();
+
+        public Distance laserReading = Meters.zero();
+        public int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
     }
 
     public void updateInputs(AlgaeIOInputs inputs);

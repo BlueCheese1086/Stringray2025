@@ -31,7 +31,7 @@ public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
     private CommandXboxController operatorController = new CommandXboxController(1);
 
-    private Coral carriage;
+    private Coral coral;
     private Drive drive;
     private Elevator elevator;
     private Gyro gyro;
@@ -55,12 +55,12 @@ public class RobotContainer {
                     new ModuleIOTalonFX(TunerConstants.FrontRight),
                     new ModuleIOTalonFX(TunerConstants.BackLeft),
                     new ModuleIOTalonFX(TunerConstants.BackRight));
-            algae = new Algae(new AlgaeIOReal(Constants.RobotMap.CARRIAGE_AlgaeId));
-            hopper = new Hopper(new HopperIOReal(Constants.RobotMap.HOPPER_trackiD));
-            carriage = new Coral(
-                    new CoralIOReal(Constants.RobotMap.CARRIAGE_CoralId,
-                            Constants.RobotMap.CARRIAGE_CoralLaserId,
-                            Constants.RobotMap.CARRIAGE_AlgaeLaserId));
+            algae = new Algae(new AlgaeIOReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId));
+            hopper = new Hopper(new HopperIOReal(RobotMap.HOPPER_MotorId, RobotMap.HOPPER_LaserId));
+            coral = new Coral(
+                    new CoralIOReal(RobotMap.CORAL_MotorId,
+                            RobotMap.CORAL_SensorId,
+                            RobotMap.CORAL_LaserId));
             elevator = new Elevator(
                     new ElevatorIOReal(Constants.RobotMap.ELEV_LeftId,
                             Constants.RobotMap.ELEV_RightId));
@@ -77,7 +77,7 @@ public class RobotContainer {
                     new ModuleIOSim(TunerConstants.FrontLeft),
                     new ModuleIOSim(TunerConstants.FrontLeft),
                     new ModuleIOSim(TunerConstants.FrontLeft));
-            carriage = new Coral(new CoralIOSim());
+            coral = new Coral(new CoralIOSim());
             hopper = new Hopper(new HopperIOSim());
             elevator = new Elevator(new ElevatorIOSim());
             algae = new Algae(new AlgaeIOSim());
@@ -126,14 +126,14 @@ public class RobotContainer {
 
         // Intake Coral & Algae
         driverController.leftTrigger(0.2)
-            .whileTrue(new SetCoralPercent(carriage, () -> driverController.getLeftTriggerAxis()))
+            .whileTrue(new SetCoralPercent(coral, () -> driverController.getLeftTriggerAxis()))
             .whileTrue(new SetAlgaePercent(algae, () -> driverController.getLeftTriggerAxis()));
 
         // Need to figure out the right voltage in order to intake
 
         // Outtake Coral & Algae (works)
         driverController.rightTrigger(0.2)
-            .whileTrue(new SetCoralPercent(carriage, () -> driverController.getRightTriggerAxis()))
+            .whileTrue(new SetCoralPercent(coral, () -> driverController.getRightTriggerAxis()))
             .whileTrue(new SetAlgaePercent(algae, () -> driverController.getRightTriggerAxis()));
 
         // Operator Buttons

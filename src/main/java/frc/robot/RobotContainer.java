@@ -19,7 +19,6 @@ import frc.robot.subsystems.coral.*;
 import frc.robot.subsystems.coral.commands.OverrideCoral;
 import frc.robot.subsystems.coral.commands.RunSensorOrientedCarriage;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
@@ -28,7 +27,6 @@ import frc.robot.subsystems.drive.Commands.AutoLeftFind;
 import frc.robot.subsystems.drive.Commands.AutoRightFind;
 import frc.robot.subsystems.drive.Commands.DriveCommands;
 import frc.robot.subsystems.elevator.*;
-import frc.robot.subsystems.gyro.*;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.hopper.HopperIOReal;
 import frc.robot.subsystems.hopper.HopperIOSim;
@@ -45,7 +43,6 @@ public class RobotContainer {
         private Coral carriage;
         private Drive drive;
         private Elevator elevator;
-        private Gyro gyro;
         private Vision vision;
         private Climb climb;
         private Algae algae;
@@ -54,7 +51,6 @@ public class RobotContainer {
         public RobotContainer() {
                 // Initializing subsystems
                 if (Robot.isReal()) {
-                        // gyro = new Gyro(new GyroIOPigeon2(Constants.RobotMap.GYRO_Pigeon2Id));
                         vision = new Vision(
                                         new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                                         new CameraIOReal(VisionConstants.rCameraName,
@@ -81,13 +77,13 @@ public class RobotContainer {
                         vision = new Vision(
                                         new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                                         new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
-                        drive = new Drive(new GyroIO() {
-                        },
-                                        vision,
-                                        new ModuleIOSim(TunerConstants.FrontLeft),
-                                        new ModuleIOSim(TunerConstants.FrontLeft),
-                                        new ModuleIOSim(TunerConstants.FrontLeft),
-                                        new ModuleIOSim(TunerConstants.FrontLeft));
+                        // drive = new Drive(new GyroIO() {
+                        // },
+                        //                 vision,
+                        //                 new ModuleIOSim(TunerConstants.FrontLeft),
+                        //                 new ModuleIOSim(TunerConstants.FrontLeft),
+                        //                 new ModuleIOSim(TunerConstants.FrontLeft),
+                        //                 new ModuleIOSim(TunerConstants.FrontLeft));
                         carriage = new Coral(new CoralIOSim());
                         hopper = new Hopper(new HopperIOSim());
                         elevator = new Elevator(new ElevatorIOSim());
@@ -139,10 +135,6 @@ public class RobotContainer {
                                                 () -> 0.2));
 
                 driverController.y().onTrue(new RecordPose(drive));
-
-                if (RobotBase.isReal()) {
-                        driverController.b().onTrue(Commands.runOnce(() -> gyro.reset(), gyro));
-                }
 
                 // Path Find / Overide is joystick
                 driverController.back().onTrue(new AutoLeftFind(drive, true)); // False is red

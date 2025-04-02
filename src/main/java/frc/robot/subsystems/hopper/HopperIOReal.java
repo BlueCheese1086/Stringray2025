@@ -36,7 +36,7 @@ public class HopperIOReal implements HopperIO {
             laser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException e) {
             e.printStackTrace();
-            System.out.println("Coral Laser Can Config Failed!");
+            System.out.println("Hopper Laser Can Config Failed!");
         }
     }
 

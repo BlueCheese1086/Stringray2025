@@ -11,10 +11,9 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 public class CoralIOSim implements CoralIO {
     private DCMotorSim motorSim;
 
-    /** Creates a simulated version of the coral. */
+    /** Creates a simulated version of the coral subsystem. */
     public CoralIOSim() {
-        motorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1),
-                DCMotor.getNEO(1));
+        motorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1), DCMotor.getNEO(1));
     }
 
     @Override

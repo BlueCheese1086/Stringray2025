@@ -1,7 +1,6 @@
 package frc.robot.subsystems.coral.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.coral.CoralConstants;
 import frc.robot.util.MathUtils;
 import frc.robot.Constants;
 import frc.robot.subsystems.coral.Coral;
@@ -10,18 +9,20 @@ import java.util.function.Supplier;
 public class SetCoralSpeed extends Command {
     private Coral coral;
     private Supplier<Double> throttle;
+    private Supplier<Double> percentSupplier;
 
     /**
-     * Creates a new SetCoralSpeed command.
-     * It sets the percent output of the coral motor and sets it back to 0 when the
-     * command is cancelled.
+     * Creates a new {@link SetCoralSpeed} command.
+     * It sets the percent output of the coral motor and sets it back to 0 when the command is cancelled.
      * 
-     * @param coral     The coral subsystem to control.
-     * @param throttle  The percent speed to run at.
+     * @param coral The {@link coral} subsystem to control.
+     * @param throttle The percent speed to run at.
+     * @param percentSupplier The max percent to run at.
      */
-    public SetCoralSpeed(Coral coral, Supplier<Double> throttle) {
+    public SetCoralSpeed(Coral coral, Supplier<Double> throttle, Supplier<Double> percentSupplier) {
         this.coral = coral;
         this.throttle = throttle;
+        this.percentSupplier = percentSupplier;
 
         addRequirements(coral);
     }
@@ -38,7 +39,7 @@ public class SetCoralSpeed extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        coral.setPercent(speed * CoralConstants.maxPercent);
+        coral.setPercent(speed * percentSupplier.get());
     }
 
     /** Returns true when the command should end. */

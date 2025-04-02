@@ -12,9 +12,9 @@ public class Coral extends SubsystemBase {
     private CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
 
     /**
-     * Creates a new Coral subsystem.
+     * Creates a new {@link Coral} subsystem.
      * 
-     * @param coralIO The coralIO to control.
+     * @param coralIO The {@link CoralIO} to control.
      */
     public Coral(CoralIO coralIO) {
         this.coralIO = coralIO;
@@ -30,34 +30,42 @@ public class Coral extends SubsystemBase {
         coralIO.setVoltage(voltage);
     }
 
+    /** Gets the proximity read by the CANandColor. */
     public double getSensorProximity() {
         return inputs.sensorProximity;
     }
 
+    /** Gets the color seen by the CANandColor. */
     public String getSensorColor() {
         return inputs.sensorColor;
     }
 
+    /** Gets the distance seen by the LaserCan. */
     public Distance getLaserReading() {
         return inputs.laserReading;
     }
 
+    /** Gets the latest status of the LaserCan. */
     public int getLaserStatus() {
         return inputs.laserStatus;
     }
 
+    /** Gets the percent output of the coral motor. */
     public double getPercent() {
         return inputs.percent;
     }
 
+    /** Gets the voltage output of the coral motor. */
     public Voltage getVoltage() {
         return inputs.voltage;
     }
 
+    /** Gets the current applied to the coral motor. */
     public Current getCurrent() {
         return inputs.current;
     }
 
+    /** Gets the internal temperature of the coral motor. */
     public Temperature getTemperature() {
         return inputs.temperature;
     }

@@ -51,6 +51,6 @@ public class Algae extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("Algae", inputs);
+        Logger.processInputs("/RealOutputs/Algae", inputs);
     }
 }

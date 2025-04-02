@@ -2,36 +2,43 @@ package frc.robot.subsystems.coral.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.coral.CoralConstants;
+import frc.robot.util.MathUtils;
+import frc.robot.Constants;
 import frc.robot.subsystems.coral.Coral;
 import java.util.function.Supplier;
 
-public class SetCoralPercent extends Command {
+public class SetCoralSpeed extends Command {
     private Coral coral;
-    private Supplier<Double> percentSupplier;
+    private Supplier<Double> throttle;
 
     /**
-     * Creates a new SetCoralPercent command.
+     * Creates a new SetCoralSpeed command.
      * It sets the percent output of the coral motor and sets it back to 0 when the
      * command is cancelled.
      * 
-     * @param coral           The coral subsystem to control.
-     * @param percentSupplier The percent output to run at. It is a supplier so it
-     *                        can be tuned while running the motors.
+     * @param coral     The coral subsystem to control.
+     * @param throttle  The percent speed to run at.
      */
-    public SetCoralPercent(Coral coral, Supplier<Double> percentSupplier) {
+    public SetCoralSpeed(Coral coral, Supplier<Double> throttle) {
         this.coral = coral;
-        this.percentSupplier = percentSupplier;
+        this.throttle = throttle;
+
+        addRequirements(coral);
     }
 
     /** Called when the command is initially scheduled. */
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     /** Called every time the scheduler runs while the command is scheduled. */
     @Override
     public void execute() {
-        coral.setPercent(percentSupplier.get() * CoralConstants.maxPercent);
+        double speed = throttle.get();
+
+        speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
+        speed = Math.copySign(speed * speed, speed);
+
+        coral.setPercent(speed * CoralConstants.maxPercent);
     }
 
     /** Returns true when the command should end. */

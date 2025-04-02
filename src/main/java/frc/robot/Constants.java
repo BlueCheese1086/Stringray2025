@@ -13,7 +13,6 @@ public class Constants {
     public static final boolean isReplay = false;
 
     public static final Angle TipThreshold = Degrees.of(6);
-    public static final double TipTimeout = 1;
 
     public static final double PrecisionScalar = 0.75;
 

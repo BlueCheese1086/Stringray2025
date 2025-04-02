@@ -1,7 +1,5 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,17 +10,20 @@ import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.algae.*;
 import frc.robot.subsystems.algae.commands.*;
 import frc.robot.subsystems.climb.*;
+import frc.robot.subsystems.climb.ClimbConstants.ClimbPositions;
 import frc.robot.subsystems.climb.commands.*;
 import frc.robot.subsystems.coral.*;
 import frc.robot.subsystems.coral.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
+import frc.robot.subsystems.elevator.commands.*;
 import frc.robot.subsystems.gyro.*;
 import frc.robot.subsystems.hopper.*;
 import frc.robot.subsystems.hopper.commands.*;
 import frc.robot.subsystems.vision.*;
 import frc.robot.util.*;
+import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
     private CommandXboxController driverController = new CommandXboxController(0);
@@ -74,9 +75,9 @@ public class RobotContainer {
             climb = new Climb(new ClimbIOSim());
         }
 
-        // Anti-Tip command (Cancels if the A button is pressed)
+        // Anti-Tip command
         if (RobotBase.isReal()) {
-            new AntiTip(drive, elevator, gyro, driverController.getHID()::getAButton);
+            new AntiTip(elevator, gyro).schedule();
         }
 
         // Configuring controller bindings
@@ -84,103 +85,99 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // Default Commands
+        // Override condition used for many of the commands.
+        // Defining it once rather than 15 times.
+        BooleanSupplier joystickOverride = () -> (
+            !MathUtils.withinDeadband(driverController.getLeftX(), Constants.deadband) ||
+            !MathUtils.withinDeadband(driverController.getLeftY(), Constants.deadband) ||
+            !MathUtils.withinDeadband(driverController.getRightX(), Constants.deadband) ||
+            !MathUtils.withinDeadband(driverController.getRightY(), Constants.deadband));
+
+
+        // Driver Controls
+
+        // Normal drive
         drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         drive,
-                        () -> driverController.getLeftY(),
-                        () -> driverController.getLeftX(),
-                        () -> -driverController.getRightX(),
-                        () -> 0.1,
+                        driverController::getLeftY,
+                        driverController::getLeftX,
+                        driverController::getRightX,
                         () -> 1.0));
 
-        // Presice Mode
+        // Precision Mode
         driverController.leftBumper().or(driverController.rightBumper())
             .whileTrue(
                 DriveCommands.joystickDrive(
                         drive,
-                        () -> driverController.getLeftY(),
-                        () -> driverController.getLeftX(),
-                        () -> -driverController.getRightX(),
-                        () -> 0.1,
-                        () -> 0.2));
+                        driverController::getLeftY,
+                        driverController::getLeftX,
+                        driverController::getRightX,
+                        () -> 0.2));        
 
+        // Reset gyro (Only works IRL)
+        if (Robot.isReal()) {
+            driverController.b().onTrue(Commands.runOnce(gyro::reset));
+        }
+
+        // Toggle X State
+        driverController.x().toggleOnTrue(DriveCommands.xStates(drive).until(joystickOverride));
+
+        // Log current robot pose
         driverController.y().onTrue(new RecordPose(drive));
 
-        // Path Find / Override is joystick
-        driverController.back() // Pathfind to left side
-            .onTrue(DriveCommands.ppToPose(drive, drive.getPose().nearest(Poses.REEF_Left),
-            () -> (
-                Math.abs(driverController.getLeftX()) < Constants.deadband ||
-                Math.abs(driverController.getLeftY()) < Constants.deadband ||
-                Math.abs(driverController.getRightX()) < Constants.deadband ||
-                Math.abs(driverController.getRightY()) < Constants.deadband)));
+        // Pathfinding controls
+        // Override pathfinding by moving any joystick or by pressing button again.
 
-        driverController.start() // Pathfind to right side
-            .onTrue(DriveCommands.ppToPose(drive, drive.getPose().nearest(Poses.REEF_Right),
-            () -> (
-                Math.abs(driverController.getLeftX()) < Constants.deadband ||
-                Math.abs(driverController.getLeftY()) < Constants.deadband ||
-                Math.abs(driverController.getRightX()) < Constants.deadband ||
-                Math.abs(driverController.getRightY()) < Constants.deadband)));
+        // Pathfind to left side of reef
+        driverController.back()
+            .toggleOnTrue(DriveCommands.pidDriveToPose(drive, drive.getPose().nearest(Poses.REEF_Left))
+            .until(joystickOverride));
+
+        // Pathfind to right side of reef.
+        driverController.start()
+            .toggleOnTrue(DriveCommands.pidDriveToPose(drive, drive.getPose().nearest(Poses.REEF_Right))
+            .until(joystickOverride));
 
         // Intake Coral & Algae
-        driverController.leftTrigger(0.2)
-            .whileTrue(new SetCoralPercent(coral, () -> driverController.getLeftTriggerAxis()))
-            .whileTrue(new SetAlgaePercent(algae, () -> driverController.getLeftTriggerAxis()));
+        driverController.leftTrigger(Constants.deadband)
+            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis))
+            .whileTrue(new SetAlgaeSpeed(algae, driverController::getLeftTriggerAxis))
+            .whileTrue(new SetHopperSpeed(hopper, driverController::getLeftTriggerAxis));
+        
+        // Outtake Coral & Algae
+        driverController.rightTrigger(Constants.deadband)
+            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis))
+            .whileTrue(new SetAlgaeSpeed(algae, driverController::getRightTriggerAxis))
+            .whileTrue(new SetHopperSpeed(hopper, driverController::getRightTriggerAxis));
 
-        // Need to figure out the right voltage in order to intake
 
-        // Outtake Coral & Algae (works)
-        driverController.rightTrigger(0.2)
-            .whileTrue(new SetCoralPercent(coral, () -> driverController.getRightTriggerAxis()))
-            .whileTrue(new SetAlgaePercent(algae, () -> driverController.getRightTriggerAxis()));
+        // Operator Controls
 
-        // Operator Buttons
+        // Reset Elevator Encoder
+        operatorController.start().onTrue(Commands.run(() -> elevator.resetEncoder()).ignoringDisable(true));
+        operatorController.back().onTrue(Commands.run(() -> elevator.resetEncoder()).ignoringDisable(true));
 
-        // Reset Encoder
-        operatorController.start().or(operatorController.back())
-            .onTrue(elevator.resetEncoder());
-
-        // Stow for Elevator
-        operatorController.leftBumper().or(operatorController.leftTrigger(0.2))
-            .onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.STOW), elevator));
-
-        // Set Elevator Height
-        operatorController.a()
-            .onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L1), elevator));
-        operatorController.b()
-            .onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L2), elevator));
-        operatorController.x()
-            .onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L3), elevator));
-        operatorController.y()
-            .onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L4), elevator));
-
-        // L3 and L2 Elevator height
-        operatorController.rightBumper()
-            .onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L3Algae), elevator));
-        operatorController.rightTrigger(0.2)
-            .onTrue(Commands.runOnce(() -> elevator.setPosition(ElevatorPositions.L2Algae), elevator));
-
-        // Climb 5.7 degrees
+        // Set Elevator Heights
+        operatorController.leftBumper().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
+        operatorController.leftTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
+        operatorController.a().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L1));
+        operatorController.b().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2));
+        operatorController.x().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L3));
+        operatorController.y().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L4));
+        operatorController.rightBumper().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L3Algae));
+        operatorController.rightTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
+        
         // Elevator manual controls
-        operatorController.axisMagnitudeGreaterThan(5, 0.1)
-            .whileTrue(Commands.run(() -> elevator.setVolts(Volts.of(MathUtils.applyDeadbandWithOffsets(operatorController.getRightY(), 0.1) * 6)), elevator));
+        elevator.setDefaultCommand(new SetElevatorSpeed(elevator, () -> operatorController.getRightY() * 0.5));
 
-        operatorController.axisMagnitudeGreaterThan(1, 0.1)
-            .whileTrue(Commands.run(() -> climb.setVolts(Volts.of(MathUtils.applyDeadbandWithOffsets(operatorController.getLeftY(), 0.1) * 6)), climb));
+        // Set Climb Positions
+        operatorController.povLeft() .onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));
+        operatorController.povRight().onTrue(new SetClimbAngle(climb, ClimbPositions.HANG));
+        operatorController.povDown() .onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
 
-        // Climb Controls
-        operatorController.povLeft()
-            .whileTrue(new SetClimbAngle(climb, ClimbConstants.extended));
-        operatorController.povRight()
-            .whileTrue(new SetClimbAngle(climb, ClimbConstants.tucked));
-        operatorController.povDown()
-            .whileTrue(new SetClimbAngle(climb, ClimbConstants.stow));
-    }
-
-    public void periodic() {
-        // Logger.recordOutput("/PlaceToGo", drivetrain.getClosestReefPoint());
+        // Climb manual controls
+        climb.setDefaultCommand(new SetClimbSpeed(climb, () -> operatorController.getLeftY() * 0.5));
     }
 
     public Command getAutonomousCommand() {

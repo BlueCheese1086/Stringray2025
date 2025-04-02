@@ -1,37 +1,44 @@
 package frc.robot.subsystems.algae.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.algae.Algae;
 import frc.robot.subsystems.algae.AlgaeConstants;
+import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
-public class SetAlgaePercent extends Command {
+public class SetAlgaeSpeed extends Command {
     private Algae algae;
-    private Supplier<Double> percentSupplier;
+    private Supplier<Double> throttle;
 
     /**
-     * Creates a new SetAlgaePercent command.
+     * Creates a new SetAlgaeSpeed command.
      * It sets the percent output of the algae roller and sets it back to 0 when the
      * command is cancelled.
      * 
      * @param algae           The algae subsystem to control.
-     * @param percentSupplier The percent output to run at. It is a supplier so it
-     *                        can be tuned while running the motors.
+     * @param throttle        The percent speed to run at.
      */
-    public SetAlgaePercent(Algae algae, Supplier<Double> percentSupplier) {
+    public SetAlgaeSpeed(Algae algae, Supplier<Double> throttle) {
         this.algae = algae;
-        this.percentSupplier = percentSupplier;
+        this.throttle = throttle;
+
+        addRequirements(algae);
     }
 
     /** Called when the command is initially scheduled. */
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     /** Called every time the scheduler runs while the command is scheduled. */
     @Override
     public void execute() {
-        algae.setPercent(percentSupplier.get() * AlgaeConstants.maxPercent);
+        double speed = throttle.get();
+
+        speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
+        speed = Math.copySign(speed * speed, speed);
+
+        algae.setPercent(speed * AlgaeConstants.maxPercent);
     }
 
     /** Returns true when the command should end. */

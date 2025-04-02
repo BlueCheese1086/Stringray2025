@@ -1,53 +1,35 @@
 package frc.robot.util;
 
-import static edu.wpi.first.units.Units.Meters;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.gyro.Gyro;
-import java.util.function.Supplier;
 
 public class AntiTip extends Command {
-    private Drive drivetrain;
     private Elevator elevator;
     private Gyro gyro;
-    private Supplier<Boolean> shouldStop;
-    private Command waitCommand;
 
-    public AntiTip(Drive drivetrain, Elevator elevator, Gyro gyro, Supplier<Boolean> shouldStop) {
-        this.drivetrain = drivetrain;
+    public AntiTip(Elevator elevator, Gyro gyro) {
         this.elevator = elevator;
         this.gyro = gyro;
     }
 
     @Override
-    public void initialize() {
-        waitCommand = new WaitCommand(Constants.TipTimeout);
-        waitCommand.addRequirements(drivetrain);
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
-        if (gyro.getPitch().gte(Constants.TipThreshold)) {
-            elevator.getCurrentCommand().cancel();
-            drivetrain.getCurrentCommand().cancel();
-
-            elevator.setPosition(Meters.zero());
-
-            waitCommand.schedule();
+        if (gyro.getPitch().gte(Constants.TipThreshold) || gyro.getRoll().gte(Constants.TipThreshold)) {
+            elevator.setPosition(ElevatorPositions.STOW);
         }
     }
 
     @Override
     public boolean isFinished() {
-        return shouldStop.get();
+        return false;
     }
 
     @Override
-    public void end(boolean interrupted) {
-        waitCommand.cancel();
-    }
+    public void end(boolean interrupted) {}
 }

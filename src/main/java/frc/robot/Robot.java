@@ -76,8 +76,6 @@ public class Robot extends LoggedRobot {
         // Running the scheduled commands
         CommandScheduler.getInstance().run();
 
-        robotContainer.periodic();
-
         AdjustableValues.updateValues();
     }
 

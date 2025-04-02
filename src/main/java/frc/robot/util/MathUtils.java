@@ -6,4 +6,8 @@ public class MathUtils {
 
         return value - Math.copySign(deadband, value);
     }
+
+    public static boolean withinDeadband(double value, double deadband) {
+        return Math.abs(value) < Math.abs(deadband);
+    }
 }

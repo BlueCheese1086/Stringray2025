@@ -12,12 +12,11 @@ public class SetAlgaeSpeed extends Command {
     private Supplier<Double> percentSupplier;
 
     /**
-     * Creates a new SetAlgaeSpeed command.
-     * It sets the percent output of the algae roller and resets it back to 0 when the
-     * command is cancelled.
+     * Creates a new {@link SetAlgaeSpeed} command.
+     * It sets the percent output of the algae motor and resets it back to 0 when the command is cancelled.
      * 
-     * @param algae           The algae subsystem to control.
-     * @param throttle        The percent speed to run at.
+     * @param algae The {@link Algae} subsystem to control.
+     * @param throttle The percent speed to run at.
      * @param percentSupplier The maximum percent output.
      */
     public SetAlgaeSpeed(Algae algae, Supplier<Double> throttle, Supplier<Double> percentSupplier) {
@@ -28,7 +27,7 @@ public class SetAlgaeSpeed extends Command {
         addRequirements(algae);
     }
 
-    /** Called when the command is initially scheduled. */
+    /** Called once when the command is initially scheduled. */
     @Override
     public void initialize() {}
 

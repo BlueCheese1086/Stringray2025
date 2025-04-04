@@ -42,36 +42,45 @@ public class RobotContainer {
         // Initializing subsystems
         if (Robot.isReal()) {
             gyro = new Gyro(new GyroIOPigeon2(RobotMap.GYRO_Pigeon2Id));
+
             vision = new Vision(
                     new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
-            drive = new Drive(
-                    gyro,
-                    vision,
+
+            drive = new Drive(gyro, vision,
                     new ModuleIOTalonFX(TunerConstants.FrontLeft),
                     new ModuleIOTalonFX(TunerConstants.FrontRight),
                     new ModuleIOTalonFX(TunerConstants.BackLeft),
                     new ModuleIOTalonFX(TunerConstants.BackRight));
+
             algae = new Algae(new AlgaeIOReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId));
+            
             hopper = new Hopper(new HopperIOReal(RobotMap.HOPPER_MotorId, RobotMap.HOPPER_LaserId));
+            
             coral = new Coral(new CoralIOReal(RobotMap.CORAL_MotorId, RobotMap.CORAL_SensorId, RobotMap.CORAL_LaserId));
+            
             elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
+            
             climb = new Climb(new ClimbIOReal(RobotMap.CLIMB_MotorId));
         } else {
             vision = new Vision(
                     new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
-            drive = new Drive(
-                    gyro,
-                    vision,
+            
+            drive = new Drive(gyro, vision,
                     new ModuleIOSim(TunerConstants.FrontLeft),
                     new ModuleIOSim(TunerConstants.FrontRight),
                     new ModuleIOSim(TunerConstants.BackLeft),
                     new ModuleIOSim(TunerConstants.BackRight));
+
             coral = new Coral(new CoralIOSim());
+            
             hopper = new Hopper(new HopperIOSim());
+            
             elevator = new Elevator(new ElevatorIOSim());
+            
             algae = new Algae(new AlgaeIOSim());
+            
             climb = new Climb(new ClimbIOSim());
         }
 

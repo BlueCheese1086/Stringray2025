@@ -33,17 +33,17 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         // Adding adjustable values
-        AdjustableValues.registerNumber("X_kP", "/Adjustables/Autos/kP_X", DriveConstants.kPX);
-        AdjustableValues.registerNumber("X_kI", "/Adjustables/Autos/kI_X", DriveConstants.kIX);
-        AdjustableValues.registerNumber("X_kD", "/Adjustables/Autos/kD_X", DriveConstants.kDX);
+        AdjustableValues.registerNumber("X_kP", "/Adjustables/Autos/X_kP", DriveConstants.kPX);
+        AdjustableValues.registerNumber("X_kI", "/Adjustables/Autos/X_kI", DriveConstants.kIX);
+        AdjustableValues.registerNumber("X_kD", "/Adjustables/Autos/X_kD", DriveConstants.kDX);
 
-        AdjustableValues.registerNumber("Y_kP", "/Adjustables/Autos/kP_Y", DriveConstants.kPY);
-        AdjustableValues.registerNumber("Y_kI", "/Adjustables/Autos/kI_Y", DriveConstants.kIY);
-        AdjustableValues.registerNumber("Y_kD", "/Adjustables/Autos/kD_Y", DriveConstants.kDY);
+        AdjustableValues.registerNumber("Y_kP", "/Adjustables/Autos/Y_kP", DriveConstants.kPY);
+        AdjustableValues.registerNumber("Y_kI", "/Adjustables/Autos/Y_kI", DriveConstants.kIY);
+        AdjustableValues.registerNumber("Y_kD", "/Adjustables/Autos/Y_kD", DriveConstants.kDY);
 
-        AdjustableValues.registerNumber("Theta_kP", "/Adjustables/Autos/kP_Theta", DriveConstants.kPTheta);
-        AdjustableValues.registerNumber("Theta_kI", "/Adjustables/Autos/kI_Theta", DriveConstants.kITheta);
-        AdjustableValues.registerNumber("Theta_kD", "/Adjustables/Autos/kD_Theta", DriveConstants.kDTheta);
+        AdjustableValues.registerNumber("Theta_kP", "/Adjustables/Autos/Theta_kP", DriveConstants.kPTheta);
+        AdjustableValues.registerNumber("Theta_kI", "/Adjustables/Autos/Theta_kI", DriveConstants.kITheta);
+        AdjustableValues.registerNumber("Theta_kD", "/Adjustables/Autos/Theta_kD", DriveConstants.kDTheta);
 
         AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", ElevatorConstants.kPDefault);
         AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
@@ -87,10 +87,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void disabledPeriodic() {}
 
-    /** Runs once when the robot exits Disabled mode. */
-    @Override
-    public void disabledExit() {}
-
     /** Runs once when the robot enters Autonomous mode. */
     @Override
     public void autonomousInit() {
@@ -121,10 +117,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {}
 
-    /** Runs once when the robot exits Teleop mode. */
-    @Override
-    public void teleopExit() {}
-
     /** Runs once when the robot enters Test mode. */
     @Override
     public void testInit() {
@@ -134,8 +126,4 @@ public class Robot extends LoggedRobot {
     /** Runs every tick while the robot is in Test mode. */
     @Override
     public void testPeriodic() {}
-
-    /** Runs once when the robot leaves Test mode. */
-    @Override
-    public void testExit() {}
 }

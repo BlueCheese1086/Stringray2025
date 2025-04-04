@@ -124,7 +124,7 @@ public class RobotContainer {
         driverController.x().toggleOnTrue(DriveCommands.xStates(drive).until(joystickOverride));
 
         // Log current robot pose
-        driverController.y().onTrue(new RecordPose(drive));
+        driverController.y().onTrue(new RecordPose(drive::getPose));
 
         // Pathfinding controls
         // Override pathfinding by moving any joystick or by pressing button again.
@@ -141,14 +141,14 @@ public class RobotContainer {
 
         // Intake Coral & Algae
         driverController.leftTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis))
-            .whileTrue(new SetAlgaeSpeed(algae, driverController::getLeftTriggerAxis))
+            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis, () -> 1.0))
+            .whileTrue(new SetAlgaeSpeed(algae, driverController::getLeftTriggerAxis, () -> 1.0))
             .whileTrue(new SetHopperSpeed(hopper, driverController::getLeftTriggerAxis));
         
         // Outtake Coral & Algae
         driverController.rightTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis))
-            .whileTrue(new SetAlgaeSpeed(algae, driverController::getRightTriggerAxis))
+            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis, () -> 1.0))
+            .whileTrue(new SetAlgaeSpeed(algae, driverController::getRightTriggerAxis, () -> 1.0))
             .whileTrue(new SetHopperSpeed(hopper, driverController::getRightTriggerAxis));
 
 
@@ -177,7 +177,7 @@ public class RobotContainer {
         operatorController.povDown() .onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
 
         // Climb manual controls
-        climb.setDefaultCommand(new SetClimbSpeed(climb, () -> operatorController.getLeftY() * 0.5));
+        climb.setDefaultCommand(new SetClimbSpeed(climb, operatorController::getLeftY, () -> 0.5));
     }
 
     public Command getAutonomousCommand() {

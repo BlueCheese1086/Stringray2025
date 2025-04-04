@@ -23,11 +23,6 @@ public class RecordPose extends Command {
     public void initialize() {
         Logger.recordOutput("/RecordedPoses/" + x, poseSupplier.get());
         x += 1;
-    }
-
-    /** Returns true when the command should end. */
-    @Override
-    public boolean isFinished() {
-        return true;
+        cancel();
     }
 }

@@ -22,11 +22,13 @@ public class Algae extends SubsystemBase {
 
     /** Sets the percent output of the algae motor. */
     public void setPercent(double percent) {
+        Logger.recordOutput("/Algae/GoalPercent", percent);
         io.setPercent(percent);
     }
 
     /** Sets the voltage output of the algae motor. */
     public void setVoltage(Voltage voltage) {
+        Logger.recordOutput("/Algae/GoalVoltage", voltage);
         io.setVoltage(voltage);
     }
 

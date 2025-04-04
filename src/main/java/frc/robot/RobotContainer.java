@@ -77,7 +77,7 @@ public class RobotContainer {
 
         // Anti-Tip command
         if (RobotBase.isReal()) {
-            new AntiTip(elevator, gyro).schedule();
+            new AntiTip(elevator::setPosition, gyro::getPitch, gyro::getRoll).schedule();
         }
 
         // Configuring controller bindings

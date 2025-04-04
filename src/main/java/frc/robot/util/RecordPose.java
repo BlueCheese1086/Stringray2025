@@ -1,24 +1,31 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.drive.Drive;
-
 public class RecordPose extends Command {
-    int x = 0;
-    Drive drivetrain;
+    private Supplier<Pose2d> poseSupplier;
+    private int x = 0;
 
-    public RecordPose(Drive drivetrain) {
-        this.drivetrain = drivetrain;
+    /**
+     * Creates a new {@link RecordPose} command.
+     * 
+     * @param poseSupplier The function to recieve poses from.
+     */
+    public RecordPose(Supplier<Pose2d> poseSupplier) {
+        this.poseSupplier = poseSupplier;
     }
 
+    /** Called when the command is initially scheduled. */
     @Override
-    public void execute() {
+    public void initialize() {
+        Logger.recordOutput("/RecordedPoses/" + x, poseSupplier.get());
         x += 1;
-        Logger.recordOutput("/RecordedPoses/" + x, drivetrain.getPose());
     }
 
+    /** Returns true when the command should end. */
     @Override
     public boolean isFinished() {
         return true;

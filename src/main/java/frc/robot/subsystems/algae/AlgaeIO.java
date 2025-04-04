@@ -12,13 +12,13 @@ import org.littletonrobotics.junction.AutoLog;
 public interface AlgaeIO {
     @AutoLog
     public class AlgaeIOInputs {
-        public double percent = 0;
-        public Voltage voltage = Volts.zero();
-        public Current current = Amps.zero();
-        public Temperature temperature = Celsius.zero();
+        double percent = 0;
+        Voltage voltage = Volts.zero();
+        Current current = Amps.zero();
+        Temperature temperature = Celsius.zero();
 
-        public Distance laserReading = Meters.zero();
-        public int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
+        Distance laserReading = Meters.zero();
+        int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
     }
 
     /** Updates a set of {@link AlgaeIOInputs} with new values. */

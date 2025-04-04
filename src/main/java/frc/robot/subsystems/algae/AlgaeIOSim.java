@@ -12,9 +12,7 @@ public class AlgaeIOSim implements AlgaeIO {
     private DCMotorSim algae;
 
     public AlgaeIOSim() {
-        this.algae = new DCMotorSim(
-                LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.02, 1),
-                DCMotor.getKrakenX60(1));
+        this.algae = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.02, 1), DCMotor.getKrakenX60(1));
     }
 
     @Override

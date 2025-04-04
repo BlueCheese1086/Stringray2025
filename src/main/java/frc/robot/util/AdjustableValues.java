@@ -4,16 +4,19 @@ import java.util.HashMap;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 import org.littletonrobotics.junction.networktables.LoggedNetworkString;
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class AdjustableValues {
     private static HashMap<String, Boolean> hasChanged = new HashMap<String, Boolean>();
 
-    private static HashMap<String, LoggedNetworkBoolean> loggedNetworkBooleans = new HashMap<String, LoggedNetworkBoolean>();
-    private static HashMap<String, LoggedNetworkString> loggedNetworkStrings = new HashMap<String, LoggedNetworkString>();
-    private static HashMap<String, LoggedNetworkNumber> loggedNetworkNumbers = new HashMap<String, LoggedNetworkNumber>();
-    private static HashMap<String, Boolean> loggedBooleans = new HashMap<String, Boolean>();
-    private static HashMap<String, String> loggedStrings = new HashMap<String, String>();
-    private static HashMap<String, Double> loggedNumbers = new HashMap<String, Double>();
+    private static HashMap<String,LoggedNetworkBoolean> loggedNetworkBooleans = new HashMap<String,LoggedNetworkBoolean>();
+    private static HashMap<String,LoggedNetworkString> loggedNetworkStrings = new HashMap<String,LoggedNetworkString>();
+    private static HashMap<String,LoggedNetworkNumber> loggedNetworkNumbers = new HashMap<String,LoggedNetworkNumber>();
+    private static HashMap<String,LoggedDashboardChooser<?>> loggedDashboardChoosers = new HashMap<String,LoggedDashboardChooser<?>>();
+    private static HashMap<String,Boolean> loggedBooleans = new HashMap<String,Boolean>();
+    private static HashMap<String,String> loggedStrings = new HashMap<String,String>();
+    private static HashMap<String,Double> loggedNumbers = new HashMap<String,Double>();
+    private static HashMap<String,Object> loggedChoosers = new HashMap<String,Object>();
 
     /**
      * Adds a boolean value to the logged values.
@@ -205,6 +208,67 @@ public class AdjustableValues {
     }
 
     /**
+     * Adds a {@link SendableChooser} to the logged values.
+     * The default return value is an empty string.
+     * 
+     * If any aliases already exist, then the function returns false and no aliases are created.
+     * 
+     * @param shortName The short name to get the value with.
+     * @param ntKey     The NetworkTables key for logging.
+     * @param aliases   Any alternate keys to read the value with. They have their
+     *                  own entry in the hasChanged table, and don't affect the
+     *                  status of the original shortName.
+     * 
+     * @return Returns false if the value already exists.
+     */
+    public static boolean registerChooser(String shortName, String ntKey, String[] aliases) {
+        return registerChooser(shortName, ntKey, "", aliases);
+    }
+
+    /**
+     * Adds a {@link SendableChooser} to the logged values.
+     * 
+     * If any aliases already exist, then the function returns false and no aliases are created.
+     * 
+     * @param shortName    The short name to get the value with.
+     * @param ntKey        The NetworkTables key for logging.
+     * @param defaultValue The default value to retrieve from the AKit Logger.
+     * @param aliases      Any alternate keys to read the value with. They have
+     *                     their own entry in the hasChanged table, and don't affect
+     *                     the status of the original shortName.
+     * 
+     * @return Returns false if the value already exists.
+     */
+    public static <T> boolean registerChooser(String shortName, String ntKey, T defaultValue, String... aliases) {
+        if (hasChanged.containsKey(shortName))
+            return false;
+
+        LoggedDashboardChooser<T> chooser = new LoggedDashboardChooser<T>(ntKey);
+        chooser.addDefaultOption("default", defaultValue);
+
+        for (int i = 0; i < aliases.length; i++) {
+            // Rather than use recursion, I manually put in the aliases so I don't create a
+            // new LoggedDashboardChooser for each alias.
+            if (hasChanged.containsKey(aliases[i])) {
+                for (int j = 0; j < i; j++) {
+                    remove(aliases[j]);
+                }
+
+                return false;
+            }
+
+            loggedDashboardChoosers.put(aliases[i], chooser);
+            hasChanged.put(aliases[i], true);
+        }
+
+        loggedDashboardChoosers.put(shortName, chooser);
+        loggedChoosers.put(shortName, defaultValue);
+        hasChanged.put(shortName, true);
+
+        return true;
+    }
+
+    /**
      * Adds an alias for the provided shortName.
      * 
      * @param shortName The source for the number
@@ -280,7 +344,7 @@ public class AdjustableValues {
     /**
      * Gets a value from the logger and marks it as read.
      * 
-     * If the key has not been created, it returns 0.
+     * If the key has not been created, it returns an empty string.
      * 
      * @param shortName The first parameter from the register() function.
      */
@@ -291,6 +355,22 @@ public class AdjustableValues {
         hasChanged.put(shortName, false);
 
         return loggedStrings.get(shortName);
+    }
+
+    /**
+     * Gets a value from the logger and marks it as read.
+     * 
+     * If the key has not been created, it returns null.
+     * 
+     * @param shortName The first parameter from the register() function.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getChooser(String shortName) {
+        if (!loggedStrings.containsKey(shortName)) return null;
+
+        hasChanged.put(shortName, false);
+
+        return (T) loggedChoosers.get(shortName);
     }
 
     /**
@@ -332,6 +412,14 @@ public class AdjustableValues {
             String loggedValue = loggedNetworkStrings.get(shortName).get();
             if (loggedValue != loggedStrings.get(shortName)) {
                 loggedStrings.put(shortName, loggedValue);
+                hasChanged.put(shortName, true);
+            }
+        }
+
+        for (String shortName : loggedDashboardChoosers.keySet()) {
+            Object loggedValue = loggedDashboardChoosers.get(shortName).get();
+            if (!loggedValue.equals(loggedChoosers.get(shortName))) {
+                loggedChoosers.put(shortName, loggedValue);
                 hasChanged.put(shortName, true);
             }
         }

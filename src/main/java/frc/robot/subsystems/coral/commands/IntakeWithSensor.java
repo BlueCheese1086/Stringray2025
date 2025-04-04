@@ -23,10 +23,6 @@ public class IntakeWithSensor extends Command {
         addRequirements(coral);
     }
 
-    /** Called once when the command is initially scheduled. */
-    @Override
-    public void initialize() {}
-
     /** Called every time the scheduler runs while the command is scheduled. */
     @Override
     public void execute() {
@@ -39,11 +35,5 @@ public class IntakeWithSensor extends Command {
     @Override
     public void end(boolean interrupted) {
         coral.setPercent(0);
-    }
-
-    /** Returns true when the command should end. */
-    @Override
-    public boolean isFinished() {
-        return false;
     }
 }

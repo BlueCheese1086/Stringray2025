@@ -152,13 +152,13 @@ public class RobotContainer {
         driverController.leftTrigger(Constants.deadband)
             .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis, () -> 1.0))
             .whileTrue(new SetAlgaeSpeed(algae, driverController::getLeftTriggerAxis, () -> 1.0))
-            .whileTrue(new SetHopperSpeed(hopper, driverController::getLeftTriggerAxis));
+            .whileTrue(new SetHopperSpeed(hopper, driverController::getLeftTriggerAxis, () -> 1.0));
         
         // Outtake Coral & Algae
         driverController.rightTrigger(Constants.deadband)
             .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis, () -> 1.0))
             .whileTrue(new SetAlgaeSpeed(algae, driverController::getRightTriggerAxis, () -> 1.0))
-            .whileTrue(new SetHopperSpeed(hopper, driverController::getRightTriggerAxis));
+            .whileTrue(new SetHopperSpeed(hopper, driverController::getRightTriggerAxis, () -> 1.0));
 
 
         // Operator Controls

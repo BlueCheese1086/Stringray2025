@@ -11,15 +11,21 @@ public class Hopper extends SubsystemBase {
     public HopperIO io;
     public HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
 
-    public Hopper(HopperIO io){
+    public Hopper(HopperIO io) {
         this.io = io;
     }
 
-    public void setPercent(double percent){
+    @Override
+    public void periodic() {
+        io.updateInputs(inputs);
+        Logger.processInputs("/RealOutputs/Hopper", inputs);
+    }
+
+    public void setPercent(double percent) {
         io.setPercent(percent);
     }
 
-    public void setVoltage(Voltage voltage){
+    public void setVoltage(Voltage voltage) {
         io.setVoltage(voltage);
     }
 
@@ -45,11 +51,5 @@ public class Hopper extends SubsystemBase {
 
     public int getLaserStatus() {
         return inputs.laserStatus;
-    }
-
-    @Override
-    public void periodic() {
-        io.updateInputs(inputs);
-        Logger.processInputs("/RealOutputs/Subsystems/Hopper", inputs);
     }
 }

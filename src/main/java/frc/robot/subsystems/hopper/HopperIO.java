@@ -21,9 +21,12 @@ public interface HopperIO {
         int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
     }
 
+    /** Updates a set of IOInputs. */
     public void updateInputs(HopperIOInputs inputs);
 
+    /** Sets the percent output of the motor. */
     public void setPercent(double percent);
 
+    /** Sets the voltage output of the motor. */
     public void setVoltage(Voltage voltage);
 }

@@ -66,6 +66,9 @@ public class RobotContainer {
             vision = new Vision(
                     new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
+
+            // Reminder that this does nothing.
+            gyro = new Gyro(new GyroIOSim());
             
             drive = new Drive(gyro, vision,
                     new ModuleIOSim(TunerConstants.FrontLeft),

@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -181,7 +182,7 @@ public class RobotContainer {
         operatorController.rightTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
         
         // Elevator manual controls
-        new SetElevatorSpeed(elevator, () -> operatorController.getRightY() * 0.5, () -> 1.0).schedule();
+        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband).whileTrue(new SetElevatorSpeed(elevator, () -> operatorController.getRightY() * 0.5, () -> 1.0));
 
         // Set Climb Positions
         operatorController.povLeft() .onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));
@@ -189,7 +190,7 @@ public class RobotContainer {
         operatorController.povDown() .onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
 
         // Climb manual controls
-        // new SetClimbSpeed(climb, operatorController::getLeftY, () -> 0.5, () -> 1.0).schedule();
+        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband).whileTrue(new SetClimbSpeed(climb, () -> operatorController.getRightY() * 0.5, () -> 1.0));
     }
 
     public Command getAutonomousCommand() {

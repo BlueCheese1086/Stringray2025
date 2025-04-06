@@ -181,7 +181,7 @@ public class RobotContainer {
         operatorController.rightTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
         
         // Elevator manual controls
-        elevator.setDefaultCommand(new SetElevatorSpeed(elevator, () -> operatorController.getRightY() * 0.5));
+        new SetElevatorSpeed(elevator, () -> operatorController.getRightY() * 0.5, () -> 1.0).schedule();
 
         // Set Climb Positions
         operatorController.povLeft() .onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));
@@ -189,7 +189,7 @@ public class RobotContainer {
         operatorController.povDown() .onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
 
         // Climb manual controls
-        climb.setDefaultCommand(new SetClimbSpeed(climb, operatorController::getLeftY, () -> 0.5));
+        // new SetClimbSpeed(climb, operatorController::getLeftY, () -> 0.5, () -> 1.0).schedule();
     }
 
     public Command getAutonomousCommand() {

@@ -49,21 +49,20 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
         AdjustableValues.registerNumber("Elev_kD", "/Adjustables/Elevator/kD", ElevatorConstants.kDDefault);
 
-        AdjustableValues.registerNumber("Elev_kS_L1", "/Adjustables/Elevator/kS_L1", ElevatorConstants.kSDefaults[0]);
-        AdjustableValues.registerNumber("Elev_kS_L2", "/Adjustables/Elevator/kS_L2", ElevatorConstants.kSDefaults[1]);
-        AdjustableValues.registerNumber("Elev_kS_L3", "/Adjustables/Elevator/kS_L3", ElevatorConstants.kSDefaults[2]);
+        AdjustableValues.registerNumber("Elev_L1_kS", "/Adjustables/Elevator/L1_kS", ElevatorConstants.kSDefaults[0]);
+        AdjustableValues.registerNumber("Elev_L1_kG", "/Adjustables/Elevator/L1_kG", ElevatorConstants.kGDefaults[0]);
+        AdjustableValues.registerNumber("Elev_L1_kV", "/Adjustables/Elevator/L1_kV", ElevatorConstants.kVDefaults[0]);
+        AdjustableValues.registerNumber("Elev_L1_kA", "/Adjustables/Elevator/L1_kA", ElevatorConstants.kADefaults[0]);
 
-        AdjustableValues.registerNumber("Elev_kG_L1", "/Adjustables/Elevator/kG_L1", ElevatorConstants.kGDefaults[0]);
-        AdjustableValues.registerNumber("Elev_kG_L2", "/Adjustables/Elevator/kG_L2", ElevatorConstants.kGDefaults[1]);
-        AdjustableValues.registerNumber("Elev_kG_L3", "/Adjustables/Elevator/kG_L3", ElevatorConstants.kGDefaults[2]);
+        AdjustableValues.registerNumber("Elev_L2_kS", "/Adjustables/Elevator/L2_kS", ElevatorConstants.kSDefaults[1]);
+        AdjustableValues.registerNumber("Elev_L2_kG", "/Adjustables/Elevator/L2_kG", ElevatorConstants.kGDefaults[1]);
+        AdjustableValues.registerNumber("Elev_L2_kV", "/Adjustables/Elevator/L2_kV", ElevatorConstants.kVDefaults[1]);
+        AdjustableValues.registerNumber("Elev_L2_kA", "/Adjustables/Elevator/L2_kA", ElevatorConstants.kADefaults[1]);
 
-        AdjustableValues.registerNumber("Elev_kV_L1", "/Adjustables/Elevator/kV_L1", ElevatorConstants.kVDefaults[0]);
-        AdjustableValues.registerNumber("Elev_kV_L2", "/Adjustables/Elevator/kV_L2", ElevatorConstants.kVDefaults[1]);
-        AdjustableValues.registerNumber("Elev_kV_L3", "/Adjustables/Elevator/kV_L3", ElevatorConstants.kVDefaults[2]);
-
-        AdjustableValues.registerNumber("Elev_kA_L1", "/Adjustables/Elevator/kA_L1", ElevatorConstants.kADefaults[0]);
-        AdjustableValues.registerNumber("Elev_kA_L2", "/Adjustables/Elevator/kA_L2", ElevatorConstants.kADefaults[1]);
-        AdjustableValues.registerNumber("Elev_kA_L3", "/Adjustables/Elevator/kA_L3", ElevatorConstants.kADefaults[2]);
+        AdjustableValues.registerNumber("Elev_L3_kS", "/Adjustables/Elevator/L3_kS", ElevatorConstants.kSDefaults[2]);
+        AdjustableValues.registerNumber("Elev_L3_kG", "/Adjustables/Elevator/L3_kG", ElevatorConstants.kGDefaults[2]);
+        AdjustableValues.registerNumber("Elev_L3_kV", "/Adjustables/Elevator/L3_kV", ElevatorConstants.kVDefaults[2]);
+        AdjustableValues.registerNumber("Elev_L3_kA", "/Adjustables/Elevator/L3_kA", ElevatorConstants.kADefaults[2]);
 
         AdjustableValues.registerNumber("Climb_kP", "/Adjustables/Drivetrain/Climb_kP", ClimbConstants.kPDefault);
         AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Drivetrain/Climb_kI", ClimbConstants.kIDefault);

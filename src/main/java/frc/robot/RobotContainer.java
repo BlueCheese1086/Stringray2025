@@ -32,7 +32,7 @@ public class RobotContainer {
     private CommandXboxController operatorController = new CommandXboxController(1);
 
     private Coral coral;
-    private Drivetrain drive;
+    private Drive drive;
     private Elevator elevator;
     private Gyro gyro;
     private Vision vision;
@@ -49,7 +49,7 @@ public class RobotContainer {
                     new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
-            drive = new Drivetrain(gyro, vision,
+            drive = new Drive(gyro, vision,
                     new ModuleIOTalonFX(0),//TunerConstants.FrontLeft),
                     new ModuleIOTalonFX(1),//TunerConstants.FrontRight),
                     new ModuleIOTalonFX(2),//TunerConstants.BackLeft),
@@ -72,7 +72,7 @@ public class RobotContainer {
             // Reminder that this does nothing.
             gyro = new Gyro(new GyroIOSim());
             
-            drive = new Drivetrain(gyro, vision,
+            drive = new Drive(gyro, vision,
                     new ModuleIOSim(0),//TunerConstants.FrontLeft),
                     new ModuleIOSim(1),//TunerConstants.FrontRight),
                     new ModuleIOSim(2),//TunerConstants.BackLeft),

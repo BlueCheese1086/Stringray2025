@@ -16,6 +16,7 @@ import frc.robot.subsystems.climb.commands.*;
 import frc.robot.subsystems.coral.*;
 import frc.robot.subsystems.coral.commands.*;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.drive.commands.*;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
 import frc.robot.subsystems.elevator.commands.*;
@@ -31,7 +32,7 @@ public class RobotContainer {
     private CommandXboxController operatorController = new CommandXboxController(1);
 
     private Coral coral;
-    private Drive drive;
+    private Drivetrain drive;
     private Elevator elevator;
     private Gyro gyro;
     private Vision vision;
@@ -48,11 +49,11 @@ public class RobotContainer {
                     new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
-            drive = new Drive(gyro, vision,
-                    new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                    new ModuleIOTalonFX(TunerConstants.FrontRight),
-                    new ModuleIOTalonFX(TunerConstants.BackLeft),
-                    new ModuleIOTalonFX(TunerConstants.BackRight));
+            drive = new Drivetrain(gyro, vision,
+                    new ModuleIOTalonFX(0),//TunerConstants.FrontLeft),
+                    new ModuleIOTalonFX(1),//TunerConstants.FrontRight),
+                    new ModuleIOTalonFX(2),//TunerConstants.BackLeft),
+                    new ModuleIOTalonFX(3));//TunerConstants.BackRight));
 
             algae = new Algae(new AlgaeIOReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId));
             
@@ -71,11 +72,11 @@ public class RobotContainer {
             // Reminder that this does nothing.
             gyro = new Gyro(new GyroIOSim());
             
-            drive = new Drive(gyro, vision,
-                    new ModuleIOSim(TunerConstants.FrontLeft),
-                    new ModuleIOSim(TunerConstants.FrontRight),
-                    new ModuleIOSim(TunerConstants.BackLeft),
-                    new ModuleIOSim(TunerConstants.BackRight));
+            drive = new Drivetrain(gyro, vision,
+                    new ModuleIOSim(0),//TunerConstants.FrontLeft),
+                    new ModuleIOSim(1),//TunerConstants.FrontRight),
+                    new ModuleIOSim(2),//TunerConstants.BackLeft),
+                    new ModuleIOSim(3));//TunerConstants.BackRight));
 
             coral = new Coral(new CoralIOSim());
             
@@ -111,22 +112,26 @@ public class RobotContainer {
 
         // Normal drive
         drive.setDefaultCommand(
-                DriveCommands.joystickDrive(
+            new SwerveDrive(//drive, null, null, null, null, null)
+                // DriveCommands.joystickDrive(
                         drive,
                         driverController::getLeftY,
                         driverController::getLeftX,
                         driverController::getRightX,
-                        () -> 1.0));
+                        () -> 1.0,
+                        () -> false));
 
         // Precision Mode
         driverController.leftBumper().or(driverController.rightBumper())
             .whileTrue(
-                DriveCommands.joystickDrive(
+                new SwerveDrive(
+                // DriveCommands.joystickDrive(
                         drive,
                         driverController::getLeftY,
                         driverController::getLeftX,
                         driverController::getRightX,
-                        () -> 0.2));        
+                        () -> 0.2,
+                        () -> false));
 
         // Reset gyro (Only works IRL)
         if (Robot.isReal()) {
@@ -134,7 +139,7 @@ public class RobotContainer {
         }
 
         // Toggle X State
-        driverController.x().toggleOnTrue(DriveCommands.xStates(drive).until(joystickOverride));
+        driverController.x().toggleOnTrue(new XStates(drive)/*DriveCommands.xStates(drive)*/.until(joystickOverride));
 
         // Log current robot pose
         driverController.y().onTrue(new RecordPose(drive::getPose));
@@ -144,12 +149,12 @@ public class RobotContainer {
 
         // Pathfind to left side of reef
         driverController.back()
-            .toggleOnTrue(DriveCommands.pidDriveToPose(drive, drive.getPose().nearest(Poses.REEF_Left))
+            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Left)//DriveCommands.pidDriveToPose(drive, drive.getPose().nearest(Poses.REEF_Left))
             .until(joystickOverride));
 
         // Pathfind to right side of reef.
         driverController.start()
-            .toggleOnTrue(DriveCommands.pidDriveToPose(drive, drive.getPose().nearest(Poses.REEF_Right))
+            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Right)//DriveCommands.pidDriveToPose(drive, drive.getPose().nearest(Poses.REEF_Right))
             .until(joystickOverride));
 
         // Intake Coral & Algae

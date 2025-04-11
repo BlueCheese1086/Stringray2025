@@ -33,40 +33,41 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         // Adding adjustable values
-        AdjustableValues.registerNumber("X_kP", "/Adjustables/Autos/X_kP", DriveConstants.kPX);
-        AdjustableValues.registerNumber("X_kI", "/Adjustables/Autos/X_kI", DriveConstants.kIX);
-        AdjustableValues.registerNumber("X_kD", "/Adjustables/Autos/X_kD", DriveConstants.kDX);
+        AdjustableValues.registerNumber("Drive_kP", "/Adjustables/Drive/kP", DriveConstants.kPDriveDefault, "Drive_kP_0", "Drive_kP_1", "Drive_kP_2", "Drive_kP_3");
+        AdjustableValues.registerNumber("Drive_kI", "/Adjustables/Drive/kI", DriveConstants.kIDriveDefault, "Drive_kI_0", "Drive_kI_1", "Drive_kI_2", "Drive_kI_3");
+        AdjustableValues.registerNumber("Drive_kD", "/Adjustables/Drive/kD", DriveConstants.kDDriveDefault, "Drive_kD_0", "Drive_kD_1", "Drive_kD_2", "Drive_kD_3");
+        AdjustableValues.registerNumber("Drive_kS", "/Adjustables/Drive/kS", DriveConstants.kSDriveDefault, "Drive_kS_0", "Drive_kS_1", "Drive_kS_2", "Drive_kS_3");
+        AdjustableValues.registerNumber("Drive_kV", "/Adjustables/Drive/kV", DriveConstants.kVDriveDefault, "Drive_kV_0", "Drive_kV_1", "Drive_kV_2", "Drive_kV_3");
 
-        AdjustableValues.registerNumber("Y_kP", "/Adjustables/Autos/Y_kP", DriveConstants.kPY);
-        AdjustableValues.registerNumber("Y_kI", "/Adjustables/Autos/Y_kI", DriveConstants.kIY);
-        AdjustableValues.registerNumber("Y_kD", "/Adjustables/Autos/Y_kD", DriveConstants.kDY);
+        AdjustableValues.registerNumber("Steer_kP", "/Adjustables/Steer/kP", DriveConstants.kPSteerDefault, "Steer_kP_0", "Steer_kP_1", "Steer_kP_2", "Steer_kP_3");
+        AdjustableValues.registerNumber("Steer_kI", "/Adjustables/Steer/kI", DriveConstants.kISteerDefault, "Steer_kI_0", "Steer_kI_1", "Steer_kI_2", "Steer_kI_3");
+        AdjustableValues.registerNumber("Steer_kD", "/Adjustables/Steer/kD", DriveConstants.kDSteerDefault, "Steer_kD_0", "Steer_kD_1", "Steer_kD_2", "Steer_kD_3");
+        AdjustableValues.registerNumber("Steer_kS", "/Adjustables/Steer/kS", DriveConstants.kSSteerDefault, "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
+        AdjustableValues.registerNumber("Steer_kV", "/Adjustables/Steer/kV", DriveConstants.kVSteerDefault, "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
 
-        AdjustableValues.registerNumber("Theta_kP", "/Adjustables/Autos/Theta_kP", DriveConstants.kPTheta);
-        AdjustableValues.registerNumber("Theta_kI", "/Adjustables/Autos/Theta_kI", DriveConstants.kITheta);
-        AdjustableValues.registerNumber("Theta_kD", "/Adjustables/Autos/Theta_kD", DriveConstants.kDTheta);
+        AdjustableValues.registerNumber("X_kP", "/Adjustables/XController/kP", DriveConstants.kPX);
+        AdjustableValues.registerNumber("X_kI", "/Adjustables/XController/kI", DriveConstants.kIX);
+        AdjustableValues.registerNumber("X_kD", "/Adjustables/XController/kD", DriveConstants.kDX);
+
+        AdjustableValues.registerNumber("Y_kP", "/Adjustables/YController/kP", DriveConstants.kPY);
+        AdjustableValues.registerNumber("Y_kI", "/Adjustables/YController/kI", DriveConstants.kIY);
+        AdjustableValues.registerNumber("Y_kD", "/Adjustables/YController/kD", DriveConstants.kDY);
+
+        AdjustableValues.registerNumber("Theta_kP", "/Adjustables/ThetaController/kP", DriveConstants.kPTheta);
+        AdjustableValues.registerNumber("Theta_kI", "/Adjustables/ThetaController/kI", DriveConstants.kITheta);
+        AdjustableValues.registerNumber("Theta_kD", "/Adjustables/ThetaController/kD", DriveConstants.kDTheta);
 
         AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", ElevatorConstants.kPDefault);
         AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
         AdjustableValues.registerNumber("Elev_kD", "/Adjustables/Elevator/kD", ElevatorConstants.kDDefault);
+        AdjustableValues.registerNumber("Elev_kS", "/Adjustables/Elevator/kS", ElevatorConstants.kSDefault);
+        AdjustableValues.registerNumber("Elev_kG", "/Adjustables/Elevator/kG", ElevatorConstants.kGDefault);
+        AdjustableValues.registerNumber("Elev_kV", "/Adjustables/Elevator/kV", ElevatorConstants.kVDefault);
+        AdjustableValues.registerNumber("Elev_kA", "/Adjustables/Elevator/kA", ElevatorConstants.kADefault);
 
-        AdjustableValues.registerNumber("Elev_L1_kS", "/Adjustables/Elevator/L1_kS", ElevatorConstants.kSDefaults[0]);
-        AdjustableValues.registerNumber("Elev_L1_kG", "/Adjustables/Elevator/L1_kG", ElevatorConstants.kGDefaults[0]);
-        AdjustableValues.registerNumber("Elev_L1_kV", "/Adjustables/Elevator/L1_kV", ElevatorConstants.kVDefaults[0]);
-        AdjustableValues.registerNumber("Elev_L1_kA", "/Adjustables/Elevator/L1_kA", ElevatorConstants.kADefaults[0]);
-
-        AdjustableValues.registerNumber("Elev_L2_kS", "/Adjustables/Elevator/L2_kS", ElevatorConstants.kSDefaults[1]);
-        AdjustableValues.registerNumber("Elev_L2_kG", "/Adjustables/Elevator/L2_kG", ElevatorConstants.kGDefaults[1]);
-        AdjustableValues.registerNumber("Elev_L2_kV", "/Adjustables/Elevator/L2_kV", ElevatorConstants.kVDefaults[1]);
-        AdjustableValues.registerNumber("Elev_L2_kA", "/Adjustables/Elevator/L2_kA", ElevatorConstants.kADefaults[1]);
-
-        AdjustableValues.registerNumber("Elev_L3_kS", "/Adjustables/Elevator/L3_kS", ElevatorConstants.kSDefaults[2]);
-        AdjustableValues.registerNumber("Elev_L3_kG", "/Adjustables/Elevator/L3_kG", ElevatorConstants.kGDefaults[2]);
-        AdjustableValues.registerNumber("Elev_L3_kV", "/Adjustables/Elevator/L3_kV", ElevatorConstants.kVDefaults[2]);
-        AdjustableValues.registerNumber("Elev_L3_kA", "/Adjustables/Elevator/L3_kA", ElevatorConstants.kADefaults[2]);
-
-        AdjustableValues.registerNumber("Climb_kP", "/Adjustables/Drivetrain/Climb_kP", ClimbConstants.kPDefault);
-        AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Drivetrain/Climb_kI", ClimbConstants.kIDefault);
-        AdjustableValues.registerNumber("Climb_kD", "/Adjustables/Drivetrain/Climb_kD", ClimbConstants.kDDefault);
+        AdjustableValues.registerNumber("Climb_kP", "/Adjustables/Climb/Climb_kP", ClimbConstants.kPDefault);
+        AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Climb/Climb_kI", ClimbConstants.kIDefault);
+        AdjustableValues.registerNumber("Climb_kD", "/Adjustables/Climb/Climb_kD", ClimbConstants.kDDefault);
     }
 
     /** Runs every tick while the robot is on. */

@@ -19,9 +19,9 @@ public class AlgaeIOSim implements AlgaeIO {
     public void updateInputs(AlgaeIOInputs inputs) {
         algae.update(0.02);
 
+        inputs.current = Amps.of(algae.getCurrentDrawAmps());
         inputs.percent = algae.getInputVoltage() / RobotController.getInputVoltage();
         inputs.voltage = Volts.of(algae.getInputVoltage());
-        inputs.current = Amps.of(algae.getCurrentDrawAmps());
     }
 
     @Override

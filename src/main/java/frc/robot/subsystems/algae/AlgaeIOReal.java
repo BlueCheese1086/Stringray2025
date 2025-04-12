@@ -10,7 +10,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Voltage;
-import java.util.Objects;
 
 public class AlgaeIOReal implements AlgaeIO {
     private TalonFX algae;
@@ -40,15 +39,15 @@ public class AlgaeIOReal implements AlgaeIO {
 
     @Override
     public void updateInputs(AlgaeIOInputs inputs) {
-        inputs.percent = algae.get();
-        inputs.voltage = algae.getMotorVoltage().getValue();
         inputs.current = algae.getStatorCurrent().getValue();
+        inputs.percent = algae.get();
         inputs.temperature = algae.getDeviceTemp().getValue();
+        inputs.voltage = algae.getMotorVoltage().getValue();
 
         // This can be null, check before using
         Measurement measure = laser.getMeasurement();
 
-        if (Objects.isNull(measure)) return;
+        if (measure == null) return;
 
         inputs.laserStatus = measure.status;
 

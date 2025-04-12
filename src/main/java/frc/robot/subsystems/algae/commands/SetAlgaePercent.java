@@ -7,18 +7,18 @@ import frc.robot.util.AdjustableValues;
 import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
-public class SetAlgaeSpeed extends Command {
+public class SetAlgaePercent extends Command {
     private Algae algae;
     private Supplier<Double> throttle;
 
     /**
-     * Creates a new {@link SetAlgaeSpeed} command.
+     * Creates a new {@link SetAlgaePercent} command.
      * It sets the percent output of the algae motor and resets it back to 0 when the command is cancelled.
      * 
      * @param algae The {@link Algae} subsystem to control.
      * @param throttle The percent speed to run at.
      */
-    public SetAlgaeSpeed(Algae algae, Supplier<Double> throttle) {
+    public SetAlgaePercent(Algae algae, Supplier<Double> throttle) {
         this.algae = algae;
         this.throttle = throttle;
 

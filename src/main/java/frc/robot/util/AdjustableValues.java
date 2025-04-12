@@ -331,6 +331,26 @@ public class AdjustableValues {
     }
 
     /**
+     * Sets a value in the logger and marks it as unread.
+     * 
+     * If the key has not been created, it returns false.
+     * 
+     * @param shortName The first parameter from the register() function.
+     * @param value The boolean to push to NT.
+     */
+    public static boolean setBoolean(String shortName, boolean value) {
+        if (!loggedBooleans.containsKey(shortName)) {
+            DriverStation.reportWarning("Program attempted to access an unregistered boolean, " + shortName + ".", false);
+            return false;
+        }
+
+        hasChanged.put(shortName, true);
+        loggedBooleans.put(shortName, value);
+
+        return true;
+    }
+
+    /**
      * Gets a value from the logger and marks it as read.
      * 
      * If the key has not been created, it returns 0.
@@ -346,6 +366,26 @@ public class AdjustableValues {
         hasChanged.put(shortName, false);
 
         return loggedNumbers.get(shortName);
+    }
+
+    /**
+     * Sets a value in the logger and marks it as unread.
+     * 
+     * If the key has not been created, it returns false.
+     * 
+     * @param shortName The first parameter from the register() function.
+     * @param value The number to push to NT.
+     */
+    public static boolean setNumber(String shortName, double value) {
+        if (!loggedNumbers.containsKey(shortName)) {
+            DriverStation.reportWarning("Program attempted to access an unregistered number, " + shortName + ".", false);
+            return false;
+        }
+
+        hasChanged.put(shortName, true);
+        loggedNumbers.put(shortName, value);
+
+        return true;
     }
 
     /**
@@ -367,6 +407,26 @@ public class AdjustableValues {
     }
 
     /**
+     * Sets a value in the logger and marks it as unread.
+     * 
+     * If the key has not been created, it returns false.
+     * 
+     * @param shortName The first parameter from the register() function.
+     * @param value The string to push to NT.
+     */
+    public static boolean setString(String shortName, String value) {
+        if (!loggedStrings.containsKey(shortName)) {
+            DriverStation.reportWarning("Program attempted to access an unregistered string, " + shortName + ".", false);
+            return false;
+        }
+
+        hasChanged.put(shortName, true);
+        loggedStrings.put(shortName, value);
+
+        return true;
+    }
+
+    /**
      * Gets a value from the logger and marks it as read.
      * 
      * If the key has not been created, it returns null.
@@ -383,6 +443,26 @@ public class AdjustableValues {
         hasChanged.put(shortName, false);
 
         return (T) loggedChoosers.get(shortName);
+    }
+
+    /**
+     * Sets a value in the logger and marks it as unread.
+     * 
+     * If the key has not been created, it returns false.
+     * 
+     * @param shortName The first parameter from the register() function.
+     * @param value The chooser to push to NT.
+     */
+    public static <T> boolean setChooser(String shortName, T value) {
+        if (!loggedStrings.containsKey(shortName)) {
+            DriverStation.reportWarning("Program attempted to access an unregistered sendable chooser, " + shortName + ".", false);
+            return false;
+        }
+
+        hasChanged.put(shortName, true);
+        loggedChoosers.put(shortName, value);
+
+        return true;
     }
 
     /**

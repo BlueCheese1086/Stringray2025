@@ -202,7 +202,7 @@ public class RobotContainer {
 
         // Climb manual controls
         operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband)
-            .whileTrue(new SetClimbSpeed(climb, operatorController::getRightY));
+            .whileTrue(new SetClimbVoltage(climb, operatorController::getLeftY));
     }
 
     public Command getAutonomousCommand() {

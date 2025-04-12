@@ -1,6 +1,5 @@
 package frc.robot.subsystems.hopper;
 
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,7 +22,7 @@ public class Hopper extends SubsystemBase {
         io.setPercent(percent);
     }
 
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
         Logger.recordOutput("/Hopper/VoltageSetpoint", voltage);
         io.setVoltage(voltage);
     }

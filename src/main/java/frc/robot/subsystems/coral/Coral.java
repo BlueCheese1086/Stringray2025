@@ -1,9 +1,5 @@
 package frc.robot.subsystems.coral;
 
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Temperature;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -26,7 +22,7 @@ public class Coral extends SubsystemBase {
     }
 
     /** Sets the voltage of the coral roller. */
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
         coralIO.setVoltage(voltage);
     }
 
@@ -41,7 +37,7 @@ public class Coral extends SubsystemBase {
     }
 
     /** Gets the distance seen by the LaserCan. */
-    public Distance getLaserReading() {
+    public double getLaserReading() {
         return inputs.laserReading;
     }
 
@@ -56,17 +52,17 @@ public class Coral extends SubsystemBase {
     }
 
     /** Gets the voltage output of the coral motor. */
-    public Voltage getVoltage() {
+    public double getVoltage() {
         return inputs.voltage;
     }
 
     /** Gets the current applied to the coral motor. */
-    public Current getCurrent() {
+    public double getCurrent() {
         return inputs.current;
     }
 
     /** Gets the internal temperature of the coral motor. */
-    public Temperature getTemperature() {
+    public double getTemperature() {
         return inputs.temperature;
     }
 

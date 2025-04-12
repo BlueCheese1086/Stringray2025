@@ -1,23 +1,17 @@
 package frc.robot.subsystems.hopper;
 
-import static edu.wpi.first.units.Units.*;
-
 import au.grapplerobotics.LaserCan;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Temperature;
-import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface HopperIO {
     @AutoLog
     public static class HopperIOInputs {
-        Current current = Amps.zero();
+        double current = 0;
         double percent = 0;
-        Temperature temperature = Celsius.zero();
-        Voltage voltage = Volts.zero();
+        double temperature = 0;
+        double voltage = 0;
 
-        Distance laserReading = Meters.zero();
+        double laserReading = 0;
         int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
     }
 
@@ -28,5 +22,5 @@ public interface HopperIO {
     public void setPercent(double percent);
 
     /** Sets the voltage output of the IO. */
-    public void setVoltage(Voltage voltage);
+    public void setVoltage(double voltage);
 }

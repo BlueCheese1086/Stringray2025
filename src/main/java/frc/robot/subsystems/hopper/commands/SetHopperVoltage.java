@@ -6,9 +6,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.util.AdjustableValues;
 import frc.robot.util.MathUtils;
-
-import static edu.wpi.first.units.Units.Volts;
-
 import java.util.function.Supplier;
 
 public class SetHopperVoltage extends Command {
@@ -37,12 +34,12 @@ public class SetHopperVoltage extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        hopper.setVoltage(Volts.of(speed * AdjustableValues.getNumber("Hopper_Percent") * RobotController.getInputVoltage()));
+        hopper.setVoltage(speed * AdjustableValues.getNumber("Hopper_Percent") * RobotController.getInputVoltage());
     }
 
     /** Called once the command ends or is interrupted. */
     @Override
     public void end(boolean interrupted) {
-        hopper.setVoltage(Volts.zero());
+        hopper.setVoltage(0);
     }
 }

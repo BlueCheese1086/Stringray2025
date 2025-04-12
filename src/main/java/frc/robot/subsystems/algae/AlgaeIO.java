@@ -1,23 +1,17 @@
 package frc.robot.subsystems.algae;
 
-import static edu.wpi.first.units.Units.*;
-
 import au.grapplerobotics.LaserCan;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Temperature;
-import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface AlgaeIO {
     @AutoLog
     public class AlgaeIOInputs {
-        Current current = Amps.zero();
+        double current = 0; // Amps
         double percent = 0;
-        Temperature temperature = Celsius.zero();
-        Voltage voltage = Volts.zero();
+        double temperature = 0; // Celsius
+        double voltage = 0; // Volts
 
-        Distance laserReading = Meters.zero();
+        double laserReading = 0;
         int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
     }
 
@@ -28,5 +22,5 @@ public interface AlgaeIO {
     public void setPercent(double percent);
 
     /** Sets the voltage output of the motor. */
-    public void setVoltage(Voltage voltage);
+    public void setVoltage(double voltage);
 }

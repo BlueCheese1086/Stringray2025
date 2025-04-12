@@ -1,7 +1,5 @@
 package frc.robot.subsystems.coral;
 
-import static edu.wpi.first.units.Units.Millimeters;
-
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
@@ -12,7 +10,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
-import edu.wpi.first.units.measure.Voltage;
 import java.util.Objects;
 
 public class CoralIOReal implements CoralIO {
@@ -54,9 +51,9 @@ public class CoralIOReal implements CoralIO {
     @Override
     public void updateInputs(CoralIOInputs inputs) {
         inputs.percent = coral.get();
-        inputs.voltage = coral.getMotorVoltage().getValue();
-        inputs.current = coral.getStatorCurrent().getValue();
-        inputs.temperature = coral.getDeviceTemp().getValue();
+        inputs.voltage = coral.getMotorVoltage().getValueAsDouble();
+        inputs.current = coral.getStatorCurrent().getValueAsDouble();
+        inputs.temperature = coral.getDeviceTemp().getValueAsDouble();
 
         inputs.sensorProximity = sensor.getProximity();
         inputs.sensorColor = String.format("#%x%x%x", (int) (sensor.getRed() * 255), (int) (sensor.getGreen() * 255), (int) (sensor.getBlue() * 255));
@@ -71,7 +68,7 @@ public class CoralIOReal implements CoralIO {
         // Only updating the reading if the sensor has a good read.
         if (inputs.laserStatus != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return;
 
-        inputs.laserReading = Millimeters.of(measure.distance_mm);
+        inputs.laserReading = measure.distance_mm / 1000.0;
     }
 
     @Override
@@ -80,7 +77,7 @@ public class CoralIOReal implements CoralIO {
     }
 
     @Override
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
         coral.setControl(new VoltageOut(voltage));
     }
 }

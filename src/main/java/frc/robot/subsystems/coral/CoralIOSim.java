@@ -1,10 +1,7 @@
 package frc.robot.subsystems.coral;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
@@ -21,8 +18,8 @@ public class CoralIOSim implements CoralIO {
         motorSim.update(0.02);
 
         inputs.percent = motorSim.getInputVoltage() / RobotController.getInputVoltage();
-        inputs.voltage = Volts.of(motorSim.getInputVoltage());
-        inputs.current = Amps.of(motorSim.getCurrentDrawAmps());
+        inputs.voltage = motorSim.getInputVoltage();
+        inputs.current = motorSim.getCurrentDrawAmps();
     }
 
     @Override
@@ -31,7 +28,7 @@ public class CoralIOSim implements CoralIO {
     }
 
     @Override
-    public void setVoltage(Voltage voltage) {
-        motorSim.setInputVoltage(voltage.in(Volts));
+    public void setVoltage(double voltage) {
+        motorSim.setInputVoltage(voltage);
     }
 }

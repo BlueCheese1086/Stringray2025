@@ -1,26 +1,20 @@
 package frc.robot.subsystems.coral;
 
-import static edu.wpi.first.units.Units.*;
-
 import au.grapplerobotics.LaserCan;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Temperature;
-import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface CoralIO {
     @AutoLog
     public class CoralIOInputs {
         public double percent = 0;
-        public Voltage voltage = Volts.zero();
-        public Current current = Amps.zero();
-        public Temperature temperature = Celsius.zero();
+        public double voltage = 0; // Volts
+        public double current = 0; // Amps
+        public double temperature = 0; // Celsius
 
-        public double sensorProximity = 0;
+        public double sensorProximity = 0; // Unknown
         public String sensorColor = "";
 
-        public Distance laserReading = Millimeters.zero();
+        public double laserReading = 0; // Meters
         public int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
     }
 
@@ -35,5 +29,5 @@ public interface CoralIO {
     public void setPercent(double percent);
 
     /** Sets the voltage of the coral roller. */
-    public void setVoltage(Voltage voltage);
+    public void setVoltage(double voltage);
 }

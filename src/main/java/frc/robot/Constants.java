@@ -1,10 +1,7 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import java.util.ArrayList;
@@ -12,7 +9,7 @@ import java.util.ArrayList;
 public class Constants {
     public static final boolean isReplay = false;
 
-    public static final Angle TipThreshold = Degrees.of(6);
+    public static final double TipThreshold = 6;
 
     public static final double PrecisionScalar = 0.75;
 

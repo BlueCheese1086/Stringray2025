@@ -1,7 +1,5 @@
 package frc.robot.subsystems.hopper;
 
-import static edu.wpi.first.units.Units.*;
-
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
@@ -11,7 +9,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class HopperIOTalonFX implements HopperIO {
@@ -48,10 +45,10 @@ public class HopperIOTalonFX implements HopperIO {
 
     @Override
     public void updateInputs(HopperIOInputs inputs) {
-        inputs.current = track.getStatorCurrent().getValue();
+        inputs.current = track.getStatorCurrent().getValueAsDouble();
         inputs.percent = track.getDutyCycle().getValue();
-        inputs.temperature = track.getDeviceTemp().getValue();
-        inputs.voltage = track.getMotorVoltage().getValue();
+        inputs.temperature = track.getDeviceTemp().getValueAsDouble();
+        inputs.voltage = track.getMotorVoltage().getValueAsDouble();
 
         // This can be null, check before using
         Measurement measure = laser.getMeasurement();
@@ -63,7 +60,7 @@ public class HopperIOTalonFX implements HopperIO {
         // Only updating the reading if the sensor has a good read.
         if (inputs.laserStatus != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return;
 
-        inputs.laserReading = Millimeters.of(measure.distance_mm);
+        inputs.laserReading = measure.distance_mm / 1000.0;
     }
 
     @Override
@@ -72,7 +69,7 @@ public class HopperIOTalonFX implements HopperIO {
     }
 
     @Override
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
         track.setControl(voltageControl.withOutput(voltage));
     }
 }

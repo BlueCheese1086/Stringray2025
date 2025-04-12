@@ -1,7 +1,5 @@
 package frc.robot.subsystems.algae.commands;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -36,12 +34,12 @@ public class SetAlgaeVoltage extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        algae.setVoltage(Volts.of(speed * AdjustableValues.getNumber("Algae_Percent") * RobotController.getInputVoltage()));
+        algae.setVoltage(speed * AdjustableValues.getNumber("Algae_Percent") * RobotController.getInputVoltage());
     }
 
     /** Called once the command ends or is interrupted. */
     @Override
     public void end(boolean interrupted) {
-        algae.setVoltage(Volts.zero());
+        algae.setVoltage(0);
     }
 }

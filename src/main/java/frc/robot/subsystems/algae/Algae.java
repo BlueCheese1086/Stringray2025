@@ -1,6 +1,5 @@
 package frc.robot.subsystems.algae;
 
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -30,7 +29,7 @@ public class Algae extends SubsystemBase {
     }
 
     /** Sets the voltage output of the algae motor. */
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
         Logger.recordOutput("/Algae/GoalVoltage", voltage);
         io.setVoltage(voltage);
     }

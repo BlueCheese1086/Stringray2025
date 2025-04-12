@@ -1,7 +1,5 @@
 package frc.robot.subsystems.hopper;
 
-import static edu.wpi.first.units.Units.*;
-
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
@@ -11,7 +9,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class HopperIOReal implements HopperIO {
@@ -42,10 +39,10 @@ public class HopperIOReal implements HopperIO {
 
     @Override
     public void updateInputs(HopperIOInputs inputs) {
-        inputs.current = Amps.of(track.getOutputCurrent());
+        inputs.current = track.getOutputCurrent();
         inputs.percent = track.getAppliedOutput();
-        inputs.temperature = Celsius.of(track.getMotorTemperature());
-        inputs.voltage = Volts.of(track.getAppliedOutput() * track.getBusVoltage());
+        inputs.temperature = track.getMotorTemperature();
+        inputs.voltage = track.getAppliedOutput() * track.getBusVoltage();
 
         // This can be null, check before using
         Measurement measure = laser.getMeasurement();
@@ -57,7 +54,7 @@ public class HopperIOReal implements HopperIO {
         // Only updating the reading if the sensor has a good read.
         if (measure.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return;
 
-        inputs.laserReading = Millimeters.of(measure.distance_mm);
+        inputs.laserReading = measure.distance_mm / 1000.0;
     }
 
     @Override
@@ -66,7 +63,7 @@ public class HopperIOReal implements HopperIO {
     }
 
     @Override
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
         track.setVoltage(voltage);
     }
 }

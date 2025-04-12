@@ -3,6 +3,9 @@ package frc.robot.util;
 import java.util.HashMap;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 import org.littletonrobotics.junction.networktables.LoggedNetworkString;
+
+import edu.wpi.first.wpilibj.DriverStation;
+
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -317,8 +320,10 @@ public class AdjustableValues {
      * @param shortName The first parameter from the register() function.
      */
     public static boolean getBoolean(String shortName) {
-        if (!loggedBooleans.containsKey(shortName))
+        if (!loggedBooleans.containsKey(shortName)) {
+            DriverStation.reportWarning("Program attempted to access an unregistered boolean, " + shortName + ".", false);
             return false;
+        }
 
         hasChanged.put(shortName, false);
 
@@ -333,8 +338,10 @@ public class AdjustableValues {
      * @param shortName The first parameter from the register() function.
      */
     public static double getNumber(String shortName) {
-        if (!loggedNumbers.containsKey(shortName))
+        if (!loggedNumbers.containsKey(shortName)) {
+            DriverStation.reportWarning("Program attempted to access an unregistered number, " + shortName + ".", false);
             return 0;
+        }
 
         hasChanged.put(shortName, false);
 
@@ -349,8 +356,10 @@ public class AdjustableValues {
      * @param shortName The first parameter from the register() function.
      */
     public static String getString(String shortName) {
-        if (!loggedStrings.containsKey(shortName))
+        if (!loggedStrings.containsKey(shortName)) {
+            DriverStation.reportWarning("Program attempted to access an unregistered string, " + shortName + ".", false);
             return "";
+        }
 
         hasChanged.put(shortName, false);
 
@@ -366,7 +375,10 @@ public class AdjustableValues {
      */
     @SuppressWarnings("unchecked")
     public static <T> T getChooser(String shortName) {
-        if (!loggedStrings.containsKey(shortName)) return null;
+        if (!loggedStrings.containsKey(shortName)) {
+            DriverStation.reportWarning("Program attempted to access an unregistered sendable chooser, " + shortName + ".", false);
+            return null;
+        }
 
         hasChanged.put(shortName, false);
 

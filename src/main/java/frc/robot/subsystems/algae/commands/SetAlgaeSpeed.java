@@ -3,13 +3,13 @@ package frc.robot.subsystems.algae.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.algae.Algae;
+import frc.robot.util.AdjustableValues;
 import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
 public class SetAlgaeSpeed extends Command {
     private Algae algae;
     private Supplier<Double> throttle;
-    private Supplier<Double> percentSupplier;
 
     /**
      * Creates a new {@link SetAlgaeSpeed} command.
@@ -17,12 +17,10 @@ public class SetAlgaeSpeed extends Command {
      * 
      * @param algae The {@link Algae} subsystem to control.
      * @param throttle The percent speed to run at.
-     * @param percentSupplier The maximum percent output.
      */
-    public SetAlgaeSpeed(Algae algae, Supplier<Double> throttle, Supplier<Double> percentSupplier) {
+    public SetAlgaeSpeed(Algae algae, Supplier<Double> throttle) {
         this.algae = algae;
         this.throttle = throttle;
-        this.percentSupplier = percentSupplier;
 
         addRequirements(algae);
     }
@@ -35,7 +33,7 @@ public class SetAlgaeSpeed extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        algae.setPercent(speed * percentSupplier.get());
+        algae.setPercent(speed * AdjustableValues.getNumber("Algae_Percent"));
     }
 
     /** Called once the command ends or is interrupted. */

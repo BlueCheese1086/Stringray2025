@@ -1,7 +1,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -90,9 +89,8 @@ public class RobotContainer {
         }
 
         // Anti-Tip command
-        if (RobotBase.isReal()) {
-            new AntiTip(elevator::setPosition, gyro::getPitch, gyro::getRoll).schedule();
-        }
+        // This doesn't work in sim due to the sim gyro not actually doing anything
+        new AntiTip(elevator::setPosition, gyro::getPitch, gyro::getRoll).schedule();
 
         // Configuring controller bindings
         configureBindings();
@@ -128,6 +126,21 @@ public class RobotContainer {
                         () -> driverController.getRightX() * 0.2,
                         () -> false));
 
+        // Precision Mode
+        // It sets the max speeds through the AdjustableValues class, but it puts them back to their default percents.
+        // This erases any tuning made to the drive percent values.
+        // driverController.leftBumper().whileTrue(Commands.runEnd(
+        //     () -> {
+        //         AdjustableValues.setNumber("DriveX_Percent", DriveConstants.precisionPercent);
+        //         AdjustableValues.setNumber("DriveY_Percent", DriveConstants.precisionPercent);
+        //         AdjustableValues.setNumber("Steer_Percent", DriveConstants.precisionPercent);
+        //     },
+        //     () -> {
+        //         AdjustableValues.setNumber("DriveX_Percent", DriveConstants.driveXPercent);
+        //         AdjustableValues.setNumber("DriveY_Percent", DriveConstants.driveYPercent);
+        //         AdjustableValues.setNumber("Steer_Percent", DriveConstants.steerPercent);
+        //     }));
+
         // Reset gyro
         driverController.b().onTrue(Commands.runOnce(gyro::reset));
 
@@ -152,15 +165,15 @@ public class RobotContainer {
 
         // Intake Coral & Algae
         driverController.leftTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis, () -> AdjustableValues.getNumber("Coral_Percent")))
-            .whileTrue(new SetAlgaeSpeed(algae, driverController::getLeftTriggerAxis, () -> AdjustableValues.getNumber("Algae_Percent")))
-            .whileTrue(new SetHopperSpeed(hopper, driverController::getLeftTriggerAxis, () -> AdjustableValues.getNumber("Hopper_Percent")));
+            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis))
+            .whileTrue(new SetAlgaeSpeed(algae, driverController::getLeftTriggerAxis))
+            .whileTrue(new SetHopperPercent(hopper, driverController::getLeftTriggerAxis));
         
         // Outtake Coral & Algae
         driverController.rightTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis, () -> AdjustableValues.getNumber("Coral_Percent")))
-            .whileTrue(new SetAlgaeSpeed(algae, driverController::getRightTriggerAxis, () -> AdjustableValues.getNumber("Algae_Percent")))
-            .whileTrue(new SetHopperSpeed(hopper, driverController::getRightTriggerAxis, () -> AdjustableValues.getNumber("Hopper_Percent")));
+            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis))
+            .whileTrue(new SetAlgaeSpeed(algae, driverController::getRightTriggerAxis))
+            .whileTrue(new SetHopperPercent(hopper, driverController::getRightTriggerAxis));
 
         // Operator Controls
 
@@ -179,7 +192,8 @@ public class RobotContainer {
         operatorController.rightTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
         
         // Elevator manual controls
-        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband).whileTrue(new SetElevatorSpeed(elevator, () -> operatorController.getRightY() * 0.5, () -> AdjustableValues.getNumber("Elevator_Percent")));
+        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband)
+            .whileTrue(new SetElevatorSpeed(elevator, operatorController::getRightY));
 
         // Set Climb Positions
         operatorController.povLeft().onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));
@@ -187,7 +201,8 @@ public class RobotContainer {
         operatorController.povDown().onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
 
         // Climb manual controls
-        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband).whileTrue(new SetClimbSpeed(climb, () -> operatorController.getRightY() * 0.5, () -> AdjustableValues.getNumber("Climb_Percent")));
+        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband)
+            .whileTrue(new SetClimbSpeed(climb, operatorController::getRightY));
     }
 
     public Command getAutonomousCommand() {

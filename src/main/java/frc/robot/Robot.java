@@ -3,9 +3,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.algae.AlgaeConstants;
 import frc.robot.subsystems.climb.ClimbConstants;
+import frc.robot.subsystems.coral.CoralConstants;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
+import frc.robot.subsystems.hopper.HopperConstants;
 import frc.robot.util.AdjustableValues;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -68,6 +71,15 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Climb_kP", "/Adjustables/Climb/Climb_kP", ClimbConstants.kPDefault);
         AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Climb/Climb_kI", ClimbConstants.kIDefault);
         AdjustableValues.registerNumber("Climb_kD", "/Adjustables/Climb/Climb_kD", ClimbConstants.kDDefault);
+
+        AdjustableValues.registerNumber("Algae_Percent", "/Adjustables/Speeds/Algae_Percent", AlgaeConstants.maxPercent);
+        AdjustableValues.registerNumber("Climb_Percent", "/Adjustables/Speeds/Climb_Percent", ClimbConstants.maxPercent);
+        AdjustableValues.registerNumber("Coral_Percent", "/Adjustables/Speeds/Coral_Percent", CoralConstants.maxPercent);
+        AdjustableValues.registerNumber("DriveX_Percent", "/Adjustables/Speeds/DriveX_Percent", DriveConstants.driveXPercent);
+        AdjustableValues.registerNumber("DriveY_Percent", "/Adjustables/Speeds/DriveY_Percent", DriveConstants.driveYPercent);
+        AdjustableValues.registerNumber("Steer_Percent", "/Adjustables/Speeds/Steer_Percent", DriveConstants.steerPercent);
+        AdjustableValues.registerNumber("Elevator_Percent", "/Adjustables/Speeds/Elevator_Percent", ElevatorConstants.maxPercent);
+        AdjustableValues.registerNumber("Hopper_Percent", "/Adjustables/Speeds/Hopper_Percent", HopperConstants.maxPercent);
     }
 
     /** Runs every tick while the robot is on. */

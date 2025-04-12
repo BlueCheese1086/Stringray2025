@@ -50,10 +50,10 @@ public class RobotContainer {
                     new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
             drive = new Drive(gyro, vision,
-                    new ModuleIOTalonFX(0),//TunerConstants.FrontLeft),
-                    new ModuleIOTalonFX(1),//TunerConstants.FrontRight),
-                    new ModuleIOTalonFX(2),//TunerConstants.BackLeft),
-                    new ModuleIOTalonFX(3));//TunerConstants.BackRight));
+                    new ModuleIOTalonFX(0),
+                    new ModuleIOTalonFX(1),
+                    new ModuleIOTalonFX(2),
+                    new ModuleIOTalonFX(3));
 
             algae = new Algae(new AlgaeIOReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId));
             
@@ -65,18 +65,18 @@ public class RobotContainer {
             
             climb = new Climb(new ClimbIOReal(RobotMap.CLIMB_MotorId));
         } else {
+            // Reminder that this does nothing.
+            gyro = new Gyro(new GyroIOSim());
+
             vision = new Vision(
                     new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
-
-            // Reminder that this does nothing.
-            gyro = new Gyro(new GyroIOSim());
             
             drive = new Drive(gyro, vision,
-                    new ModuleIOSim(0),//TunerConstants.FrontLeft),
-                    new ModuleIOSim(1),//TunerConstants.FrontRight),
-                    new ModuleIOSim(2),//TunerConstants.BackLeft),
-                    new ModuleIOSim(3));//TunerConstants.BackRight));
+                    new ModuleIOSim(0),
+                    new ModuleIOSim(1),
+                    new ModuleIOSim(2),
+                    new ModuleIOSim(3));
 
             coral = new Coral(new CoralIOSim());
             
@@ -107,39 +107,32 @@ public class RobotContainer {
             !MathUtils.withinDeadband(driverController.getRightX(), Constants.deadband) ||
             !MathUtils.withinDeadband(driverController.getRightY(), Constants.deadband));
 
-
         // Driver Controls
 
         // Normal drive
         drive.setDefaultCommand(
-            new SwerveDrive(//drive, null, null, null, null, null)
-                // DriveCommands.joystickDrive(
-                        drive,
-                        driverController::getLeftY,
-                        driverController::getLeftX,
-                        driverController::getRightX,
-                        () -> 1.0,
-                        () -> false));
+            new SwerveDrive(
+                    drive,
+                    driverController::getLeftY,
+                    driverController::getLeftX,
+                    driverController::getRightX,
+                    () -> false));
 
         // Precision Mode
         driverController.leftBumper().or(driverController.rightBumper())
             .whileTrue(
                 new SwerveDrive(
-                // DriveCommands.joystickDrive(
                         drive,
-                        driverController::getLeftY,
-                        driverController::getLeftX,
-                        driverController::getRightX,
-                        () -> 0.2,
+                        () -> driverController.getLeftY() * 0.2,
+                        () -> driverController.getLeftX() * 0.2,
+                        () -> driverController.getRightX() * 0.2,
                         () -> false));
 
-        // Reset gyro (Only works IRL)
-        if (Robot.isReal()) {
-            driverController.b().onTrue(Commands.runOnce(gyro::reset));
-        }
+        // Reset gyro
+        driverController.b().onTrue(Commands.runOnce(gyro::reset));
 
         // Toggle X State
-        driverController.x().toggleOnTrue(new XStates(drive)/*DriveCommands.xStates(drive)*/.until(joystickOverride));
+        driverController.x().toggleOnTrue(new XStates(drive).until(joystickOverride));
 
         // Log current robot pose
         driverController.y().onTrue(new RecordPose(drive::getPose));
@@ -149,32 +142,31 @@ public class RobotContainer {
 
         // Pathfind to left side of reef
         driverController.back()
-            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Left)//DriveCommands.pidDriveToPose(drive, drive.getPose().nearest(Poses.REEF_Left))
+            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Left)
             .until(joystickOverride));
 
         // Pathfind to right side of reef.
         driverController.start()
-            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Right)//DriveCommands.pidDriveToPose(drive, drive.getPose().nearest(Poses.REEF_Right))
+            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Right)
             .until(joystickOverride));
 
         // Intake Coral & Algae
         driverController.leftTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis, () -> 1.0))
-            .whileTrue(new SetAlgaeSpeed(algae, driverController::getLeftTriggerAxis, () -> 1.0))
-            .whileTrue(new SetHopperSpeed(hopper, driverController::getLeftTriggerAxis, () -> 1.0));
+            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis, () -> AdjustableValues.getNumber("Coral_Percent")))
+            .whileTrue(new SetAlgaeSpeed(algae, driverController::getLeftTriggerAxis, () -> AdjustableValues.getNumber("Algae_Percent")))
+            .whileTrue(new SetHopperSpeed(hopper, driverController::getLeftTriggerAxis, () -> AdjustableValues.getNumber("Hopper_Percent")));
         
         // Outtake Coral & Algae
         driverController.rightTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis, () -> 1.0))
-            .whileTrue(new SetAlgaeSpeed(algae, driverController::getRightTriggerAxis, () -> 1.0))
-            .whileTrue(new SetHopperSpeed(hopper, driverController::getRightTriggerAxis, () -> 1.0));
-
+            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis, () -> AdjustableValues.getNumber("Coral_Percent")))
+            .whileTrue(new SetAlgaeSpeed(algae, driverController::getRightTriggerAxis, () -> AdjustableValues.getNumber("Algae_Percent")))
+            .whileTrue(new SetHopperSpeed(hopper, driverController::getRightTriggerAxis, () -> AdjustableValues.getNumber("Hopper_Percent")));
 
         // Operator Controls
 
         // Reset Elevator Encoder
-        operatorController.start().onTrue(Commands.run(() -> elevator.resetEncoder()).ignoringDisable(true));
-        operatorController.back().onTrue(Commands.run(() -> elevator.resetEncoder()).ignoringDisable(true));
+        operatorController.start().onTrue(Commands.run(elevator::resetEncoder).ignoringDisable(true));
+        operatorController.back().onTrue(Commands.run(elevator::resetEncoder).ignoringDisable(true));
 
         // Set Elevator Heights
         operatorController.leftBumper().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
@@ -187,15 +179,15 @@ public class RobotContainer {
         operatorController.rightTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
         
         // Elevator manual controls
-        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband).whileTrue(new SetElevatorSpeed(elevator, () -> operatorController.getRightY() * 0.5, () -> 1.0));
+        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband).whileTrue(new SetElevatorSpeed(elevator, () -> operatorController.getRightY() * 0.5, () -> AdjustableValues.getNumber("Elevator_Percent")));
 
         // Set Climb Positions
-        operatorController.povLeft() .onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));
+        operatorController.povLeft().onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));
         operatorController.povRight().onTrue(new SetClimbAngle(climb, ClimbPositions.HANG));
-        operatorController.povDown() .onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
+        operatorController.povDown().onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
 
         // Climb manual controls
-        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband).whileTrue(new SetClimbSpeed(climb, () -> operatorController.getRightY() * 0.5, () -> 1.0));
+        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband).whileTrue(new SetClimbSpeed(climb, () -> operatorController.getRightY() * 0.5, () -> AdjustableValues.getNumber("Climb_Percent")));
     }
 
     public Command getAutonomousCommand() {

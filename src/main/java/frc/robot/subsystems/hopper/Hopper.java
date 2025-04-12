@@ -1,14 +1,11 @@
 package frc.robot.subsystems.hopper;
 
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class Hopper extends SubsystemBase {
-    public HopperIO io;
+    private HopperIO io;
     public HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
 
     public Hopper(HopperIO io) {
@@ -22,34 +19,12 @@ public class Hopper extends SubsystemBase {
     }
 
     public void setPercent(double percent) {
+        Logger.recordOutput("/Hopper/PercentSetpoint", percent);
         io.setPercent(percent);
     }
 
     public void setVoltage(Voltage voltage) {
+        Logger.recordOutput("/Hopper/VoltageSetpoint", voltage);
         io.setVoltage(voltage);
-    }
-
-    public double getPercent() {
-        return inputs.percent;
-    }
-
-    public Voltage getVoltage() {
-        return inputs.voltage;
-    }
-
-    public Current getCurrent() {
-        return inputs.current;
-    }
-
-    public Temperature getTemperature() {
-        return inputs.temperature;
-    }
-
-    public Distance getLaserReading() {
-        return inputs.laserReading;
-    }
-
-    public int getLaserStatus() {
-        return inputs.laserStatus;
     }
 }

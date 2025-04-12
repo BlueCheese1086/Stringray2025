@@ -1,29 +1,30 @@
 package frc.robot.subsystems.hopper.commands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.util.AdjustableValues;
 import frc.robot.util.MathUtils;
+
+import static edu.wpi.first.units.Units.Volts;
+
 import java.util.function.Supplier;
 
-public class SetHopperSpeed extends Command {
+public class SetHopperVoltage extends Command {
     private Hopper hopper;
     private Supplier<Double> throttle;
-    private Supplier<Double> percentSupplier;
 
     /**
-     * Creates a new SetHopperSpeed command.
-     * It sets the percent output of the hopper and sets it back to 0 when the
-     * command is cancelled.
+     * Creates a new {@link SetHopperVoltage} command.
+     * It sets the voltage output of the hopper and sets it back to 0 when the command is cancelled.
      * 
-     * @param hopper   The hopper subsystem to control.
-     * @param throttle The percent speed to run at.
-     * @param percentSupplier The max percent to run at.
+     * @param hopper The {@link Hopper} subsystem to control.
+     * @param throttle The percent of max voltage to run at.
      */
-    public SetHopperSpeed(Hopper hopper, Supplier<Double> throttle, Supplier<Double> percentSupplier) {
+    public SetHopperVoltage(Hopper hopper, Supplier<Double> throttle) {
         this.hopper = hopper;
         this.throttle = throttle;
-        this.percentSupplier = percentSupplier;
 
         addRequirements(hopper);
     }
@@ -36,12 +37,12 @@ public class SetHopperSpeed extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        hopper.setPercent(speed * percentSupplier.get());
+        hopper.setVoltage(Volts.of(speed * AdjustableValues.getNumber("Hopper_Percent") * RobotController.getInputVoltage()));
     }
 
     /** Called once the command ends or is interrupted. */
     @Override
     public void end(boolean interrupted) {
-        hopper.setPercent(0);
+        hopper.setVoltage(Volts.zero());
     }
 }

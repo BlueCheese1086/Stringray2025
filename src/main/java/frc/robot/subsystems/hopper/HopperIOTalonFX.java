@@ -12,11 +12,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Voltage;
-import java.util.Objects;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class HopperIOTalonFX implements HopperIO {
     private TalonFX track;
     private LaserCan laser;
+
+    // Control methods
+    private DutyCycleOut dutyCycleControl = new DutyCycleOut(0);
+    private VoltageOut voltageControl = new VoltageOut(0);
 
     public HopperIOTalonFX(int trackId, int laserId) {
         track = new TalonFX(trackId);
@@ -25,6 +29,8 @@ public class HopperIOTalonFX implements HopperIO {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.Voltage.PeakForwardVoltage = 12;
+        config.Voltage.PeakReverseVoltage = -12;
 
         track.getConfigurator().apply(config);
 
@@ -32,25 +38,25 @@ public class HopperIOTalonFX implements HopperIO {
         try {
             laser.setRangingMode(LaserCan.RangingMode.SHORT);
             laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-            // Default but we have to configure in their app
+            // Default but we have to configure in their app ???
             laser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException e) {
+            DriverStation.reportWarning("Hopper Laser Can Config Failed!", false);
             e.printStackTrace();
-            System.out.println("Hopper Laser Can Config Failed!");
         }
     }
 
     @Override
     public void updateInputs(HopperIOInputs inputs) {
-        inputs.percent = track.get();
-        inputs.voltage = track.getMotorVoltage().getValue();
         inputs.current = track.getStatorCurrent().getValue();
+        inputs.percent = track.getDutyCycle().getValue();
         inputs.temperature = track.getDeviceTemp().getValue();
+        inputs.voltage = track.getMotorVoltage().getValue();
 
         // This can be null, check before using
         Measurement measure = laser.getMeasurement();
 
-        if (Objects.isNull(measure)) return;
+        if (measure == null) return;
 
         inputs.laserStatus = measure.status;
 
@@ -62,11 +68,11 @@ public class HopperIOTalonFX implements HopperIO {
 
     @Override
     public void setPercent(double percent) {
-        track.setControl(new DutyCycleOut(percent));
+        track.setControl(dutyCycleControl.withOutput(percent));
     }
 
     @Override
     public void setVoltage(Voltage voltage) {
-        track.setControl(new VoltageOut(voltage));
+        track.setControl(voltageControl.withOutput(voltage));
     }
 }

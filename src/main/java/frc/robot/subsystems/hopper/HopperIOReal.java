@@ -12,7 +12,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.units.measure.Voltage;
-import java.util.Objects;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class HopperIOReal implements HopperIO {
     private SparkMax track;
@@ -35,27 +35,27 @@ public class HopperIOReal implements HopperIO {
             // Default but we have to configure in their app
             laser.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException e) {
+            DriverStation.reportWarning("Hopper Laser Can Config Failed!", false);
             e.printStackTrace();
-            System.out.println("Hopper Laser Can Config Failed!");
         }
     }
 
     @Override
     public void updateInputs(HopperIOInputs inputs) {
-        inputs.percent = track.getAppliedOutput();
-        inputs.voltage = Volts.of(track.getAppliedOutput() * track.getBusVoltage());
         inputs.current = Amps.of(track.getOutputCurrent());
+        inputs.percent = track.getAppliedOutput();
         inputs.temperature = Celsius.of(track.getMotorTemperature());
+        inputs.voltage = Volts.of(track.getAppliedOutput() * track.getBusVoltage());
 
         // This can be null, check before using
         Measurement measure = laser.getMeasurement();
 
-        if (Objects.isNull(measure)) return;
+        if (measure == null) return;
 
         inputs.laserStatus = measure.status;
 
         // Only updating the reading if the sensor has a good read.
-        if (inputs.laserStatus != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return;
+        if (measure.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return;
 
         inputs.laserReading = Millimeters.of(measure.distance_mm);
     }

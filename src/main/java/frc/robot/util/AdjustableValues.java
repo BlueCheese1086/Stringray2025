@@ -13,44 +13,38 @@ public class AdjustableValues {
     private static HashMap<String,Boolean> loggedBooleans = new HashMap<String,Boolean>();
     private static HashMap<String,String> loggedStrings = new HashMap<String,String>();
     private static HashMap<String,Double> loggedNumbers = new HashMap<String,Double>();
-    private static HashMap<String,Boolean> hasChanged = new HashMap<String,Boolean>();
+    private static HashMap<String,Boolean> changedValues = new HashMap<String,Boolean>();
 
     /**
-     * Adds a boolean value to the logged values.
+     * Adds a boolean to the logged values.
      * The default return value is false.
      * 
-     * If any aliases already exist, then the function returns false and no aliases
-     * are created.
-     * 
      * @param shortName The short name to get the value with.
-     * @param ntKey     The NetworkTables key for logging.
-     * @param aliases   Any alternate keys to read the value with. They have their
-     *                  own entry in the hasChanged table, and don't affect the
-     *                  status of the original shortName.
+     * @param ntKey The NetworkTables key for logging.
+     * @param aliases Alternate keys to read the value with. They have their
+     *                own entry in the table and don't affect the read
+     *                status of the original short name.
      * 
-     * @return Returns false if the value already exists.
+     * @return Returns false if the short name or any aliases already exist.
      */
     public static boolean registerBoolean(String shortName, String ntKey, String... aliases) {
         return registerBoolean(shortName, ntKey, false, aliases);
     }
 
     /**
-     * Adds a boolean value to the logged values.
+     * Adds a boolean to the logged values.
      * 
-     * If any aliases already exist, then the function returns false and no aliases
-     * are created.
-     * 
-     * @param shortName    The short name to get the value with.
-     * @param ntKey        The NetworkTables key for logging.
+     * @param shortName The short name to get the value with.
+     * @param ntKey The NetworkTables key for logging.
      * @param defaultValue The default value to retrieve from the AKit Logger.
-     * @param aliases      Any alternate keys to read the value with. They have
-     *                     their own entry in the hasChanged table, and don't affect
-     *                     the status of the original shortName.
+     * @param aliases Alternate keys to read the value with. They have their
+     *                own entry in the table and don't affect the read
+     *                status of the original short name.
      * 
-     * @return Returns false if the value already exists.
+     * @return Returns false if the short name or any aliases already exist.
      */
     public static boolean registerBoolean(String shortName, String ntKey, boolean defaultValue, String... aliases) {
-        if (hasChanged.containsKey(shortName))
+        if (changedValues.containsKey(shortName))
             return false;
 
         LoggedNetworkBoolean loggedBool = new LoggedNetworkBoolean(ntKey, defaultValue);
@@ -58,7 +52,7 @@ public class AdjustableValues {
         for (int i = 0; i < aliases.length; i++) {
             // Rather than use recursion, I manually put in the aliases so I don't create a
             // new LoggedNetworkNumber for each alias.
-            if (hasChanged.containsKey(aliases[i])) {
+            if (changedValues.containsKey(aliases[i])) {
                 for (int j = 0; j < i; j++) {
                     remove(aliases[j]);
                 }
@@ -68,52 +62,46 @@ public class AdjustableValues {
 
             loggedNetworkBooleans.put(aliases[i], loggedBool);
             loggedBooleans.put(aliases[i], defaultValue);
-            hasChanged.put(aliases[i], true);
+            changedValues.put(aliases[i], true);
         }
 
         loggedNetworkBooleans.put(shortName, loggedBool);
         loggedBooleans.put(shortName, defaultValue);
-        hasChanged.put(shortName, true);
+        changedValues.put(shortName, true);
 
         return true;
     }
 
     /**
-     * Adds a double value to the logged values.
+     * Adds a double to the logged values.
      * The default return value is 0.
      * 
-     * If any aliases already exist, then the function returns false and no aliases
-     * are created.
-     * 
      * @param shortName The short name to get the value with.
-     * @param ntKey     The NetworkTables key for logging.
-     * @param aliases   Any alternate keys to read the value with. They have their
-     *                  own entry in the hasChanged table, and don't affect the
-     *                  status of the original shortName.
+     * @param ntKey The NetworkTables key for logging.
+     * @param aliases Alternate keys to read the value with. They have their
+     *                own entry in the table and don't affect the read
+     *                status of the original short name.
      * 
-     * @return Returns false if the value already exists.
+     * @return Returns false if the short name or any aliases already exist.
      */
     public static boolean registerNumber(String shortName, String ntKey, String... aliases) {
         return registerNumber(shortName, ntKey, 0, aliases);
     }
 
     /**
-     * Adds a double value to the logged values.
+     * Adds a double to the logged values.
      * 
-     * If any aliases already exist, then the function returns false and no aliases
-     * are created.
-     * 
-     * @param shortName    The short name to get the value with.
-     * @param ntKey        The NetworkTables key for logging.
+     * @param shortName The short name to get the value with.
+     * @param ntKey The NetworkTables key for logging.
      * @param defaultValue The default value to retrieve from the AKit Logger.
-     * @param aliases      Any alternate keys to read the value with. They have
-     *                     their own entry in the hasChanged table, and don't affect
-     *                     the status of the original shortName.
+     * @param aliases Alternate keys to read the value with. They have their
+     *                own entry in the table and don't affect the read
+     *                status of the original short name.
      * 
-     * @return Returns false if the value already exists.
+     * @return Returns false if the short name or any aliases already exist.
      */
     public static boolean registerNumber(String shortName, String ntKey, double defaultValue, String... aliases) {
-        if (hasChanged.containsKey(shortName))
+        if (changedValues.containsKey(shortName))
             return false;
 
         LoggedNetworkNumber loggedNum = new LoggedNetworkNumber(ntKey, defaultValue);
@@ -121,7 +109,7 @@ public class AdjustableValues {
         for (int i = 0; i < aliases.length; i++) {
             // Rather than use recursion, I manually put in the aliases so I don't create a
             // new LoggedNetworkNumber for each alias.
-            if (hasChanged.containsKey(aliases[i])) {
+            if (changedValues.containsKey(aliases[i])) {
                 for (int j = 0; j < i; j++) {
                     remove(aliases[j]);
                 }
@@ -131,52 +119,46 @@ public class AdjustableValues {
 
             loggedNetworkNumbers.put(aliases[i], loggedNum);
             loggedNumbers.put(aliases[i], defaultValue);
-            hasChanged.put(aliases[i], true);
+            changedValues.put(aliases[i], true);
         }
 
         loggedNetworkNumbers.put(shortName, loggedNum);
         loggedNumbers.put(shortName, defaultValue);
-        hasChanged.put(shortName, true);
+        changedValues.put(shortName, true);
 
         return true;
     }
 
     /**
-     * Adds a string value to the logged values.
+     * Adds a string to the logged values.
      * The default return value is an empty string.
      * 
-     * If any aliases already exist, then the function returns false and no aliases
-     * are created.
-     * 
      * @param shortName The short name to get the value with.
-     * @param ntKey     The NetworkTables key for logging.
-     * @param aliases   Any alternate keys to read the value with. They have their
-     *                  own entry in the hasChanged table, and don't affect the
-     *                  status of the original shortName.
+     * @param ntKey The NetworkTables key for logging.
+     * @param aliases Alternate keys to read the value with. They have their
+     *                own entry in the table and don't affect the read
+     *                status of the original short name.
      * 
-     * @return Returns false if the value already exists.
+     * @return Returns false if the short name or any aliases already exist.
      */
     public static boolean registerString(String shortName, String ntKey, String[] aliases) {
         return registerString(shortName, ntKey, "", aliases);
     }
 
     /**
-     * Adds a string value to the logged values.
+     * Adds a string to the logged values.
      * 
-     * If any aliases already exist, then the function returns false and no aliases
-     * are created.
-     * 
-     * @param shortName    The short name to get the value with.
-     * @param ntKey        The NetworkTables key for logging.
+     * @param shortName The short name to get the value with.
+     * @param ntKey The NetworkTables key for logging.
      * @param defaultValue The default value to retrieve from the AKit Logger.
-     * @param aliases      Any alternate keys to read the value with. They have
-     *                     their own entry in the hasChanged table, and don't affect
-     *                     the status of the original shortName.
+     * @param aliases Alternate keys to read the value with. They have their
+     *                own entry in the table and don't affect the read
+     *                status of the original short name.
      * 
-     * @return Returns false if the value already exists.
+     * @return Returns false if the short name or any aliases already exist.
      */
     public static boolean registerString(String shortName, String ntKey, String defaultValue, String... aliases) {
-        if (hasChanged.containsKey(shortName))
+        if (changedValues.containsKey(shortName))
             return false;
 
         LoggedNetworkString loggedStr = new LoggedNetworkString(ntKey, defaultValue);
@@ -184,7 +166,7 @@ public class AdjustableValues {
         for (int i = 0; i < aliases.length; i++) {
             // Rather than use recursion, I manually put in the aliases so I don't create a
             // new LoggedNetworkNumber for each alias.
-            if (hasChanged.containsKey(aliases[i])) {
+            if (changedValues.containsKey(aliases[i])) {
                 for (int j = 0; j < i; j++) {
                     remove(aliases[j]);
                 }
@@ -194,198 +176,185 @@ public class AdjustableValues {
 
             loggedNetworkStrings.put(aliases[i], loggedStr);
             loggedStrings.put(aliases[i], defaultValue);
-            hasChanged.put(aliases[i], true);
+            changedValues.put(aliases[i], true);
         }
 
         loggedNetworkStrings.put(shortName, loggedStr);
         loggedStrings.put(shortName, defaultValue);
-        hasChanged.put(shortName, true);
+        changedValues.put(shortName, true);
 
         return true;
     }
 
     /**
-     * Adds an alias for the provided shortName.
+     * Adds an alias for a short name.
      * 
      * @param shortName The source for the number
-     * @param alias     The alias to add.
+     * @param alias The alias to add.
      * 
-     * @return Returns false if the alias already exists or if the shortName doesn't
-     *         exist.
+     * @return Returns false if the short name doesn't exist or if the alias already exists.
      */
     public static boolean addAlias(String shortName, String alias) {
-        if (hasChanged.containsKey(alias) || !hasChanged.containsKey(shortName))
-            return false;
-
         // Checks if the shortName is a boolean
-        if (loggedBooleans.containsKey(shortName)) {
+        if (loggedBooleans.containsKey(shortName) && !loggedBooleans.containsKey(alias)) {
             loggedNetworkBooleans.put(alias, loggedNetworkBooleans.get(shortName));
             loggedBooleans.put(alias, loggedNetworkBooleans.get(shortName).get());
-            hasChanged.put(alias, true);
+            changedValues.put(alias, true);
             return true;
         }
 
         // Checks if the shortName is a number
-        if (loggedNumbers.containsKey(shortName)) {
+        if (loggedNumbers.containsKey(shortName) && !loggedNumbers.containsKey(alias)) {
             loggedNetworkNumbers.put(alias, loggedNetworkNumbers.get(shortName));
             loggedNumbers.put(alias, loggedNetworkNumbers.get(shortName).get());
-            hasChanged.put(alias, true);
+            changedValues.put(alias, true);
             return true;
         }
 
         // Checks if the shortName is a String
-        if (loggedStrings.containsKey(shortName)) {
+        if (loggedStrings.containsKey(shortName) && !loggedStrings.containsKey(alias)) {
             loggedNetworkStrings.put(alias, loggedNetworkStrings.get(shortName));
             loggedStrings.put(alias, loggedNetworkStrings.get(shortName).get());
-            hasChanged.put(alias, true);
+            changedValues.put(alias, true);
             return true;
         }
 
-        // This theoretically shouldn't run, but it's here just in case
+        // If the short name doesn't exist or the alias already exists, this runs.
+        DriverStation.reportWarning("Program attempted to access an unregistered number, " + shortName + ".", false);
         return false;
     }
 
     /**
      * Gets a value from the logger and marks it as read.
-     * 
      * If the key has not been created, it returns false.
      * 
-     * @param shortName The first parameter from the register() function.
+     * @param shortName The short name used to address the boolean.
      */
     public static boolean getBoolean(String shortName) {
-        if (!loggedBooleans.containsKey(shortName)) {
+        if (!changedValues.containsKey(shortName)) {
             DriverStation.reportWarning("Program attempted to access an unregistered boolean, " + shortName + ".", false);
             return false;
         }
 
-        hasChanged.put(shortName, false);
+        changedValues.put(shortName, false);
 
         return loggedBooleans.get(shortName);
     }
 
     /**
      * Sets a value in the logger and marks it as unread.
-     * 
      * If the key has not been created, it returns false.
      * 
-     * @param shortName The first parameter from the register() function.
+     * @param shortName The short name used to address the boolean.
      * @param value The boolean to push to NT.
      */
     public static boolean setBoolean(String shortName, boolean value) {
-        if (!loggedBooleans.containsKey(shortName)) {
+        if (!changedValues.containsKey(shortName)) {
             DriverStation.reportWarning("Program attempted to access an unregistered boolean, " + shortName + ".", false);
             return false;
         }
 
-        hasChanged.put(shortName, true);
         loggedNetworkBooleans.get(shortName).set(value);
         loggedBooleans.put(shortName, value);
+        changedValues.put(shortName, true);
 
         return true;
     }
 
     /**
      * Gets a value from the logger and marks it as read.
-     * 
      * If the key has not been created, it returns 0.
      * 
-     * @param shortName The first parameter from the register() function.
+     * @param shortName The short name used to address the boolean.
      */
     public static double getNumber(String shortName) {
-        if (!loggedNumbers.containsKey(shortName)) {
+        if (!changedValues.containsKey(shortName)) {
             DriverStation.reportWarning("Program attempted to access an unregistered number, " + shortName + ".", false);
             return 0;
         }
 
-        hasChanged.put(shortName, false);
+        changedValues.put(shortName, false);
 
         return loggedNumbers.get(shortName);
     }
 
     /**
      * Sets a value in the logger and marks it as unread.
-     * 
      * If the key has not been created, it returns false.
      * 
-     * @param shortName The first parameter from the register() function.
+     * @param shortName The short name used to address the boolean.
      * @param value The number to push to NT.
      */
     public static boolean setNumber(String shortName, double value) {
-        if (!loggedNumbers.containsKey(shortName)) {
+        if (!changedValues.containsKey(shortName)) {
             DriverStation.reportWarning("Program attempted to access an unregistered number, " + shortName + ".", false);
             return false;
         }
 
-        hasChanged.put(shortName, true);
         loggedNetworkNumbers.get(shortName).set(value);
         loggedNumbers.put(shortName, value);
+        changedValues.put(shortName, true);
 
         return true;
     }
 
     /**
      * Gets a value from the logger and marks it as read.
-     * 
      * If the key has not been created, it returns an empty string.
      * 
-     * @param shortName The first parameter from the register() function.
+     * @param shortName The short name used to address the boolean.
      */
     public static String getString(String shortName) {
-        if (!loggedStrings.containsKey(shortName)) {
+        if (!changedValues.containsKey(shortName)) {
             DriverStation.reportWarning("Program attempted to access an unregistered string, " + shortName + ".", false);
             return "";
         }
 
-        hasChanged.put(shortName, false);
+        changedValues.put(shortName, false);
 
         return loggedStrings.get(shortName);
     }
 
     /**
      * Sets a value in the logger and marks it as unread.
-     * 
      * If the key has not been created, it returns false.
      * 
-     * @param shortName The first parameter from the register() function.
+     * @param shortName The short name used to address the boolean.
      * @param value The string to push to NT.
      */
     public static boolean setString(String shortName, String value) {
-        if (!loggedStrings.containsKey(shortName)) {
+        if (!changedValues.containsKey(shortName)) {
             DriverStation.reportWarning("Program attempted to access an unregistered string, " + shortName + ".", false);
             return false;
         }
 
-        hasChanged.put(shortName, true);
         loggedNetworkStrings.get(shortName).set(value);
         loggedStrings.put(shortName, value);
+        changedValues.put(shortName, true);
 
         return true;
     }
 
     /**
-     * Gets whether or not the value has changed.
+     * Gets whether or not a value has changed.
+     * If the key has not been created, it returns false.
      * 
-     * If the key has not been created, it returns "".
-     * 
-     * @param shortName The first parameter from the register() function.
+     * @param shortName The short name used to address data.
      */
     public static boolean hasChanged(String shortName) {
-        if (!hasChanged.containsKey(shortName))
+        if (!changedValues.containsKey(shortName))
             return false;
 
-        return hasChanged.get(shortName);
+        return changedValues.get(shortName);
     }
 
-    /**
-     * Updates the values with their current value in NetworkTables and updates the
-     * corresponding hasChanged value accordingly.
-     */
+    /** Updates the values with their current value in NetworkTables and marks changed things as unread. */
     public static void updateValues() {
         for (String shortName : loggedNetworkBooleans.keySet()) {
             boolean loggedValue = loggedNetworkBooleans.get(shortName).get();
             if (loggedValue != loggedBooleans.get(shortName)) {
                 loggedBooleans.put(shortName, loggedValue);
-                hasChanged.put(shortName, true);
+                changedValues.put(shortName, true);
             }
         }
 
@@ -393,7 +362,7 @@ public class AdjustableValues {
             double loggedValue = loggedNetworkNumbers.get(shortName).get();
             if (loggedValue != loggedNumbers.get(shortName)) {
                 loggedNumbers.put(shortName, loggedValue);
-                hasChanged.put(shortName, true);
+                changedValues.put(shortName, true);
             }
         }
 
@@ -401,7 +370,7 @@ public class AdjustableValues {
             String loggedValue = loggedNetworkStrings.get(shortName).get();
             if (loggedValue != loggedStrings.get(shortName)) {
                 loggedStrings.put(shortName, loggedValue);
-                hasChanged.put(shortName, true);
+                changedValues.put(shortName, true);
             }
         }
     }
@@ -421,6 +390,6 @@ public class AdjustableValues {
         loggedNetworkStrings.remove(shortName);
         loggedStrings.remove(shortName);
 
-        hasChanged.remove(shortName);
+        changedValues.remove(shortName);
     }
 }

@@ -48,17 +48,17 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Steer_kS", "/Adjustables/Steer/kS", DriveConstants.kSSteerDefault, "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
         AdjustableValues.registerNumber("Steer_kV", "/Adjustables/Steer/kV", DriveConstants.kVSteerDefault, "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
 
-        AdjustableValues.registerNumber("X_kP", "/Adjustables/XController/kP", DriveConstants.kPX);
-        AdjustableValues.registerNumber("X_kI", "/Adjustables/XController/kI", DriveConstants.kIX);
-        AdjustableValues.registerNumber("X_kD", "/Adjustables/XController/kD", DriveConstants.kDX);
+        AdjustableValues.registerNumber("AutoAlignX_kP", "/Adjustables/AutoAlign/X_kP", DriveConstants.kPX);
+        AdjustableValues.registerNumber("AutoAlignX_kI", "/Adjustables/AutoAlign/X_kI", DriveConstants.kIX);
+        AdjustableValues.registerNumber("AutoAlignX_kD", "/Adjustables/AutoAlign/X_kD", DriveConstants.kDX);
 
-        AdjustableValues.registerNumber("Y_kP", "/Adjustables/YController/kP", DriveConstants.kPY);
-        AdjustableValues.registerNumber("Y_kI", "/Adjustables/YController/kI", DriveConstants.kIY);
-        AdjustableValues.registerNumber("Y_kD", "/Adjustables/YController/kD", DriveConstants.kDY);
+        AdjustableValues.registerNumber("AutoAlignY_kP", "/Adjustables/AutoAlign/Y_kP", DriveConstants.kPY);
+        AdjustableValues.registerNumber("AutoAlignY_kI", "/Adjustables/AutoAlign/Y_kI", DriveConstants.kIY);
+        AdjustableValues.registerNumber("AutoAlignY_kD", "/Adjustables/AutoAlign/Y_kD", DriveConstants.kDY);
 
-        AdjustableValues.registerNumber("Theta_kP", "/Adjustables/ThetaController/kP", DriveConstants.kPTheta);
-        AdjustableValues.registerNumber("Theta_kI", "/Adjustables/ThetaController/kI", DriveConstants.kITheta);
-        AdjustableValues.registerNumber("Theta_kD", "/Adjustables/ThetaController/kD", DriveConstants.kDTheta);
+        AdjustableValues.registerNumber("AutoAlignTheta_kP", "/Adjustables/AutoAlign/Theta_kP", DriveConstants.kPTheta);
+        AdjustableValues.registerNumber("AutoAlignTheta_kI", "/Adjustables/AutoAlign/Theta_kI", DriveConstants.kITheta);
+        AdjustableValues.registerNumber("AutoAlignTheta_kD", "/Adjustables/AutoAlign/Theta_kD", DriveConstants.kDTheta);
 
         AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", ElevatorConstants.kPDefault);
         AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
@@ -72,14 +72,14 @@ public class Robot extends LoggedRobot {
         AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Climb/Climb_kI", ClimbConstants.kIDefault);
         AdjustableValues.registerNumber("Climb_kD", "/Adjustables/Climb/Climb_kD", ClimbConstants.kDDefault);
 
-        AdjustableValues.registerNumber("Algae_Percent", "/Adjustables/Speeds/Algae_Percent", AlgaeConstants.maxPercent);
-        AdjustableValues.registerNumber("Climb_Percent", "/Adjustables/Speeds/Climb_Percent", ClimbConstants.maxPercent);
-        AdjustableValues.registerNumber("Coral_Percent", "/Adjustables/Speeds/Coral_Percent", CoralConstants.maxPercent);
-        AdjustableValues.registerNumber("DriveX_Percent", "/Adjustables/Speeds/DriveX_Percent", DriveConstants.driveXPercent);
-        AdjustableValues.registerNumber("DriveY_Percent", "/Adjustables/Speeds/DriveY_Percent", DriveConstants.driveYPercent);
-        AdjustableValues.registerNumber("Steer_Percent", "/Adjustables/Speeds/Steer_Percent", DriveConstants.steerPercent);
+        AdjustableValues.registerNumber("Algae_Percent",    "/Adjustables/Speeds/Algae_Percent",    AlgaeConstants.maxPercent);
+        AdjustableValues.registerNumber("Climb_Percent",    "/Adjustables/Speeds/Climb_Percent",    ClimbConstants.maxPercent);
+        AdjustableValues.registerNumber("Coral_Percent",    "/Adjustables/Speeds/Coral_Percent",    CoralConstants.maxPercent);
+        AdjustableValues.registerNumber("DriveX_Percent",   "/Adjustables/Speeds/DriveX_Percent",   DriveConstants.driveXPercent);
+        AdjustableValues.registerNumber("DriveY_Percent",   "/Adjustables/Speeds/DriveY_Percent",   DriveConstants.driveYPercent);
+        AdjustableValues.registerNumber("Steer_Percent",    "/Adjustables/Speeds/Steer_Percent",    DriveConstants.steerPercent);
         AdjustableValues.registerNumber("Elevator_Percent", "/Adjustables/Speeds/Elevator_Percent", ElevatorConstants.maxPercent);
-        AdjustableValues.registerNumber("Hopper_Percent", "/Adjustables/Speeds/Hopper_Percent", HopperConstants.maxPercent);
+        AdjustableValues.registerNumber("Hopper_Percent",   "/Adjustables/Speeds/Hopper_Percent",   HopperConstants.maxPercent);
     }
 
     /** Runs every tick while the robot is on. */
@@ -88,6 +88,7 @@ public class Robot extends LoggedRobot {
         // Running the scheduled commands
         CommandScheduler.getInstance().run();
 
+        // Updating the logged values
         AdjustableValues.updateValues();
     }
 

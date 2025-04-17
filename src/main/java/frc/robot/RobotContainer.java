@@ -121,24 +121,27 @@ public class RobotContainer {
             .whileTrue(
                 new SwerveDrive(
                         drive,
-                        () -> driverController.getLeftY() * 0.2,
-                        () -> driverController.getLeftX() * 0.2,
-                        () -> driverController.getRightX() * 0.2,
+                        () -> driverController.getLeftY() * DriveConstants.precisionPercent,
+                        () -> driverController.getLeftX() * DriveConstants.precisionPercent,
+                        () -> driverController.getRightX() * DriveConstants.precisionPercent,
                         () -> false));
-
         // Precision Mode
-        // It sets the max speeds through the AdjustableValues class, but it puts them back to their default percents.
-        // This erases any tuning made to the drive percent values.
+        // It limits the max speeds through the AdjustableValues class and puts them back to their previous percents when done. 
+        // double[] percents = new double[3];
         // driverController.leftBumper().whileTrue(Commands.runEnd(
         //     () -> {
+        //         percents[0] = AdjustableValues.getNumber("DriveX_Percent");
+        //         percents[1] = AdjustableValues.getNumber("DriveY_Percent");
+        //         percents[2] = AdjustableValues.getNumber("Steer_Percent");
+
         //         AdjustableValues.setNumber("DriveX_Percent", DriveConstants.precisionPercent);
         //         AdjustableValues.setNumber("DriveY_Percent", DriveConstants.precisionPercent);
         //         AdjustableValues.setNumber("Steer_Percent", DriveConstants.precisionPercent);
         //     },
         //     () -> {
-        //         AdjustableValues.setNumber("DriveX_Percent", DriveConstants.driveXPercent);
-        //         AdjustableValues.setNumber("DriveY_Percent", DriveConstants.driveYPercent);
-        //         AdjustableValues.setNumber("Steer_Percent", DriveConstants.steerPercent);
+        //         AdjustableValues.setNumber("DriveX_Percent", percents[0]);
+        //         AdjustableValues.setNumber("DriveY_Percent", percents[1]);
+        //         AdjustableValues.setNumber("Steer_Percent", percents[2]);
         //     }));
 
         // Reset gyro

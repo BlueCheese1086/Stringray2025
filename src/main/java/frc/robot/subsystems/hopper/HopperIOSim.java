@@ -26,11 +26,11 @@ public class HopperIOSim implements HopperIO {
 
     @Override
     public void setPercent(double percent) {
-        track.setInput(percent * RobotController.getInputVoltage());
+        track.setInputVoltage(percent * RobotController.getInputVoltage());
     }
 
     @Override
     public void setVoltage(Voltage voltage) {
-        track.setInput(voltage.in(Volts));
+        track.setInputVoltage(voltage.in(Volts));
     }
 }

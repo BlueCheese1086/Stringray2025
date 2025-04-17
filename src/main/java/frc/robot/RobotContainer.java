@@ -8,20 +8,14 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Poses;
 import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.algae.*;
-import frc.robot.subsystems.algae.commands.*;
 import frc.robot.subsystems.climb.*;
 import frc.robot.subsystems.climb.ClimbConstants.ClimbPositions;
-import frc.robot.subsystems.climb.commands.*;
 import frc.robot.subsystems.coral.*;
-import frc.robot.subsystems.coral.commands.*;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.drive.commands.*;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorPositions;
-import frc.robot.subsystems.elevator.commands.*;
 import frc.robot.subsystems.gyro.*;
 import frc.robot.subsystems.hopper.*;
-import frc.robot.subsystems.hopper.commands.*;
 import frc.robot.subsystems.vision.*;
 import frc.robot.util.*;
 import java.util.function.BooleanSupplier;
@@ -109,7 +103,7 @@ public class RobotContainer {
 
         // Normal drive
         drive.setDefaultCommand(
-            new SwerveDrive(
+            DriveCommands.drive(
                     drive,
                     driverController::getLeftY,
                     driverController::getLeftX,
@@ -119,7 +113,7 @@ public class RobotContainer {
         // Precision Mode
         driverController.leftBumper().or(driverController.rightBumper())
             .whileTrue(
-                new SwerveDrive(
+                DriveCommands.drive(
                         drive,
                         () -> driverController.getLeftY() * DriveConstants.precisionPercent,
                         () -> driverController.getLeftX() * DriveConstants.precisionPercent,
@@ -148,7 +142,7 @@ public class RobotContainer {
         driverController.b().onTrue(Commands.runOnce(gyro::reset));
 
         // Toggle X State
-        driverController.x().toggleOnTrue(new XStates(drive).until(joystickOverride));
+        driverController.x().toggleOnTrue(DriveCommands.xStates(drive).until(joystickOverride));
 
         // Log current robot pose
         driverController.y().onTrue(new RecordPose(drive::getPose));
@@ -158,25 +152,25 @@ public class RobotContainer {
 
         // Pathfind to left side of reef
         driverController.back()
-            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Left)
+            .toggleOnTrue(DriveCommands.pathfindToNearestPose(drive, Poses.REEF_Left)
             .until(joystickOverride));
 
         // Pathfind to right side of reef.
         driverController.start()
-            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Right)
+            .toggleOnTrue(DriveCommands.pathfindToNearestPose(drive, Poses.REEF_Right)
             .until(joystickOverride));
 
         // Intake Coral & Algae
         driverController.leftTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis))
-            .whileTrue(new SetAlgaePercent(algae, driverController::getLeftTriggerAxis))
-            .whileTrue(new SetHopperPercent(hopper, driverController::getLeftTriggerAxis));
+            .whileTrue(CoralCommands.setSpeed(coral, driverController::getLeftTriggerAxis))
+            .whileTrue(AlgaeCommands.setPercent(algae, driverController::getLeftTriggerAxis))
+            .whileTrue(HopperCommands.setPercent(hopper, driverController::getLeftTriggerAxis));
         
         // Outtake Coral & Algae
         driverController.rightTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis))
-            .whileTrue(new SetAlgaePercent(algae, driverController::getRightTriggerAxis))
-            .whileTrue(new SetHopperPercent(hopper, driverController::getRightTriggerAxis));
+            .whileTrue(CoralCommands.setSpeed(coral, driverController::getRightTriggerAxis))
+            .whileTrue(AlgaeCommands.setPercent(algae, driverController::getRightTriggerAxis))
+            .whileTrue(HopperCommands.setPercent(hopper, driverController::getRightTriggerAxis));
 
         // Operator Controls
 
@@ -185,27 +179,27 @@ public class RobotContainer {
         operatorController.back().onTrue(Commands.run(elevator::resetEncoder).ignoringDisable(true));
 
         // Set Elevator Heights
-        operatorController.leftBumper().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
-        operatorController.leftTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
-        operatorController.a().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L1));
-        operatorController.b().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2));
-        operatorController.x().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L3));
-        operatorController.y().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L4));
-        operatorController.rightBumper().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L3Algae));
-        operatorController.rightTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
+        operatorController.leftBumper().onTrue(ElevatorCommands.setHeight(elevator, ElevatorPositions.STOW));
+        operatorController.leftTrigger(0.2).onTrue(ElevatorCommands.setHeight(elevator, ElevatorPositions.STOW));
+        operatorController.b().onTrue(ElevatorCommands.setHeight(elevator, ElevatorPositions.L2));
+        operatorController.a().onTrue(ElevatorCommands.setHeight(elevator, ElevatorPositions.L1));
+        operatorController.x().onTrue(ElevatorCommands.setHeight(elevator, ElevatorPositions.L3));
+        operatorController.y().onTrue(ElevatorCommands.setHeight(elevator, ElevatorPositions.L4));
+        operatorController.rightBumper().onTrue(ElevatorCommands.setHeight(elevator, ElevatorPositions.L3Algae));
+        operatorController.rightTrigger(0.2).onTrue(ElevatorCommands.setHeight(elevator, ElevatorPositions.L2Algae));
         
         // Elevator manual controls
         operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband)
-            .whileTrue(new SetElevatorVoltage(elevator, operatorController::getRightY));
+            .whileTrue(ElevatorCommands.setVoltage(elevator, operatorController::getRightY));
 
         // Set Climb Positions
-        operatorController.povLeft().onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));
-        operatorController.povRight().onTrue(new SetClimbAngle(climb, ClimbPositions.HANG));
-        operatorController.povDown().onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
+        operatorController.povLeft().onTrue(ClimbCommands.setAngle(climb, ClimbPositions.GRAB));
+        operatorController.povRight().onTrue(ClimbCommands.setAngle(climb, ClimbPositions.HANG));
+        operatorController.povDown().onTrue(ClimbCommands.setAngle(climb, ClimbPositions.STOW));
 
         // Climb manual controls
         operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband)
-            .whileTrue(new SetClimbVoltage(climb, operatorController::getLeftY));
+            .whileTrue(ClimbCommands.setVoltage(climb, operatorController::getLeftY));
     }
 
     public Command getAutonomousCommand() {

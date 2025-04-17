@@ -19,7 +19,7 @@ public class HopperIOReal implements HopperIO {
     private LaserCan laser;
 
     // Control methods
-    private DutyCycleOut dutyCycleControl = new DutyCycleOut(0);
+    private DutyCycleOut percentControl = new DutyCycleOut(0);
     private VoltageOut voltageControl = new VoltageOut(0);
 
     public HopperIOReal(int trackId, int laserId) {
@@ -68,7 +68,7 @@ public class HopperIOReal implements HopperIO {
 
     @Override
     public void setPercent(double percent) {
-        track.setControl(dutyCycleControl.withOutput(percent));
+        track.setControl(percentControl.withOutput(percent));
     }
 
     @Override

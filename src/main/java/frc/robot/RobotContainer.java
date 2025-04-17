@@ -196,7 +196,7 @@ public class RobotContainer {
         
         // Elevator manual controls
         operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband)
-            .whileTrue(new SetElevatorSpeed(elevator, operatorController::getRightY));
+            .whileTrue(new SetElevatorVoltage(elevator, operatorController::getRightY));
 
         // Set Climb Positions
         operatorController.povLeft().onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));

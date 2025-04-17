@@ -14,8 +14,6 @@ public class Constants {
 
     public static final Angle TipThreshold = Degrees.of(6);
 
-    public static final double PrecisionScalar = 0.75;
-
     public static final double deadband = 0.1;
 
     public class RobotMap {

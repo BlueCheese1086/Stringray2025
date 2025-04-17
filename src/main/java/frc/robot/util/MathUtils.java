@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class MathUtils {
@@ -46,10 +47,12 @@ public class MathUtils {
     }
 
     /**
-     * Finds a {@link Translation2d} between all of the parameters.
-     * @param translations The translations to analyze
+     * Finds the mean {@link Translation2d} between all of the parameters.
+     * I kinda just made this for fun at comp.  I was thinking it could be used for when you have multiple photon pose estimators running to combine multiple poses into one.
+     * 
+     * @param translations The translations to analyze.
      */
-    public Translation2d getMean(Translation2d... translations) {
+    public Translation2d getMeanTranslation(Translation2d... translations) {
         if (translations.length == 0) return new Translation2d();
         if (translations.length == 1) return translations[0];
 
@@ -66,10 +69,33 @@ public class MathUtils {
     }
 
     /**
+     * Finds the mean {@link Translation2d} between all of the parameters.
+     * I kinda just made this for fun at comp.  I was thinking it could be used for when you have multiple photon pose estimators running to combine multiple poses into one.
+     * 
+     * @param rotations The translations to analyze.
+     */
+    public Rotation2d getMeanRotation(Rotation2d... rotations) {
+        if (rotations.length == 0) return new Rotation2d();
+        if (rotations.length == 1) return rotations[0];
+
+        Rotation2d interpolated = rotations[0].interpolate(rotations[1], 0.5);
+        double done = 2;
+        double total = 2;
+        for (int i = 2; i < rotations.length; i++) {
+            total++;
+            interpolated = rotations[i].interpolate(interpolated, done / total);
+            done++;
+        }
+
+        return interpolated;
+    }
+
+    /**
      * Finds a {@link Pose2d} between all of the parameters.
+     * 
      * @param poses The translations to analyze
      */
-    public Pose2d getMean(Pose2d... poses) {
+    public Pose2d getMeanPose(Pose2d... poses) {
         if (poses.length == 0) return new Pose2d();
         if (poses.length == 1) return poses[0];
 

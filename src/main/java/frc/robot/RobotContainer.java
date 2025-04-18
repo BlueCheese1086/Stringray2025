@@ -49,20 +49,20 @@ public class RobotContainer {
                     new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
             drive = new Drive(gyro, vision,
-                    new ModuleIOTalonFX(0),
-                    new ModuleIOTalonFX(1),
-                    new ModuleIOTalonFX(2),
-                    new ModuleIOTalonFX(3));
+                    new ModuleTalonFX(0),
+                    new ModuleTalonFX(1),
+                    new ModuleTalonFX(2),
+                    new ModuleTalonFX(3));
 
-            algae = new Algae(new AlgaeIOReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId));
+            algae = new AlgaeReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId);
             
             hopper = new Hopper(new HopperIOReal(RobotMap.HOPPER_MotorId, RobotMap.HOPPER_LaserId));
             
-            coral = new Coral(new CoralIOReal(RobotMap.CORAL_MotorId, RobotMap.CORAL_SensorId, RobotMap.CORAL_LaserId));
+            coral = new CoralReal(RobotMap.CORAL_MotorId, RobotMap.CORAL_SensorId, RobotMap.CORAL_LaserId);
             
             elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
             
-            climb = new Climb(new ClimbIOReal(RobotMap.CLIMB_MotorId));
+            climb = new ClimbReal(RobotMap.CLIMB_MotorId);
         } else {
             // Reminder that this does nothing.
             gyro = new Gyro(new GyroIOSim());
@@ -72,20 +72,20 @@ public class RobotContainer {
                     new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
             
             drive = new Drive(gyro, vision,
-                    new ModuleIOSim(0),
-                    new ModuleIOSim(1),
-                    new ModuleIOSim(2),
-                    new ModuleIOSim(3));
+                    new ModuleSim(0),
+                    new ModuleSim(1),
+                    new ModuleSim(2),
+                    new ModuleSim(3));
 
-            coral = new Coral(new CoralIOSim());
+            coral = new CoralSim();
             
             hopper = new Hopper(new HopperIOSim());
             
             elevator = new Elevator(new ElevatorIOSim());
             
-            algae = new Algae(new AlgaeIOSim());
+            algae = new AlgaeSim();
             
-            climb = new Climb(new ClimbIOSim());
+            climb = new ClimbSim();
         }
 
         // Anti-Tip command

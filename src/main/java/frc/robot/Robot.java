@@ -1,5 +1,10 @@
+
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructSubscriber;
+import edu.wpi.first.networktables.Subscriber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -10,6 +15,9 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.hopper.HopperConstants;
 import frc.robot.util.AdjustableValues;
+
+import java.util.HashMap;
+
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -20,8 +28,10 @@ public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
     private Command autonomousCommand;
 
+    Subscriber sub;
+
     public Robot() {
-        robotContainer = new RobotContainer();
+        // robotContainer = new RobotContainer();
 
         Logger.addDataReceiver(new NT4Publisher());
 
@@ -36,50 +46,50 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         // Adding adjustable values
-        AdjustableValues.registerNumber("Drive_kP", "/Adjustables/Drive/kP", DriveConstants.kPDriveDefault, "Drive_kP_0", "Drive_kP_1", "Drive_kP_2", "Drive_kP_3");
-        AdjustableValues.registerNumber("Drive_kI", "/Adjustables/Drive/kI", DriveConstants.kIDriveDefault, "Drive_kI_0", "Drive_kI_1", "Drive_kI_2", "Drive_kI_3");
-        AdjustableValues.registerNumber("Drive_kD", "/Adjustables/Drive/kD", DriveConstants.kDDriveDefault, "Drive_kD_0", "Drive_kD_1", "Drive_kD_2", "Drive_kD_3");
-        AdjustableValues.registerNumber("Drive_kS", "/Adjustables/Drive/kS", DriveConstants.kSDriveDefault, "Drive_kS_0", "Drive_kS_1", "Drive_kS_2", "Drive_kS_3");
-        AdjustableValues.registerNumber("Drive_kV", "/Adjustables/Drive/kV", DriveConstants.kVDriveDefault, "Drive_kV_0", "Drive_kV_1", "Drive_kV_2", "Drive_kV_3");
+        // AdjustableValues.registerNumber("Drive_kP", "/Adjustables/Drive/kP", DriveConstants.kPDriveDefault, "Drive_kP_0", "Drive_kP_1", "Drive_kP_2", "Drive_kP_3");
+        // AdjustableValues.registerNumber("Drive_kI", "/Adjustables/Drive/kI", DriveConstants.kIDriveDefault, "Drive_kI_0", "Drive_kI_1", "Drive_kI_2", "Drive_kI_3");
+        // AdjustableValues.registerNumber("Drive_kD", "/Adjustables/Drive/kD", DriveConstants.kDDriveDefault, "Drive_kD_0", "Drive_kD_1", "Drive_kD_2", "Drive_kD_3");
+        // AdjustableValues.registerNumber("Drive_kS", "/Adjustables/Drive/kS", DriveConstants.kSDriveDefault, "Drive_kS_0", "Drive_kS_1", "Drive_kS_2", "Drive_kS_3");
+        // AdjustableValues.registerNumber("Drive_kV", "/Adjustables/Drive/kV", DriveConstants.kVDriveDefault, "Drive_kV_0", "Drive_kV_1", "Drive_kV_2", "Drive_kV_3");
 
-        AdjustableValues.registerNumber("Steer_kP", "/Adjustables/Steer/kP", DriveConstants.kPSteerDefault, "Steer_kP_0", "Steer_kP_1", "Steer_kP_2", "Steer_kP_3");
-        AdjustableValues.registerNumber("Steer_kI", "/Adjustables/Steer/kI", DriveConstants.kISteerDefault, "Steer_kI_0", "Steer_kI_1", "Steer_kI_2", "Steer_kI_3");
-        AdjustableValues.registerNumber("Steer_kD", "/Adjustables/Steer/kD", DriveConstants.kDSteerDefault, "Steer_kD_0", "Steer_kD_1", "Steer_kD_2", "Steer_kD_3");
-        AdjustableValues.registerNumber("Steer_kS", "/Adjustables/Steer/kS", DriveConstants.kSSteerDefault, "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
-        AdjustableValues.registerNumber("Steer_kV", "/Adjustables/Steer/kV", DriveConstants.kVSteerDefault, "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
+        // AdjustableValues.registerNumber("Steer_kP", "/Adjustables/Steer/kP", DriveConstants.kPSteerDefault, "Steer_kP_0", "Steer_kP_1", "Steer_kP_2", "Steer_kP_3");
+        // AdjustableValues.registerNumber("Steer_kI", "/Adjustables/Steer/kI", DriveConstants.kISteerDefault, "Steer_kI_0", "Steer_kI_1", "Steer_kI_2", "Steer_kI_3");
+        // AdjustableValues.registerNumber("Steer_kD", "/Adjustables/Steer/kD", DriveConstants.kDSteerDefault, "Steer_kD_0", "Steer_kD_1", "Steer_kD_2", "Steer_kD_3");
+        // AdjustableValues.registerNumber("Steer_kS", "/Adjustables/Steer/kS", DriveConstants.kSSteerDefault, "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
+        // AdjustableValues.registerNumber("Steer_kV", "/Adjustables/Steer/kV", DriveConstants.kVSteerDefault, "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
 
-        AdjustableValues.registerNumber("AutoAlignX_kP", "/Adjustables/AutoAlign/X_kP", DriveConstants.kPX);
-        AdjustableValues.registerNumber("AutoAlignX_kI", "/Adjustables/AutoAlign/X_kI", DriveConstants.kIX);
-        AdjustableValues.registerNumber("AutoAlignX_kD", "/Adjustables/AutoAlign/X_kD", DriveConstants.kDX);
+        // AdjustableValues.registerNumber("AutoAlignX_kP", "/Adjustables/AutoAlign/X_kP", DriveConstants.kPX);
+        // AdjustableValues.registerNumber("AutoAlignX_kI", "/Adjustables/AutoAlign/X_kI", DriveConstants.kIX);
+        // AdjustableValues.registerNumber("AutoAlignX_kD", "/Adjustables/AutoAlign/X_kD", DriveConstants.kDX);
 
-        AdjustableValues.registerNumber("AutoAlignY_kP", "/Adjustables/AutoAlign/Y_kP", DriveConstants.kPY);
-        AdjustableValues.registerNumber("AutoAlignY_kI", "/Adjustables/AutoAlign/Y_kI", DriveConstants.kIY);
-        AdjustableValues.registerNumber("AutoAlignY_kD", "/Adjustables/AutoAlign/Y_kD", DriveConstants.kDY);
+        // AdjustableValues.registerNumber("AutoAlignY_kP", "/Adjustables/AutoAlign/Y_kP", DriveConstants.kPY);
+        // AdjustableValues.registerNumber("AutoAlignY_kI", "/Adjustables/AutoAlign/Y_kI", DriveConstants.kIY);
+        // AdjustableValues.registerNumber("AutoAlignY_kD", "/Adjustables/AutoAlign/Y_kD", DriveConstants.kDY);
 
-        AdjustableValues.registerNumber("AutoAlignTheta_kP", "/Adjustables/AutoAlign/Theta_kP", DriveConstants.kPTheta);
-        AdjustableValues.registerNumber("AutoAlignTheta_kI", "/Adjustables/AutoAlign/Theta_kI", DriveConstants.kITheta);
-        AdjustableValues.registerNumber("AutoAlignTheta_kD", "/Adjustables/AutoAlign/Theta_kD", DriveConstants.kDTheta);
+        // AdjustableValues.registerNumber("AutoAlignTheta_kP", "/Adjustables/AutoAlign/Theta_kP", DriveConstants.kPTheta);
+        // AdjustableValues.registerNumber("AutoAlignTheta_kI", "/Adjustables/AutoAlign/Theta_kI", DriveConstants.kITheta);
+        // AdjustableValues.registerNumber("AutoAlignTheta_kD", "/Adjustables/AutoAlign/Theta_kD", DriveConstants.kDTheta);
 
-        AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", ElevatorConstants.kPDefault);
-        AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
-        AdjustableValues.registerNumber("Elev_kD", "/Adjustables/Elevator/kD", ElevatorConstants.kDDefault);
-        AdjustableValues.registerNumber("Elev_kS", "/Adjustables/Elevator/kS", ElevatorConstants.kSDefault);
-        AdjustableValues.registerNumber("Elev_kG", "/Adjustables/Elevator/kG", ElevatorConstants.kGDefault);
-        AdjustableValues.registerNumber("Elev_kV", "/Adjustables/Elevator/kV", ElevatorConstants.kVDefault);
-        AdjustableValues.registerNumber("Elev_kA", "/Adjustables/Elevator/kA", ElevatorConstants.kADefault);
+        // AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", ElevatorConstants.kPDefault);
+        // AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
+        // AdjustableValues.registerNumber("Elev_kD", "/Adjustables/Elevator/kD", ElevatorConstants.kDDefault);
+        // AdjustableValues.registerNumber("Elev_kS", "/Adjustables/Elevator/kS", ElevatorConstants.kSDefault);
+        // AdjustableValues.registerNumber("Elev_kG", "/Adjustables/Elevator/kG", ElevatorConstants.kGDefault);
+        // AdjustableValues.registerNumber("Elev_kV", "/Adjustables/Elevator/kV", ElevatorConstants.kVDefault);
+        // AdjustableValues.registerNumber("Elev_kA", "/Adjustables/Elevator/kA", ElevatorConstants.kADefault);
 
-        AdjustableValues.registerNumber("Climb_kP", "/Adjustables/Climb/Climb_kP", ClimbConstants.kPDefault);
-        AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Climb/Climb_kI", ClimbConstants.kIDefault);
-        AdjustableValues.registerNumber("Climb_kD", "/Adjustables/Climb/Climb_kD", ClimbConstants.kDDefault);
+        // AdjustableValues.registerNumber("Climb_kP", "/Adjustables/Climb/Climb_kP", ClimbConstants.kPDefault);
+        // AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Climb/Climb_kI", ClimbConstants.kIDefault);
+        // AdjustableValues.registerNumber("Climb_kD", "/Adjustables/Climb/Climb_kD", ClimbConstants.kDDefault);
 
-        AdjustableValues.registerNumber("Algae_Percent",    "/Adjustables/Speeds/Algae_Percent",    AlgaeConstants.maxPercent);
-        AdjustableValues.registerNumber("Climb_Percent",    "/Adjustables/Speeds/Climb_Percent",    ClimbConstants.maxPercent);
-        AdjustableValues.registerNumber("Coral_Percent",    "/Adjustables/Speeds/Coral_Percent",    CoralConstants.maxPercent);
-        AdjustableValues.registerNumber("DriveX_Percent",   "/Adjustables/Speeds/DriveX_Percent",   DriveConstants.driveXPercent);
-        AdjustableValues.registerNumber("DriveY_Percent",   "/Adjustables/Speeds/DriveY_Percent",   DriveConstants.driveYPercent);
-        AdjustableValues.registerNumber("Steer_Percent",    "/Adjustables/Speeds/Steer_Percent",    DriveConstants.steerPercent);
-        AdjustableValues.registerNumber("Elevator_Percent", "/Adjustables/Speeds/Elevator_Percent", ElevatorConstants.maxPercent);
-        AdjustableValues.registerNumber("Hopper_Percent",   "/Adjustables/Speeds/Hopper_Percent",   HopperConstants.maxPercent);
+        // AdjustableValues.registerNumber("Algae_Percent",    "/Adjustables/Speeds/Algae_Percent",    AlgaeConstants.maxPercent);
+        // AdjustableValues.registerNumber("Climb_Percent",    "/Adjustables/Speeds/Climb_Percent",    ClimbConstants.maxPercent);
+        // AdjustableValues.registerNumber("Coral_Percent",    "/Adjustables/Speeds/Coral_Percent",    CoralConstants.maxPercent);
+        // AdjustableValues.registerNumber("DriveX_Percent",   "/Adjustables/Speeds/DriveX_Percent",   DriveConstants.driveXPercent);
+        // AdjustableValues.registerNumber("DriveY_Percent",   "/Adjustables/Speeds/DriveY_Percent",   DriveConstants.driveYPercent);
+        // AdjustableValues.registerNumber("Steer_Percent",    "/Adjustables/Speeds/Steer_Percent",    DriveConstants.steerPercent);
+        // AdjustableValues.registerNumber("Elevator_Percent", "/Adjustables/Speeds/Elevator_Percent", ElevatorConstants.maxPercent);
+        // AdjustableValues.registerNumber("Hopper_Percent",   "/Adjustables/Speeds/Hopper_Percent",   HopperConstants.maxPercent);
     }
 
     /** Runs every tick while the robot is on. */
@@ -89,7 +99,7 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
 
         // Updating the logged values
-        AdjustableValues.updateValues();
+        // AdjustableValues.updateValues();
     }
 
     /** Runs once when the robot enters Disabled mode. */
@@ -103,7 +113,7 @@ public class Robot extends LoggedRobot {
     /** Runs once when the robot enters Autonomous mode. */
     @Override
     public void autonomousInit() {
-        autonomousCommand = robotContainer.getAutonomousCommand();
+        // autonomousCommand = robotContainer.getAutonomousCommand();
 
         if (autonomousCommand == null) {
             autonomousCommand = Commands.print("No autonomous command configured.");

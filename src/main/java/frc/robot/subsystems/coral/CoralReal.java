@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.coral;
 
 import static edu.wpi.first.units.Units.*;
@@ -26,7 +27,7 @@ public class CoralReal extends Coral {
 
     /**
      * Creates a new coral subsystem with real hardware.
-     * 
+     *
      * @param coralId  The CAN ID of the {@link TalonFX} motor that puts coral on the reef.
      * @param sensorId The CAN ID of the {@link CANandcolor} sensor to read.
      * @param laserId  The CAN ID of the {@link LaserCan} sensor under the roller.

@@ -1,3 +1,4 @@
+
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -49,19 +50,19 @@ public class RobotContainer {
                     new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
             drive = new Drive(gyro, vision,
-                    new ModuleTalonFX(0),
-                    new ModuleTalonFX(1),
-                    new ModuleTalonFX(2),
-                    new ModuleTalonFX(3));
+                    new ModuleSparkMax(0),
+                    new ModuleSparkMax(1),
+                    new ModuleSparkMax(2),
+                    new ModuleSparkMax(3));
 
             algae = new AlgaeReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId);
-            
+
             hopper = new Hopper(new HopperIOReal(RobotMap.HOPPER_MotorId, RobotMap.HOPPER_LaserId));
-            
+
             coral = new CoralReal(RobotMap.CORAL_MotorId, RobotMap.CORAL_SensorId, RobotMap.CORAL_LaserId);
-            
+
             elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
-            
+
             climb = new ClimbReal(RobotMap.CLIMB_MotorId);
         } else {
             // Reminder that this does nothing.
@@ -70,7 +71,7 @@ public class RobotContainer {
             vision = new Vision(
                     new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
                     new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
-            
+
             drive = new Drive(gyro, vision,
                     new ModuleSim(0),
                     new ModuleSim(1),
@@ -78,13 +79,13 @@ public class RobotContainer {
                     new ModuleSim(3));
 
             coral = new CoralSim();
-            
+
             hopper = new Hopper(new HopperIOSim());
-            
+
             elevator = new Elevator(new ElevatorIOSim());
-            
+
             algae = new AlgaeSim();
-            
+
             climb = new ClimbSim();
         }
 
@@ -126,7 +127,7 @@ public class RobotContainer {
                         () -> driverController.getRightX() * DriveConstants.precisionPercent,
                         () -> false));
         // Precision Mode
-        // It limits the max speeds through the AdjustableValues class and puts them back to their previous percents when done. 
+        // It limits the max speeds through the AdjustableValues class and puts them back to their previous percents when done.
         // double[] percents = new double[3];
         // driverController.leftBumper().whileTrue(Commands.runEnd(
         //     () -> {
@@ -171,7 +172,7 @@ public class RobotContainer {
             .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis))
             .whileTrue(new SetAlgaePercent(algae, driverController::getLeftTriggerAxis))
             .whileTrue(new SetHopperPercent(hopper, driverController::getLeftTriggerAxis));
-        
+
         // Outtake Coral & Algae
         driverController.rightTrigger(Constants.deadband)
             .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis))
@@ -193,7 +194,7 @@ public class RobotContainer {
         operatorController.y().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L4));
         operatorController.rightBumper().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L3Algae));
         operatorController.rightTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
-        
+
         // Elevator manual controls
         operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband)
             .whileTrue(new SetElevatorVoltage(elevator, operatorController::getRightY));

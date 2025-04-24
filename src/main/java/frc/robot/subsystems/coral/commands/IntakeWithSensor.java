@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.coral.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +13,7 @@ public class IntakeWithSensor extends Command {
     /**
      * Creates a new {@link IntakeWithSensor} command.
      * It runs the coral motor at some speed and cancels itself when the CANandColor sensor detects an object.
-     * 
+     *
      * @param coral The {@link Coral} subsystem to control.
      * @param percentSupplier The percent speed to run at.
      */

@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.algae.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +15,7 @@ public class SetAlgaePercent extends Command {
     /**
      * Creates a new {@link SetAlgaePercent} command.
      * It sets the percent output of the algae motor and resets it back to 0 when the command is cancelled.
-     * 
+     *
      * @param algae The {@link Algae} subsystem to control.
      * @param throttle The percent speed to run at.
      */
@@ -33,7 +34,7 @@ public class SetAlgaePercent extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        algae.setPercent(speed * AdjustableValues.getNumber("Algae_Percent"));
+        algae.setPercent(speed);// * AdjustableValues.getNumber("Algae_Percent"));
     }
 
     /** Called once the command ends or is interrupted. */

@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.algae;
 
 import static edu.wpi.first.units.Units.*;
@@ -20,7 +21,7 @@ public class Algae extends SubsystemBase {
     public Voltage getVoltage() {
         return Volts.zero();
     }
-    
+
     public Current getCurrent() {
         return Amps.zero();
     }
@@ -28,11 +29,11 @@ public class Algae extends SubsystemBase {
     public Temperature getTemperature() {
         return Celsius.zero();
     }
-    
+
     public int getLaserStatus() {
         return LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
     }
-    
+
     public Distance getLaserDistance() {
         return Meters.of(Double.MAX_VALUE);
     }

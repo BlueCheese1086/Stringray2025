@@ -1,3 +1,4 @@
+
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,7 +12,7 @@ public class RecordPose extends Command {
 
     /**
      * Creates a new {@link RecordPose} command.
-     * 
+     *
      * @param poseSupplier The function to recieve poses from.
      */
     public RecordPose(Supplier<Pose2d> poseSupplier) {

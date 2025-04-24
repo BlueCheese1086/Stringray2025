@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.hopper.commands;
 
 import static edu.wpi.first.units.Units.Volts;
@@ -17,7 +18,7 @@ public class SetHopperVoltage extends Command {
     /**
      * Creates a new {@link SetHopperVoltage} command.
      * It sets the voltage output of the hopper and sets it back to 0 when the command is cancelled.
-     * 
+     *
      * @param hopper The {@link Hopper} subsystem to control.
      * @param throttle The percent of max voltage to run at.
      */
@@ -36,7 +37,7 @@ public class SetHopperVoltage extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        hopper.setVoltage(Volts.of(speed * AdjustableValues.getNumber("Hopper_Percent") * RobotController.getInputVoltage()));
+        hopper.setVoltage(Volts.of(speed));// * AdjustableValues.getNumber("Hopper_Percent") * RobotController.getInputVoltage()));
     }
 
     /** Called once the command ends or is interrupted. */

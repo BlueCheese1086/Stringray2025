@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.algae.commands;
 
 import static edu.wpi.first.units.Units.Volts;
@@ -17,7 +18,7 @@ public class SetAlgaeVoltage extends Command {
     /**
      * Creates a new {@link SetAlgaeVoltage} command.
      * It sets the voltage output of the algae motor and resets it back to 0 when the command is cancelled.
-     * 
+     *
      * @param algae The {@link Algae} subsystem to control.
      * @param throttle The percent voltage to run at.
      */
@@ -36,7 +37,7 @@ public class SetAlgaeVoltage extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        algae.setVoltage(Volts.of(speed * AdjustableValues.getNumber("Algae_Percent") * RobotController.getInputVoltage()));
+        algae.setVoltage(Volts.of(speed));// * AdjustableValues.getNumber("Algae_Percent") * RobotController.getInputVoltage()));
     }
 
     /** Called once the command ends or is interrupted. */

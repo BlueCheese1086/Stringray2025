@@ -54,7 +54,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -111,7 +111,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -168,7 +168,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -225,7 +225,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -282,7 +282,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -339,7 +339,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -402,7 +402,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -459,7 +459,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -516,7 +516,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -573,7 +573,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -641,7 +641,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -721,7 +721,7 @@ public class TurboLogger {
             }
 
             // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type changes.
+            // Remove the next line to allow type overriding.
             return;
         }
 

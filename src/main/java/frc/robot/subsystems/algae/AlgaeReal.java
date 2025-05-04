@@ -14,7 +14,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.util.TurboLogger;
 
 public class AlgaeReal extends Algae {
     private TalonFX algae;
@@ -44,24 +44,24 @@ public class AlgaeReal extends Algae {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("/Algae/Current", getCurrent().in(Amps));
-        SmartDashboard.putNumber("/Algae/Percent/Actual", getPercent());
-        SmartDashboard.putNumber("/Algae/Temperature", getTemperature().in(Celsius));
-        SmartDashboard.putNumber("/Algae/Voltage/Actual", getVoltage().in(Volts));
-        SmartDashboard.putNumber("/Algae/LaserStatus", getLaserStatus());
-        SmartDashboard.putNumber("/Algae/LaserDist", getLaserDistance().in(Meters));
+        TurboLogger.log("/Algae/Current", getCurrent().in(Amps));
+        TurboLogger.log("/Algae/Percent/Actual", getPercent());
+        TurboLogger.log("/Algae/Temperature", getTemperature().in(Celsius));
+        TurboLogger.log("/Algae/Voltage/Actual", getVoltage().in(Volts));
+        TurboLogger.log("/Algae/LaserStatus", getLaserStatus());
+        TurboLogger.log("/Algae/LaserDist", getLaserDistance().in(Meters));
     }
 
     @Override
     public void setPercent(double percent) {
-        SmartDashboard.putNumber("/Algae/Percent/Setpoint", percent);
+        TurboLogger.log("/Algae/Percent/Setpoint", percent);
 
         algae.set(percent);
     }
 
     @Override
     public void setVoltage(Voltage voltage) {
-        SmartDashboard.putNumber("/Algae/Voltage/Setpoint", voltage.in(Volts));
+        TurboLogger.log("/Algae/Voltage/Setpoint", voltage.in(Volts));
 
         algae.setVoltage(voltage.in(Volts));
     }

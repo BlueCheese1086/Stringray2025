@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.hopper.Hopper;
-import frc.robot.util.AdjustableValues;
+import frc.robot.subsystems.hopper.HopperConstants;
+import frc.robot.util.TurboLogger;
 import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
@@ -37,7 +38,7 @@ public class SetHopperVoltage extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        hopper.setVoltage(Volts.of(speed));// * AdjustableValues.getNumber("Hopper_Percent") * RobotController.getInputVoltage()));
+        hopper.setVoltage(Volts.of(speed * TurboLogger.get("Hopper_Percent", HopperConstants.maxPercent) * RobotController.getInputVoltage()));
     }
 
     /** Called once the command ends or is interrupted. */

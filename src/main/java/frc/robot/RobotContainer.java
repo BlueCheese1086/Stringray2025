@@ -127,23 +127,23 @@ public class RobotContainer {
                         () -> driverController.getRightX() * DriveConstants.precisionPercent,
                         () -> false));
         // Precision Mode
-        // It limits the max speeds through the AdjustableValues class and puts them back to their previous percents when done.
-        // double[] percents = new double[3];
-        // driverController.leftBumper().whileTrue(Commands.runEnd(
-        //     () -> {
-        //         percents[0] = AdjustableValues.getNumber("DriveX_Percent");
-        //         percents[1] = AdjustableValues.getNumber("DriveY_Percent");
-        //         percents[2] = AdjustableValues.getNumber("Steer_Percent");
+        // It limits the max speeds through the TurboLogger class and puts them back to their previous percents when done.
+        double[] percents = new double[3];
+        driverController.leftBumper().whileTrue(Commands.runEnd(
+            () -> {
+                percents[0] = TurboLogger.get("DriveX_Percent", DriveConstants.precisionPercent);
+                percents[1] = TurboLogger.get("DriveY_Percent", DriveConstants.precisionPercent);
+                percents[2] = TurboLogger.get("Steer_Percent", DriveConstants.precisionPercent);
 
-        //         AdjustableValues.setNumber("DriveX_Percent", DriveConstants.precisionPercent);
-        //         AdjustableValues.setNumber("DriveY_Percent", DriveConstants.precisionPercent);
-        //         AdjustableValues.setNumber("Steer_Percent", DriveConstants.precisionPercent);
-        //     },
-        //     () -> {
-        //         AdjustableValues.setNumber("DriveX_Percent", percents[0]);
-        //         AdjustableValues.setNumber("DriveY_Percent", percents[1]);
-        //         AdjustableValues.setNumber("Steer_Percent", percents[2]);
-        //     }));
+                TurboLogger.log("DriveX_Percent", DriveConstants.precisionPercent);
+                TurboLogger.log("DriveY_Percent", DriveConstants.precisionPercent);
+                TurboLogger.log("Steer_Percent", DriveConstants.precisionPercent);
+            },
+            () -> {
+                TurboLogger.log("DriveX_Percent", percents[0]);
+                TurboLogger.log("DriveY_Percent", percents[1]);
+                TurboLogger.log("Steer_Percent", percents[2]);
+            }));
 
         // Reset gyro
         driverController.b().onTrue(Commands.runOnce(gyro::reset));

@@ -4,7 +4,8 @@ package frc.robot.subsystems.hopper.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.hopper.Hopper;
-import frc.robot.util.AdjustableValues;
+import frc.robot.subsystems.hopper.HopperConstants;
+import frc.robot.util.TurboLogger;
 import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
@@ -34,7 +35,7 @@ public class SetHopperPercent extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        hopper.setPercent(speed);// * AdjustableValues.getNumber("Hopper_Percent"));
+        hopper.setPercent(speed * TurboLogger.get("Hopper_Percent", HopperConstants.maxPercent));
     }
 
     /** Called once the command ends or is interrupted. */

@@ -9,7 +9,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.util.TurboLogger;
 
 public class AlgaeSim extends Algae {
     private DCMotorSim algae;
@@ -22,21 +22,21 @@ public class AlgaeSim extends Algae {
     public void periodic() {
         algae.update(0.02);
 
-        SmartDashboard.putNumber("/Algae/Current", getCurrent().in(Amps));
-        SmartDashboard.putNumber("/Algae/Percent/Actual", getPercent());
-        SmartDashboard.putNumber("/Algae/Voltage/Actual", getVoltage().in(Volts));
+        TurboLogger.log("/Algae/Current", getCurrent().in(Amps));
+        TurboLogger.log("/Algae/Percent/Actual", getPercent());
+        TurboLogger.log("/Algae/Voltage/Actual", getVoltage().in(Volts));
     }
 
     @Override
     public void setPercent(double percent) {
-        SmartDashboard.putNumber("/Algae/Percent/Setpoint", percent);
+        TurboLogger.log("/Algae/Percent/Setpoint", percent);
 
         algae.setInputVoltage(percent * RobotController.getInputVoltage());
     }
 
     @Override
     public void setVoltage(Voltage voltage) {
-        SmartDashboard.putNumber("/Algae/Voltage/Setpoint", voltage.in(Volts));
+        TurboLogger.log("/Algae/Voltage/Setpoint", voltage.in(Volts));
 
         algae.setInputVoltage(voltage.in(Volts));
     }

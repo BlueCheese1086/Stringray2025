@@ -2,10 +2,12 @@
 package frc.robot.subsystems.coral.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.util.AdjustableValues;
+import frc.robot.util.TurboLogger;
 import frc.robot.util.MathUtils;
 import frc.robot.Constants;
 import frc.robot.subsystems.coral.Coral;
+import frc.robot.subsystems.coral.CoralConstants;
+
 import java.util.function.Supplier;
 
 public class SetCoralSpeed extends Command {
@@ -34,7 +36,7 @@ public class SetCoralSpeed extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        coral.setPercent(speed);// * AdjustableValues.getNumber("Coral_Percent"));
+        coral.setPercent(speed * TurboLogger.get("Coral_Percent", CoralConstants.maxPercent));
     }
 
     /** Called once the command ends or is interrupted. */

@@ -3,21 +3,55 @@ package frc.robot.util;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class TurboLogger {
-    private static NetworkTableInstance instance = NetworkTableInstance.getDefault();
-    private static NetworkTable table = instance.getTable("TurboLogger");
-
+    // Hashmaps for NT logging
     private static HashMap<String,Publisher> pubs = new HashMap<String,Publisher>();
     private static HashMap<String,Subscriber> subs = new HashMap<String,Subscriber>();
     private static HashMap<String,Long> lastReads = new HashMap<String,Long>();
-
     private static HashMap<String,List<String>> ntPathToAliases = new HashMap<String,List<String>>();
     private static HashMap<String,String> aliasToNTPath = new HashMap<String,String>();
+
+    private static NetworkTableInstance instance = NetworkTableInstance.getDefault();
+    private static NetworkTable table = instance.getTable("TurboLogger");
+
+    /** Opens a new DataLog file */
+    public static void enableDataLogs(String logPath) {
+        String[] sections = new String[0];
+
+        // Checking what the path is using as a separator
+        if (logPath.contains("\\")) {
+            sections = logPath.split("\\");
+        } else if (logPath.contains("/")) {
+            sections = logPath.split("/");
+        }
+
+        // Splitting the file from the path
+        String file = "";
+        if (sections.length > 0) {
+            file = sections[sections.length - 1];
+        } else {
+            file = logPath;
+        }
+
+        String path = (sections.length == 0) ? "." : logPath.replace(file, "");
+
+        // Starting the logger at the path and file location
+        DataLogManager.start(path, file);
+
+        DataLogManager.logNetworkTables(true);
+    }
+
+    /** Closes the existing DataLog file and resets it to null. */
+    public static void disableDataLogs() {
+        // Stopping the logger from pulling from NetworkTables.
+        DataLogManager.logNetworkTables(false);
+    }
 
     // Loggers
 
@@ -34,17 +68,17 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
         // Checking if the key has been published already.
         if (pubs.containsKey(key)) {
-            // If the published value is a boolean array, then it pushes the value and exits.
+            // If the published value is a boolean array, then it pushes the value.
             if (pubs.get(key) instanceof BooleanArrayPublisher pub) {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
@@ -53,11 +87,8 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of BooleanArrayPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
             return;
         }
-
         // Since the publisher for this key hasn't been created, it makes one.
         // If the key has any aliases defined, it also pushes the pubs and subs to them.
         // Creating the boolean array topic
@@ -69,9 +100,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -91,17 +121,17 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
-        // Checking if the key has been published already.
+        // Checking if the key has been published to NT already.
         if (pubs.containsKey(key)) {
             // If the published value is a boolean, then it pushes the value and exits.
             if (pubs.get(key) instanceof BooleanPublisher pub) {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
@@ -110,8 +140,6 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of BooleanPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -126,9 +154,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -148,7 +175,7 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
         // Checking if the key has been published already.
@@ -167,8 +194,6 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of DoubleArrayPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -183,9 +208,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -205,7 +229,7 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
         // Checking if the key has been published already.
@@ -215,17 +239,15 @@ public class TurboLogger {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of DoublePublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning("Publisher is not an instance of DoubleArrayPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of DoublePublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning("Publisher is not an instance of DoubleArrayPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -240,9 +262,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -262,7 +283,7 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
         // Checking if the key has been published already.
@@ -272,7 +293,7 @@ public class TurboLogger {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
@@ -281,11 +302,9 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of FloatArrayPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
             return;
         }
-
+        
         // Since the publisher for this key hasn't been created, it makes one.
         // If the key has any aliases defined, it also pushes the pubs and subs to them.
         // Creating the float array topic
@@ -297,9 +316,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -319,7 +337,7 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
         // Checking if the key has been published already.
@@ -329,7 +347,7 @@ public class TurboLogger {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
@@ -338,8 +356,6 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of FloatPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -354,9 +370,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -382,7 +397,7 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
         // Checking if the key has been published already.
@@ -400,12 +415,10 @@ public class TurboLogger {
             } else {
                 DriverStation.reportWarning("Publisher is not an instance of IntegerArrayPublisher for key \"" + key + "\".", false);
             }
-
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
+            
             return;
         }
-
+        
         // Since the publisher for this key hasn't been created, it makes one.
         // If the key has any aliases defined, it also pushes the pubs and subs to them.
         // Creating the int array topic
@@ -417,9 +430,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -439,7 +451,7 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
         // Checking if the key has been published already.
@@ -458,11 +470,9 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of IntegerPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
             return;
         }
-
+        
         // Since the publisher for this key hasn't been created, it makes one.
         // If the key has any aliases defined, it also pushes the pubs and subs to them.
         // Creating the int topic
@@ -474,9 +484,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -506,7 +515,7 @@ public class TurboLogger {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
@@ -515,8 +524,6 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of StringArrayPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
             return;
         }
 
@@ -531,9 +538,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -553,12 +559,12 @@ public class TurboLogger {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
-        // Adding the value to the lastReads map if it isn't there yet
+        // Adding the value to the lastReads map if it isn't there yet.
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
         // Checking if the key has been published already.
         if (pubs.containsKey(key)) {
-            // If the published value is a string, then it pushes the value and exits.
+            // If the published value is a string, then it pushes the value.
             if (pubs.get(key) instanceof StringPublisher pub) {
                 pub.set(value);
                 return;
@@ -571,9 +577,7 @@ public class TurboLogger {
             } else {
                 DriverStation.reportWarning("Publisher is not an instance of StringPublisher for key \"" + key + "\".", false);
             }
-
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
+            
             return;
         }
 
@@ -588,9 +592,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -613,20 +616,33 @@ public class TurboLogger {
         // Adding the value to the lastReads map if it isn't there yet
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
+        // Finding the struct for this StructSerializable object.
+        Struct<T> struct = null;
+
+        try {
+            struct = (Struct<T>) value.getClass().getComponentType().getDeclaredField("struct").get(value);
+        } catch (IllegalAccessException | NoSuchFieldException err) {
+            DriverStation.reportError(
+                    "No public instance of struct for the StructSerializable object " + value.getClass().getName(),
+                    err.getStackTrace());
+            return;
+        }
+
         // Checking if the key has been published already.
         if (pubs.containsKey(key)) {
             // If the published value is a struct array, then it pushes the value and exits.
             if (pubs.get(key) instanceof StructArrayPublisher pub && subs.get(key) instanceof StructArraySubscriber sub) {
                 if (sub.get().getClass().getComponentType().getName().equals(value.getClass().getComponentType().getName())) {
                     ((StructArrayPublisher<T>) pub).set(value);
+                    return;
+                }
+
+                // Reports if the struct array being pushed doesn't match the type of the existing struct array.
+                // If the key is an alias, then change the message reported to DriverStation.
+                if (aliasToNTPath.containsKey(key)) {
+                    DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getComponentType().getName() + " for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
                 } else {
-                    // Reports if the struct array being pushed doesn't match the type of the existing struct array.
-                    // If the key is an alias, then change the message reported to DriverStation.
-                    if (aliasToNTPath.containsKey(key)) {
-                        DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getComponentType().getName() + " for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
-                    } else {
-                        DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getComponentType().getName() + " for key \"" + key + "\".", false);
-                    }
+                    DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getComponentType().getName() + " for key \"" + key + "\".", false);
                 }
 
                 return;
@@ -640,20 +656,6 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of StructArrayPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
-            return;
-        }
-
-        // Finding the struct for this StructSerializable object.
-        Struct<T> struct = null;
-
-        try {
-            struct = (Struct<T>) value.getClass().getComponentType().getDeclaredField("struct").get(value);
-        } catch (IllegalAccessException | NoSuchFieldException err) {
-            DriverStation.reportError(
-                    "No public instance of struct for the StructSerializable object " + value.getClass().getName(),
-                    err.getStackTrace());
             return;
         }
 
@@ -668,9 +670,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);
@@ -693,22 +694,35 @@ public class TurboLogger {
         // Adding the value to the lastReads map if it isn't there yet
         if (!lastReads.containsKey(key)) lastReads.put(key, 0l);
 
+        // Finding the struct for this StructSerializable object.
+        Struct<T> struct = null;
+
+        try {
+            struct = (Struct<T>) value.getClass().getDeclaredField("struct").get(value);
+        } catch (IllegalAccessException | NoSuchFieldException err) {
+            DriverStation.reportError(
+                    "No public instance of struct for the StructSerializable object " + value.getClass().getName(),
+                    err.getStackTrace());
+            return;
+        }
+
         // Checking if the key has been published already.
         if (pubs.containsKey(key)) {
             // If the published value is a struct, then it pushes the value and exits.
             if (pubs.get(key) instanceof StructPublisher pub && subs.get(key) instanceof StructSubscriber sub) {
                 if (sub.get().getClass().getName().equals(value.getClass().getName())) {
                     ((StructPublisher<T>) pub).set(value);
-                } else {
-                    // Reports if the struct being pushed doesn't match the existing struct
-                    // If the key is an alias, then change the message reported to DriverStation.
-                    if (aliasToNTPath.containsKey(key)) {
-                        DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getName() + " for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
-                    } else {
-                        DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getName() + " for key \"" + key + "\".", false);
-                    }
+                    return;
                 }
 
+                // Reports if the struct being pushed doesn't match the existing struct
+                // If the key is an alias, then change the message reported to DriverStation.
+                if (aliasToNTPath.containsKey(key)) {
+                    DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getName() + " for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                } else {
+                    DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getName() + " for key \"" + key + "\".", false);
+                }
+                
                 return;
             }
 
@@ -720,20 +734,6 @@ public class TurboLogger {
                 DriverStation.reportWarning("Publisher is not an instance of StructPublisher for key \"" + key + "\".", false);
             }
 
-            // Not sure if I should allow overwriting or not.
-            // Remove the next line to allow type overriding.
-            return;
-        }
-
-        // Finding the struct for this StructSerializable object.
-        Struct<T> struct = null;
-
-        try {
-            struct = (Struct<T>) value.getClass().getDeclaredField("struct").get(value);
-        } catch (IllegalAccessException | NoSuchFieldException err) {
-            DriverStation.reportError(
-                    "No public instance of struct for the StructSerializable object " + value.getClass().getName(),
-                    err.getStackTrace());
             return;
         }
 
@@ -748,9 +748,8 @@ public class TurboLogger {
         pubs.put(key, pub);
         subs.put(key, sub);
 
-        if (!ntPathToAliases.containsKey(key)) return;
-
-        for (String alias : ntPathToAliases.get(key)) {
+        // This updates the pub/sub/lastread entries for all the aliases of this path.
+        for (String alias : ntPathToAliases.getOrDefault(key, new ArrayList<>())) {
             pubs.put(alias, pub);
             subs.put(alias, sub);
             lastReads.put(alias, 0l);

@@ -1,10 +1,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructSubscriber;
-import edu.wpi.first.networktables.Subscriber;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -14,82 +11,77 @@ import frc.robot.subsystems.coral.CoralConstants;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.hopper.HopperConstants;
-import frc.robot.util.AdjustableValues;
+import frc.robot.util.TurboLogger;
 
-import java.util.HashMap;
-
-import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-
-public class Robot extends LoggedRobot {
+public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private Command autonomousCommand;
 
-    Subscriber sub;
-
     public Robot() {
-        // robotContainer = new RobotContainer();
+        robotContainer = new RobotContainer();
 
-        Logger.addDataReceiver(new NT4Publisher());
+        // Logger.addDataReceiver(new NT4Publisher());
 
-        if (isReal()) {
-            Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
-        }
+        // if (isReal()) {
+        //     Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
+        // }
 
-        if (isSimulation() && Constants.isReplay) {
-            Logger.setReplaySource(new WPILOGReader("log.wpilog"));
-        }
+        // if (isSimulation() && Constants.isReplay) {
+        //     Logger.setReplaySource(new WPILOGReader("log.wpilog"));
+        // }
 
-        Logger.start();
+        // Logger.start();
 
         // Adding adjustable values
-        // AdjustableValues.registerNumber("Drive_kP", "/Adjustables/Drive/kP", DriveConstants.kPDriveDefault, "Drive_kP_0", "Drive_kP_1", "Drive_kP_2", "Drive_kP_3");
-        // AdjustableValues.registerNumber("Drive_kI", "/Adjustables/Drive/kI", DriveConstants.kIDriveDefault, "Drive_kI_0", "Drive_kI_1", "Drive_kI_2", "Drive_kI_3");
-        // AdjustableValues.registerNumber("Drive_kD", "/Adjustables/Drive/kD", DriveConstants.kDDriveDefault, "Drive_kD_0", "Drive_kD_1", "Drive_kD_2", "Drive_kD_3");
-        // AdjustableValues.registerNumber("Drive_kS", "/Adjustables/Drive/kS", DriveConstants.kSDriveDefault, "Drive_kS_0", "Drive_kS_1", "Drive_kS_2", "Drive_kS_3");
-        // AdjustableValues.registerNumber("Drive_kV", "/Adjustables/Drive/kV", DriveConstants.kVDriveDefault, "Drive_kV_0", "Drive_kV_1", "Drive_kV_2", "Drive_kV_3");
+        TurboLogger.log("/Adjustables/Algae/MaxPercent", AlgaeConstants.maxPercent, "Algae_Percent");
 
-        // AdjustableValues.registerNumber("Steer_kP", "/Adjustables/Steer/kP", DriveConstants.kPSteerDefault, "Steer_kP_0", "Steer_kP_1", "Steer_kP_2", "Steer_kP_3");
-        // AdjustableValues.registerNumber("Steer_kI", "/Adjustables/Steer/kI", DriveConstants.kISteerDefault, "Steer_kI_0", "Steer_kI_1", "Steer_kI_2", "Steer_kI_3");
-        // AdjustableValues.registerNumber("Steer_kD", "/Adjustables/Steer/kD", DriveConstants.kDSteerDefault, "Steer_kD_0", "Steer_kD_1", "Steer_kD_2", "Steer_kD_3");
-        // AdjustableValues.registerNumber("Steer_kS", "/Adjustables/Steer/kS", DriveConstants.kSSteerDefault, "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
-        // AdjustableValues.registerNumber("Steer_kV", "/Adjustables/Steer/kV", DriveConstants.kVSteerDefault, "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
+        TurboLogger.log("/Adjustables/AutoAlign/X/kP", DriveConstants.kPX, "X_kP");
+        TurboLogger.log("/Adjustables/AutoAlign/X/kI", DriveConstants.kIX, "X_kI");
+        TurboLogger.log("/Adjustables/AutoAlign/X/kD", DriveConstants.kDX, "X_kD");
 
-        // AdjustableValues.registerNumber("AutoAlignX_kP", "/Adjustables/AutoAlign/X_kP", DriveConstants.kPX);
-        // AdjustableValues.registerNumber("AutoAlignX_kI", "/Adjustables/AutoAlign/X_kI", DriveConstants.kIX);
-        // AdjustableValues.registerNumber("AutoAlignX_kD", "/Adjustables/AutoAlign/X_kD", DriveConstants.kDX);
+        TurboLogger.log("/Adjustables/AutoAlign/Y/kP", DriveConstants.kPY, "Y_kP");
+        TurboLogger.log("/Adjustables/AutoAlign/Y/kI", DriveConstants.kIY, "Y_kI");
+        TurboLogger.log("/Adjustables/AutoAlign/Y/kD", DriveConstants.kDY, "Y_kD");
 
-        // AdjustableValues.registerNumber("AutoAlignY_kP", "/Adjustables/AutoAlign/Y_kP", DriveConstants.kPY);
-        // AdjustableValues.registerNumber("AutoAlignY_kI", "/Adjustables/AutoAlign/Y_kI", DriveConstants.kIY);
-        // AdjustableValues.registerNumber("AutoAlignY_kD", "/Adjustables/AutoAlign/Y_kD", DriveConstants.kDY);
+        TurboLogger.log("/Adjustables/AutoAlign/Theta/kP", DriveConstants.kPTheta, "Theta_kP");
+        TurboLogger.log("/Adjustables/AutoAlign/Theta/kI", DriveConstants.kITheta, "Theta_kI");
+        TurboLogger.log("/Adjustables/AutoAlign/Theta/kD", DriveConstants.kDTheta, "Theta_kD");
+        
+        TurboLogger.log("/Adjustables/Climb/kP", ClimbConstants.kPDefault, "Climb_kP");
+        TurboLogger.log("/Adjustables/Climb/kI", ClimbConstants.kIDefault, "Climb_kI");
+        TurboLogger.log("/Adjustables/Climb/kD", ClimbConstants.kDDefault, "Climb_kD");
+        TurboLogger.log("/Adjustables/Climb/MaxPercent", ClimbConstants.maxPercent, "Climb_Percent");
 
-        // AdjustableValues.registerNumber("AutoAlignTheta_kP", "/Adjustables/AutoAlign/Theta_kP", DriveConstants.kPTheta);
-        // AdjustableValues.registerNumber("AutoAlignTheta_kI", "/Adjustables/AutoAlign/Theta_kI", DriveConstants.kITheta);
-        // AdjustableValues.registerNumber("AutoAlignTheta_kD", "/Adjustables/AutoAlign/Theta_kD", DriveConstants.kDTheta);
+        TurboLogger.log("/Adjustables/Coral/MaxPercent", CoralConstants.maxPercent, "Coral_Percent");
 
-        // AdjustableValues.registerNumber("Elev_kP", "/Adjustables/Elevator/kP", ElevatorConstants.kPDefault);
-        // AdjustableValues.registerNumber("Elev_kI", "/Adjustables/Elevator/kI", ElevatorConstants.kIDefault);
-        // AdjustableValues.registerNumber("Elev_kD", "/Adjustables/Elevator/kD", ElevatorConstants.kDDefault);
-        // AdjustableValues.registerNumber("Elev_kS", "/Adjustables/Elevator/kS", ElevatorConstants.kSDefault);
-        // AdjustableValues.registerNumber("Elev_kG", "/Adjustables/Elevator/kG", ElevatorConstants.kGDefault);
-        // AdjustableValues.registerNumber("Elev_kV", "/Adjustables/Elevator/kV", ElevatorConstants.kVDefault);
-        // AdjustableValues.registerNumber("Elev_kA", "/Adjustables/Elevator/kA", ElevatorConstants.kADefault);
+        TurboLogger.log("/Adjustables/Drive/kP", DriveConstants.kPDriveDefault, "Drive_kP", "Drive_kP_0", "Drive_kP_1", "Drive_kP_2", "Drive_kP_3");
+        TurboLogger.log("/Adjustables/Drive/kI", DriveConstants.kIDriveDefault, "Drive_kI", "Drive_kI_0", "Drive_kI_1", "Drive_kI_2", "Drive_kI_3");
+        TurboLogger.log("/Adjustables/Drive/kD", DriveConstants.kDDriveDefault, "Drive_kD", "Drive_kD_0", "Drive_kD_1", "Drive_kD_2", "Drive_kD_3");
+        TurboLogger.log("/Adjustables/Drive/kS", DriveConstants.kSDriveDefault, "Drive_kS", "Drive_kS_0", "Drive_kS_1", "Drive_kS_2", "Drive_kS_3");
+        TurboLogger.log("/Adjustables/Drive/kV", DriveConstants.kVDriveDefault, "Drive_kV", "Drive_kV_0", "Drive_kV_1", "Drive_kV_2", "Drive_kV_3");
+        TurboLogger.log("/Adjustables/Drive/MaxDriveXPercent", DriveConstants.driveXPercent, "DriveX_Percent");
+        TurboLogger.log("/Adjustables/Drive/MaxDriveYPercent", DriveConstants.driveYPercent, "DriveY_Percent");
 
-        // AdjustableValues.registerNumber("Climb_kP", "/Adjustables/Climb/Climb_kP", ClimbConstants.kPDefault);
-        // AdjustableValues.registerNumber("Climb_kI", "/Adjustables/Climb/Climb_kI", ClimbConstants.kIDefault);
-        // AdjustableValues.registerNumber("Climb_kD", "/Adjustables/Climb/Climb_kD", ClimbConstants.kDDefault);
+        TurboLogger.log("/Adjustables/Elevator/kP", ElevatorConstants.kPDefault, "Elev_kP");
+        TurboLogger.log("/Adjustables/Elevator/kI", ElevatorConstants.kIDefault, "Elev_kI");
+        TurboLogger.log("/Adjustables/Elevator/kD", ElevatorConstants.kDDefault, "Elev_kD");
+        TurboLogger.log("/Adjustables/Elevator/kS", ElevatorConstants.kSDefault, "Elev_kS");
+        TurboLogger.log("/Adjustables/Elevator/kG", ElevatorConstants.kGDefault, "Elev_kG");
+        TurboLogger.log("/Adjustables/Elevator/kV", ElevatorConstants.kVDefault, "Elev_kV");
+        TurboLogger.log("/Adjustables/Elevator/kA", ElevatorConstants.kADefault, "Elev_kA");
+        TurboLogger.log("/Adjustables/Elevator/MaxPercent", ElevatorConstants.maxPercent, "Elevator_Percent");
+        
+        TurboLogger.log("/Adjustables/Hopper/MaxPercent", HopperConstants.maxPercent, "Hopper_Percent");
 
-        // AdjustableValues.registerNumber("Algae_Percent",    "/Adjustables/Speeds/Algae_Percent",    AlgaeConstants.maxPercent);
-        // AdjustableValues.registerNumber("Climb_Percent",    "/Adjustables/Speeds/Climb_Percent",    ClimbConstants.maxPercent);
-        // AdjustableValues.registerNumber("Coral_Percent",    "/Adjustables/Speeds/Coral_Percent",    CoralConstants.maxPercent);
-        // AdjustableValues.registerNumber("DriveX_Percent",   "/Adjustables/Speeds/DriveX_Percent",   DriveConstants.driveXPercent);
-        // AdjustableValues.registerNumber("DriveY_Percent",   "/Adjustables/Speeds/DriveY_Percent",   DriveConstants.driveYPercent);
-        // AdjustableValues.registerNumber("Steer_Percent",    "/Adjustables/Speeds/Steer_Percent",    DriveConstants.steerPercent);
-        // AdjustableValues.registerNumber("Elevator_Percent", "/Adjustables/Speeds/Elevator_Percent", ElevatorConstants.maxPercent);
-        // AdjustableValues.registerNumber("Hopper_Percent",   "/Adjustables/Speeds/Hopper_Percent",   HopperConstants.maxPercent);
+        TurboLogger.log("/Adjustables/Steer/kP", DriveConstants.kPSteerDefault, "Steer_kP", "Steer_kP_0", "Steer_kP_1", "Steer_kP_2", "Steer_kP_3");
+        TurboLogger.log("/Adjustables/Steer/kI", DriveConstants.kISteerDefault, "Steer_kI", "Steer_kI_0", "Steer_kI_1", "Steer_kI_2", "Steer_kI_3");
+        TurboLogger.log("/Adjustables/Steer/kD", DriveConstants.kDSteerDefault, "Steer_kD", "Steer_kD_0", "Steer_kD_1", "Steer_kD_2", "Steer_kD_3");
+        TurboLogger.log("/Adjustables/Steer/kS", DriveConstants.kSSteerDefault, "Steer_kS", "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
+        TurboLogger.log("/Adjustables/Steer/kV", DriveConstants.kVSteerDefault, "Steer_kV", "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
+        TurboLogger.log("/Adjustables/Steer/MaxSteerPercent", DriveConstants.steerPercent, "Steer_Percent");
+
+        // Enabling DataLog recording
+        TurboLogger.enableDataLogs("test.wpilog");
     }
 
     /** Runs every tick while the robot is on. */
@@ -97,9 +89,6 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         // Running the scheduled commands
         CommandScheduler.getInstance().run();
-
-        // Updating the logged values
-        // AdjustableValues.updateValues();
     }
 
     /** Runs once when the robot enters Disabled mode. */
@@ -113,7 +102,7 @@ public class Robot extends LoggedRobot {
     /** Runs once when the robot enters Autonomous mode. */
     @Override
     public void autonomousInit() {
-        // autonomousCommand = robotContainer.getAutonomousCommand();
+        autonomousCommand = robotContainer.getAutonomousCommand();
 
         if (autonomousCommand == null) {
             autonomousCommand = Commands.print("No autonomous command configured.");

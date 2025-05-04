@@ -17,7 +17,8 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.util.TurboLogger;
+
 import java.util.Objects;
 
 public class CoralReal extends Coral {
@@ -58,26 +59,26 @@ public class CoralReal extends Coral {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("/Coral/Percent/Actual", getPercent());
-        SmartDashboard.putNumber("/Coral/Voltage/Actual", getVoltage().in(Volts));
-        SmartDashboard.putNumber("/Coral/Current", getCurrent().in(Amps));
-        SmartDashboard.putNumber("/Coral/Temperature", getTemperature().in(Celsius));
-        SmartDashboard.putNumber("/Coral/SensorProximity", getSensorProximity());
-        SmartDashboard.putString("/Coral/SensorColor", getSensorColor());
-        SmartDashboard.putNumber("/Coral/LaserStatus", getLaserStatus());
-        SmartDashboard.putNumber("/Coral/LaserDistance", getLaserReading().in(Inches));
+        TurboLogger.log("/Coral/Percent/Actual", getPercent());
+        TurboLogger.log("/Coral/Voltage/Actual", getVoltage().in(Volts));
+        TurboLogger.log("/Coral/Current", getCurrent().in(Amps));
+        TurboLogger.log("/Coral/Temperature", getTemperature().in(Celsius));
+        TurboLogger.log("/Coral/SensorProximity", getSensorProximity());
+        TurboLogger.log("/Coral/SensorColor", getSensorColor());
+        TurboLogger.log("/Coral/LaserStatus", getLaserStatus());
+        TurboLogger.log("/Coral/LaserDistance", getLaserReading().in(Inches));
     }
 
     @Override
     public void setPercent(double percent) {
-        SmartDashboard.putNumber("/Coral/Percent/Setpoint", percent);
+        TurboLogger.log("/Coral/Percent/Setpoint", percent);
 
         coral.setControl(new DutyCycleOut(percent));
     }
 
     @Override
     public void setVoltage(Voltage voltage) {
-        SmartDashboard.putNumber("/Coral/Voltage/Setpoint", voltage.in(Volts));
+        TurboLogger.log("/Coral/Voltage/Setpoint", voltage.in(Volts));
 
         coral.setControl(new VoltageOut(voltage));
     }

@@ -4,7 +4,8 @@ package frc.robot.subsystems.algae.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.algae.Algae;
-import frc.robot.util.AdjustableValues;
+import frc.robot.subsystems.algae.AlgaeConstants;
+import frc.robot.util.TurboLogger;
 import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
@@ -34,7 +35,7 @@ public class SetAlgaePercent extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        algae.setPercent(speed);// * AdjustableValues.getNumber("Algae_Percent"));
+        algae.setPercent(speed * TurboLogger.get("Algae_Percent", AlgaeConstants.maxPercent));
     }
 
     /** Called once the command ends or is interrupted. */

@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.algae.Algae;
-import frc.robot.util.AdjustableValues;
+import frc.robot.subsystems.algae.AlgaeConstants;
+import frc.robot.util.TurboLogger;
 import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
@@ -37,7 +38,7 @@ public class SetAlgaeVoltage extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        algae.setVoltage(Volts.of(speed));// * AdjustableValues.getNumber("Algae_Percent") * RobotController.getInputVoltage()));
+        algae.setVoltage(Volts.of(speed * TurboLogger.get("Algae_Percent", AlgaeConstants.maxPercent) * RobotController.getInputVoltage()));
     }
 
     /** Called once the command ends or is interrupted. */

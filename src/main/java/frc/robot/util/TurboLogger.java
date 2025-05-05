@@ -20,29 +20,40 @@ public class TurboLogger {
     private static NetworkTableInstance instance = NetworkTableInstance.getDefault();
     private static NetworkTable table = instance.getTable("TurboLogger");
 
-    /** Opens a new DataLog file */
+    /**
+     * Enables DataLog recording of NT output.
+     * 
+     * The wpilog is created at the logPath point.
+     * If the logPath ends with a forward slash, it is seen as a directory.
+     * Otherwise, it is seen as a file.
+     * 
+     * @param logPath The path to store the logfile at.
+     */
     public static void enableDataLogs(String logPath) {
-        String[] sections = new String[0];
+        // Checking if the path contains a file.
+        // If there is a period in the path, it is considered to be a file.
+        if (logPath.contains(".")) {
 
-        // Checking what the path is using as a separator
-        if (logPath.contains("\\")) {
-            sections = logPath.split("\\");
-        } else if (logPath.contains("/")) {
-            sections = logPath.split("/");
-        }
+            // Checking if the path is separated by forwards or backwards slashes.
+            String separator = "";
+            if (logPath.contains("/")) {
+                separator = "/";
+            } else if (logPath.contains("\\")) {
+                separator = "\\";
+            }
 
-        // Splitting the file from the path
-        String file = "";
-        if (sections.length > 0) {
-            file = sections[sections.length - 1];
+            // Splitting the path and putting it back together without the file name.
+            String path = "";
+            String[] pathParts = logPath.split(separator);
+            for (int i = 0; i < pathParts.length - 1; i++) {
+                path += pathParts[i] + separator;
+            }
+
+            // Starting the logger at the path and file location.
+            DataLogManager.start(path, pathParts[pathParts.length - 1]);
         } else {
-            file = logPath;
+            DataLogManager.start(logPath, "");
         }
-
-        String path = (sections.length == 0) ? "." : logPath.replace(file, "");
-
-        // Starting the logger at the path and file location
-        DataLogManager.start(path, file);
 
         DataLogManager.logNetworkTables(true);
     }

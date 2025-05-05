@@ -11,22 +11,22 @@ import java.util.List;
 
 public class TurboLogger {
     // Hashmaps for NT logging
-    private static HashMap<String,Publisher> pubs = new HashMap<String,Publisher>();
-    private static HashMap<String,Subscriber> subs = new HashMap<String,Subscriber>();
-    private static HashMap<String,Long> lastReads = new HashMap<String,Long>();
-    private static HashMap<String,List<String>> ntPathToAliases = new HashMap<String,List<String>>();
-    private static HashMap<String,String> aliasToNTPath = new HashMap<String,String>();
+    private static HashMap<String, Publisher> pubs = new HashMap<String, Publisher>();
+    private static HashMap<String, Subscriber> subs = new HashMap<String, Subscriber>();
+    private static HashMap<String, Long> lastReads = new HashMap<String, Long>();
+    private static HashMap<String, List<String>> ntPathToAliases =
+            new HashMap<String, List<String>>();
+    private static HashMap<String, String> aliasToNTPath = new HashMap<String, String>();
 
     private static NetworkTableInstance instance = NetworkTableInstance.getDefault();
     private static NetworkTable table = instance.getTable("TurboLogger");
 
     /**
      * Enables DataLog recording of NT output.
-     * 
-     * The wpilog is created at the logPath point.
-     * If the logPath ends with a forward slash, it is seen as a directory.
-     * Otherwise, it is seen as a file.
-     * 
+     *
+     * <p>The wpilog is created at the logPath point. If the logPath ends with a forward slash, it
+     * is seen as a directory. Otherwise, it is seen as a file.
+     *
      * @param logPath The path to store the logfile at.
      */
     public static void enableDataLogs(String logPath) {
@@ -68,10 +68,10 @@ public class TurboLogger {
 
     /**
      * Logs a boolean array to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The boolean array to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -93,9 +93,19 @@ public class TurboLogger {
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of BooleanArrayPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of BooleanArrayPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of BooleanArrayPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of BooleanArrayPublisher for key \""
+                                + key
+                                + "\".",
+                        false);
             }
 
             return;
@@ -121,10 +131,10 @@ public class TurboLogger {
 
     /**
      * Logs a boolean to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The boolean to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -146,9 +156,17 @@ public class TurboLogger {
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of BooleanPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of BooleanPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of BooleanPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of BooleanPublisher for key \"" + key + "\".",
+                        false);
             }
 
             return;
@@ -175,10 +193,10 @@ public class TurboLogger {
 
     /**
      * Logs a double array to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The double array to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -196,13 +214,23 @@ public class TurboLogger {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of DoubleArrayPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of DoubleArrayPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of DoubleArrayPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of DoubleArrayPublisher for key \""
+                                + key
+                                + "\".",
+                        false);
             }
 
             return;
@@ -229,10 +257,10 @@ public class TurboLogger {
 
     /**
      * Logs a double to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The double to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -254,9 +282,19 @@ public class TurboLogger {
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of DoubleArrayPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of DoubleArrayPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of DoubleArrayPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of DoubleArrayPublisher for key \""
+                                + key
+                                + "\".",
+                        false);
             }
 
             return;
@@ -283,10 +321,10 @@ public class TurboLogger {
 
     /**
      * Logs a float array to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The float array to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -308,14 +346,24 @@ public class TurboLogger {
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of FloatArrayPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of FloatArrayPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of FloatArrayPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of FloatArrayPublisher for key \""
+                                + key
+                                + "\".",
+                        false);
             }
 
             return;
         }
-        
+
         // Since the publisher for this key hasn't been created, it makes one.
         // If the key has any aliases defined, it also pushes the pubs and subs to them.
         // Creating the float array topic
@@ -337,10 +385,10 @@ public class TurboLogger {
 
     /**
      * Logs a float to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The float to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -362,9 +410,17 @@ public class TurboLogger {
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of FloatPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of FloatPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of FloatPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of FloatPublisher for key \"" + key + "\".",
+                        false);
             }
 
             return;
@@ -391,10 +447,10 @@ public class TurboLogger {
 
     /**
      * Logs an int array to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The int array to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -418,18 +474,28 @@ public class TurboLogger {
                 pub.set(longArr);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of IntegerArrayPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of IntegerArrayPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of IntegerArrayPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of IntegerArrayPublisher for key \""
+                                + key
+                                + "\".",
+                        false);
             }
-            
+
             return;
         }
-        
+
         // Since the publisher for this key hasn't been created, it makes one.
         // If the key has any aliases defined, it also pushes the pubs and subs to them.
         // Creating the int array topic
@@ -451,10 +517,10 @@ public class TurboLogger {
 
     /**
      * Logs an int to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The int to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -472,18 +538,26 @@ public class TurboLogger {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of IntegerPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of IntegerPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of IntegerPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of IntegerPublisher for key \"" + key + "\".",
+                        false);
             }
 
             return;
         }
-        
+
         // Since the publisher for this key hasn't been created, it makes one.
         // If the key has any aliases defined, it also pushes the pubs and subs to them.
         // Creating the int topic
@@ -505,10 +579,10 @@ public class TurboLogger {
 
     /**
      * Logs a string array to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The string array to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -530,9 +604,19 @@ public class TurboLogger {
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of StringArrayPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of StringArrayPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of StringArrayPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of StringArrayPublisher for key \""
+                                + key
+                                + "\".",
+                        false);
             }
 
             return;
@@ -559,10 +643,10 @@ public class TurboLogger {
 
     /**
      * Logs a string to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
      *
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The string to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -580,15 +664,23 @@ public class TurboLogger {
                 pub.set(value);
                 return;
             }
-            
+
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.get(key) != null) {
-                DriverStation.reportWarning("Publisher is not an instance of StringPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of StringPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of StringPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of StringPublisher for key \"" + key + "\".",
+                        false);
             }
-            
+
             return;
         }
 
@@ -613,14 +705,15 @@ public class TurboLogger {
 
     /**
      * Logs a struct array to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
-     * 
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     *
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The struct array to log.
      * @param aliases Any aliases to add to the ntPath.
      */
-    public static <T extends StructSerializable> void log(String key, T[] value, String... aliases) {
+    public static <T extends StructSerializable> void log(
+            String key, T[] value, String... aliases) {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
@@ -631,10 +724,16 @@ public class TurboLogger {
         Struct<T> struct = null;
 
         try {
-            struct = (Struct<T>) value.getClass().getComponentType().getDeclaredField("struct").get(value);
+            struct =
+                    (Struct<T>)
+                            value.getClass()
+                                    .getComponentType()
+                                    .getDeclaredField("struct")
+                                    .get(value);
         } catch (IllegalAccessException | NoSuchFieldException err) {
             DriverStation.reportError(
-                    "No public instance of struct for the StructSerializable object " + value.getClass().getName(),
+                    "No public instance of struct for the StructSerializable object "
+                            + value.getClass().getName(),
                     err.getStackTrace());
             return;
         }
@@ -642,18 +741,39 @@ public class TurboLogger {
         // Checking if the key has been published already.
         if (pubs.containsKey(key)) {
             // If the published value is a struct array, then it pushes the value and exits.
-            if (pubs.get(key) instanceof StructArrayPublisher pub && subs.get(key) instanceof StructArraySubscriber sub) {
-                if (sub.get().getClass().getComponentType().getName().equals(value.getClass().getComponentType().getName())) {
+            if (pubs.get(key) instanceof StructArrayPublisher pub
+                    && subs.get(key) instanceof StructArraySubscriber sub) {
+                if (sub.get()
+                        .getClass()
+                        .getComponentType()
+                        .getName()
+                        .equals(value.getClass().getComponentType().getName())) {
                     ((StructArrayPublisher<T>) pub).set(value);
                     return;
                 }
 
-                // Reports if the struct array being pushed doesn't match the type of the existing struct array.
+                // Reports if the struct array being pushed doesn't match the type of the existing
+                // struct
+                // array.
                 // If the key is an alias, then change the message reported to DriverStation.
                 if (aliasToNTPath.containsKey(key)) {
-                    DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getComponentType().getName() + " for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                    DriverStation.reportWarning(
+                            "Value is not an instance of "
+                                    + sub.get().getClass().getComponentType().getName()
+                                    + " for alias \""
+                                    + key
+                                    + "\" of key \""
+                                    + aliasToNTPath.get(key)
+                                    + "\".",
+                            false);
                 } else {
-                    DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getComponentType().getName() + " for key \"" + key + "\".", false);
+                    DriverStation.reportWarning(
+                            "Value is not an instance of "
+                                    + sub.get().getClass().getComponentType().getName()
+                                    + " for key \""
+                                    + key
+                                    + "\".",
+                            false);
                 }
 
                 return;
@@ -662,9 +782,19 @@ public class TurboLogger {
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.containsKey(key)) {
-                DriverStation.reportWarning("Publisher is not an instance of StructArrayPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of StructArrayPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of StructArrayPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of StructArrayPublisher for key \""
+                                + key
+                                + "\".",
+                        false);
             }
 
             return;
@@ -691,10 +821,10 @@ public class TurboLogger {
 
     /**
      * Logs a struct to NetworkTables.
-     * 
-     * It also creates any of the aliases passed into the array.
-     * 
-     * @param key The key to log the value under.  This can be a NetworkTables path or an alias.
+     *
+     * <p>It also creates any of the aliases passed into the array.
+     *
+     * @param key The key to log the value under. This can be a NetworkTables path or an alias.
      * @param value The struct to log.
      * @param aliases Any aliases to add to the ntPath.
      */
@@ -712,7 +842,8 @@ public class TurboLogger {
             struct = (Struct<T>) value.getClass().getDeclaredField("struct").get(value);
         } catch (IllegalAccessException | NoSuchFieldException err) {
             DriverStation.reportError(
-                    "No public instance of struct for the StructSerializable object " + value.getClass().getName(),
+                    "No public instance of struct for the StructSerializable object "
+                            + value.getClass().getName(),
                     err.getStackTrace());
             return;
         }
@@ -720,7 +851,8 @@ public class TurboLogger {
         // Checking if the key has been published already.
         if (pubs.containsKey(key)) {
             // If the published value is a struct, then it pushes the value and exits.
-            if (pubs.get(key) instanceof StructPublisher pub && subs.get(key) instanceof StructSubscriber sub) {
+            if (pubs.get(key) instanceof StructPublisher pub
+                    && subs.get(key) instanceof StructSubscriber sub) {
                 if (sub.get().getClass().getName().equals(value.getClass().getName())) {
                     ((StructPublisher<T>) pub).set(value);
                     return;
@@ -729,20 +861,42 @@ public class TurboLogger {
                 // Reports if the struct being pushed doesn't match the existing struct
                 // If the key is an alias, then change the message reported to DriverStation.
                 if (aliasToNTPath.containsKey(key)) {
-                    DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getName() + " for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                    DriverStation.reportWarning(
+                            "Value is not an instance of "
+                                    + sub.get().getClass().getName()
+                                    + " for alias \""
+                                    + key
+                                    + "\" of key \""
+                                    + aliasToNTPath.get(key)
+                                    + "\".",
+                            false);
                 } else {
-                    DriverStation.reportWarning("Value is not an instance of " + sub.get().getClass().getName() + " for key \"" + key + "\".", false);
+                    DriverStation.reportWarning(
+                            "Value is not an instance of "
+                                    + sub.get().getClass().getName()
+                                    + " for key \""
+                                    + key
+                                    + "\".",
+                            false);
                 }
-                
+
                 return;
             }
 
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             if (aliasToNTPath.containsKey(key)) {
-                DriverStation.reportWarning("Publisher is not an instance of StructPublisher for alias \"" + key + "\" of key \"" + aliasToNTPath.get(key) + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of StructPublisher for alias \""
+                                + key
+                                + "\" of key \""
+                                + aliasToNTPath.get(key)
+                                + "\".",
+                        false);
             } else {
-                DriverStation.reportWarning("Publisher is not an instance of StructPublisher for key \"" + key + "\".", false);
+                DriverStation.reportWarning(
+                        "Publisher is not an instance of StructPublisher for key \"" + key + "\".",
+                        false);
             }
 
             return;
@@ -1008,7 +1162,6 @@ public class TurboLogger {
             }
 
             return intArr;
-            
         }
 
         // Creating the storage for the error message
@@ -1051,7 +1204,6 @@ public class TurboLogger {
             if (longVal > Integer.MAX_VALUE) return Integer.MAX_VALUE;
             if (longVal < Integer.MIN_VALUE) return Integer.MIN_VALUE;
             else return (int) longVal;
-            
         }
 
         // Creating the storage for the error message
@@ -1159,13 +1311,21 @@ public class TurboLogger {
 
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof StructArraySubscriber sub) {
-            if (sub.get().getClass().getComponentType().getName().equals(defaultValue.getClass().getComponentType().getName())) {
+            if (sub.get()
+                    .getClass()
+                    .getComponentType()
+                    .getName()
+                    .equals(defaultValue.getClass().getComponentType().getName())) {
                 lastReads.put(key, sub.getLastChange());
                 return (T[]) sub.get();
             }
 
-            // Reporting if the class of the StructArraySubscriber doesn't match the class passed in as the defaultValue.
-            message += "Subscriber does not take serializables of type " + defaultValue.getClass().getComponentType().getSimpleName();
+            // Reporting if the class of the StructArraySubscriber doesn't match the class passed in
+            // as
+            // the defaultValue.
+            message +=
+                    "Subscriber does not take serializables of type "
+                            + defaultValue.getClass().getComponentType().getSimpleName();
         }
 
         // Reporting if the logged data type is different or the publisher doesn't exist.
@@ -1203,8 +1363,12 @@ public class TurboLogger {
                 return (T) sub.get();
             }
 
-            // Reporting if the class of the StructSubscriber doesn't match the class passed in as the defaultValue.
-            message += "Subscriber does not take serializables of type " + defaultValue.getClass().getSimpleName();
+            // Reporting if the class of the StructSubscriber doesn't match the class passed in as
+            // the
+            // defaultValue.
+            message +=
+                    "Subscriber does not take serializables of type "
+                            + defaultValue.getClass().getSimpleName();
         }
 
         // Reporting if the logged data type is different or the publisher doesn't exist.
@@ -1227,32 +1391,43 @@ public class TurboLogger {
     }
 
     /**
-     * Adds aliases to a NT path.
-     * Aliases allow you to pass them into the log or get methods rather than the full path.
-     * They can also increase readability in the code.
-     * 
-     * Note that aliases have their own entry in the lastRead table, so when you get a value with one alias, it does not mark itself as read for any others.
-     * 
+     * Adds aliases to a NT path. Aliases allow you to pass them into the log or get methods rather
+     * than the full path. They can also increase readability in the code.
+     *
+     * <p>Note that aliases have their own entry in the lastRead table, so when you get a value with
+     * one alias, it does not mark itself as read for any others.
+     *
      * @param ntPath The path to create an alias for.
      * @param aliases The aliases to add.
      */
     public static void addAliases(String ntPath, String... aliases) {
         // This check isn't necessary, but I want it to report a warning if someone tried it.
         if (aliases.length == 0) {
-            DriverStation.reportWarning("Please don't use addAliases with no alias parameters", false);
+            DriverStation.reportWarning(
+                    "Please don't use addAliases with no alias parameters", false);
             return;
         }
 
         for (String alias : aliases) {
             // Skipping if the alias is the same as the path.
             if (alias.equals(ntPath)) {
-                DriverStation.reportWarning("Alias cannot have the same name as the NT path.  Skipping creation", false);
+                DriverStation.reportWarning(
+                        "Alias cannot have the same name as the NT path.  Skipping creation",
+                        false);
                 continue;
             }
 
-            // If the alias has already been assigned, it reports an error and doesn't add an entry for this ntPath.
+            // If the alias has already been assigned, it reports an error and doesn't add an entry
+            // for
+            // this ntPath.
             if (aliasToNTPath.containsKey(alias)) {
-                DriverStation.reportWarning("Alias \"" + alias + "\" has already been assigned to key \"" + aliasToNTPath.get(alias) + "\".  Skipping creation", false);
+                DriverStation.reportWarning(
+                        "Alias \""
+                                + alias
+                                + "\" has already been assigned to key \""
+                                + aliasToNTPath.get(alias)
+                                + "\".  Skipping creation",
+                        false);
                 continue;
             }
 
@@ -1267,7 +1442,8 @@ public class TurboLogger {
 
             ntPathToAliases.get(ntPath).add(alias);
 
-            // Now that the aliases have been added to the records, let's put them into the publisher/subscriber maps.
+            // Now that the aliases have been added to the records, let's put them into the
+            // publisher/subscriber maps.
             // This only adds the publishers and subscribers if both exist for the ntPath.
             if (pubs.containsKey(ntPath) && subs.containsKey(ntPath)) {
                 pubs.put(alias, pubs.get(ntPath));
@@ -1279,8 +1455,8 @@ public class TurboLogger {
 
     /**
      * Gets whether or not the logged value has changed since the last time the key was read from.
-     * 
-     * @param key The key to check the status of.  This can be the path in NetworkTables or an alias.
+     *
+     * @param key The key to check the status of. This can be the path in NetworkTables or an alias.
      */
     public static boolean hasChanged(String key) {
         System.out.println(lastReads.containsKey(key));
@@ -1292,10 +1468,10 @@ public class TurboLogger {
 
     /**
      * Removes a key from the logger.
-     * 
-     * If the key is a NT path, then it removes its aliases.
-     * If the key is an alias itself, it removes the alias.
-     * 
+     *
+     * <p>If the key is a NT path, then it removes its aliases. If the key is an alias itself, it
+     * removes the alias.
+     *
      * @param key
      */
     public static void remove(String key) {

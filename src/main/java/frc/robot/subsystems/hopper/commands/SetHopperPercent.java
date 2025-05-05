@@ -1,12 +1,11 @@
-
 package frc.robot.subsystems.hopper.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.hopper.HopperConstants;
-import frc.robot.util.TurboLogger;
 import frc.robot.util.MathUtils;
+import frc.robot.util.TurboLogger;
 import java.util.function.Supplier;
 
 public class SetHopperPercent extends Command {
@@ -14,8 +13,8 @@ public class SetHopperPercent extends Command {
     private Supplier<Double> throttle;
 
     /**
-     * Creates a new {@link SetHopperPercent} command.
-     * It sets the percent output of the hopper and sets it back to 0 when the command is cancelled.
+     * Creates a new {@link SetHopperPercent} command. It sets the percent output of the hopper and
+     * sets it back to 0 when the command is cancelled.
      *
      * @param hopper The {@link Hopper} subsystem to control.
      * @param throttle The percent speed to run at.

@@ -1,4 +1,3 @@
-
 package frc.robot.util;
 
 import static edu.wpi.first.units.Units.Inches;
@@ -16,14 +15,17 @@ public class AntiTip extends Command {
     private Supplier<Angle> rollSupplier;
 
     /**
-     * Creates a new {@link AntiTip} command.
-     * It checks the roll and pitch of the robot and slams the elevator down if it is above some threshold.
+     * Creates a new {@link AntiTip} command. It checks the roll and pitch of the robot and slams
+     * the elevator down if it is above some threshold.
      *
      * @param setHeight A function that sets the height of the robot's elevator.
      * @param pitchSupplier A function that gets the pitch of the robot.
      * @param rollSupplier A function that gets the roll of the robot.
      */
-    public AntiTip(Consumer<Distance> setHeight, Supplier<Angle> pitchSupplier, Supplier<Angle> rollSupplier) {
+    public AntiTip(
+            Consumer<Distance> setHeight,
+            Supplier<Angle> pitchSupplier,
+            Supplier<Angle> rollSupplier) {
         this.setHeight = setHeight;
         this.pitchSupplier = pitchSupplier;
         this.rollSupplier = rollSupplier;
@@ -32,7 +34,8 @@ public class AntiTip extends Command {
     /** Called every time the scheduler runs while the command is scheduled. */
     @Override
     public void execute() {
-        if (pitchSupplier.get().gte(Constants.TipThreshold) || rollSupplier.get().gte(Constants.TipThreshold)) {
+        if (pitchSupplier.get().gte(Constants.TipThreshold)
+                || rollSupplier.get().gte(Constants.TipThreshold)) {
             setHeight.accept(Inches.zero());
         }
     }

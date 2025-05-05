@@ -1,4 +1,3 @@
-
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -45,38 +44,55 @@ public class RobotContainer {
         if (Robot.isReal()) {
             gyro = new Gyro(new GyroIOPigeon2(RobotMap.GYRO_Pigeon2Id));
 
-            vision = new Vision(
-                    new CameraIOReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
-                    new CameraIOReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
+            vision =
+                    new Vision(
+                            new CameraIOReal(
+                                    VisionConstants.lCameraName, VisionConstants.lCameraTransform),
+                            new CameraIOReal(
+                                    VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
-            drive = new Drive(gyro, vision,
-                    new ModuleSparkMax(0),
-                    new ModuleSparkMax(1),
-                    new ModuleSparkMax(2),
-                    new ModuleSparkMax(3));
+            drive =
+                    new Drive(
+                            gyro,
+                            vision,
+                            new ModuleSparkMax(0),
+                            new ModuleSparkMax(1),
+                            new ModuleSparkMax(2),
+                            new ModuleSparkMax(3));
 
             algae = new AlgaeReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId);
 
             hopper = new Hopper(new HopperIOReal(RobotMap.HOPPER_MotorId, RobotMap.HOPPER_LaserId));
 
-            coral = new CoralReal(RobotMap.CORAL_MotorId, RobotMap.CORAL_SensorId, RobotMap.CORAL_LaserId);
+            coral =
+                    new CoralReal(
+                            RobotMap.CORAL_MotorId,
+                            RobotMap.CORAL_SensorId,
+                            RobotMap.CORAL_LaserId);
 
-            elevator = new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
+            elevator =
+                    new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
 
             climb = new ClimbReal(RobotMap.CLIMB_MotorId);
         } else {
             // Reminder that this does nothing.
             gyro = new Gyro(new GyroIOSim());
 
-            vision = new Vision(
-                    new CameraIOSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
-                    new CameraIOSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
+            vision =
+                    new Vision(
+                            new CameraIOSim(
+                                    VisionConstants.lCameraName, VisionConstants.lCameraTransform),
+                            new CameraIOSim(
+                                    VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
-            drive = new Drive(gyro, vision,
-                    new ModuleSim(0),
-                    new ModuleSim(1),
-                    new ModuleSim(2),
-                    new ModuleSim(3));
+            drive =
+                    new Drive(
+                            gyro,
+                            vision,
+                            new ModuleSim(0),
+                            new ModuleSim(1),
+                            new ModuleSim(2),
+                            new ModuleSim(3));
 
             coral = new CoralSim();
 
@@ -100,50 +116,75 @@ public class RobotContainer {
     private void configureBindings() {
         // Override condition used for many of the commands.
         // Defining it once rather than 15 times.
-        BooleanSupplier joystickOverride = () -> (
-            !MathUtils.withinDeadband(driverController.getLeftX(), Constants.deadband) ||
-            !MathUtils.withinDeadband(driverController.getLeftY(), Constants.deadband) ||
-            !MathUtils.withinDeadband(driverController.getRightX(), Constants.deadband) ||
-            !MathUtils.withinDeadband(driverController.getRightY(), Constants.deadband));
+        BooleanSupplier joystickOverride =
+                () ->
+                        (!MathUtils.withinDeadband(driverController.getLeftX(), Constants.deadband)
+                                || !MathUtils.withinDeadband(
+                                        driverController.getLeftY(), Constants.deadband)
+                                || !MathUtils.withinDeadband(
+                                        driverController.getRightX(), Constants.deadband)
+                                || !MathUtils.withinDeadband(
+                                        driverController.getRightY(), Constants.deadband));
 
         // Driver Controls
 
         // Normal drive
         drive.setDefaultCommand(
-            new SwerveDrive(
-                    drive,
-                    driverController::getLeftY,
-                    driverController::getLeftX,
-                    driverController::getRightX,
-                    () -> false));
-
-        // Precision Mode
-        driverController.leftBumper().or(driverController.rightBumper())
-            .whileTrue(
                 new SwerveDrive(
                         drive,
-                        () -> driverController.getLeftY() * DriveConstants.precisionPercent,
-                        () -> driverController.getLeftX() * DriveConstants.precisionPercent,
-                        () -> driverController.getRightX() * DriveConstants.precisionPercent,
+                        driverController::getLeftY,
+                        driverController::getLeftX,
+                        driverController::getRightX,
                         () -> false));
-        // Precision Mode
-        // It limits the max speeds through the TurboLogger class and puts them back to their previous percents when done.
-        double[] percents = new double[3];
-        driverController.leftBumper().whileTrue(Commands.runEnd(
-            () -> {
-                percents[0] = TurboLogger.get("DriveX_Percent", DriveConstants.precisionPercent);
-                percents[1] = TurboLogger.get("DriveY_Percent", DriveConstants.precisionPercent);
-                percents[2] = TurboLogger.get("Steer_Percent", DriveConstants.precisionPercent);
 
-                TurboLogger.log("DriveX_Percent", DriveConstants.precisionPercent);
-                TurboLogger.log("DriveY_Percent", DriveConstants.precisionPercent);
-                TurboLogger.log("Steer_Percent", DriveConstants.precisionPercent);
-            },
-            () -> {
-                TurboLogger.log("DriveX_Percent", percents[0]);
-                TurboLogger.log("DriveY_Percent", percents[1]);
-                TurboLogger.log("Steer_Percent", percents[2]);
-            }));
+        // Precision Mode
+        driverController
+                .leftBumper()
+                .or(driverController.rightBumper())
+                .whileTrue(
+                        new SwerveDrive(
+                                drive,
+                                () -> driverController.getLeftY() * DriveConstants.precisionPercent,
+                                () -> driverController.getLeftX() * DriveConstants.precisionPercent,
+                                () ->
+                                        driverController.getRightX()
+                                                * DriveConstants.precisionPercent,
+                                () -> false));
+        // Precision Mode
+        // It limits the max speeds through the TurboLogger class and puts them back to their
+        // previous
+        // percents when done.
+        double[] percents = new double[3];
+        driverController
+                .leftBumper()
+                .whileTrue(
+                        Commands.runEnd(
+                                () -> {
+                                    percents[0] =
+                                            TurboLogger.get(
+                                                    "DriveX_Percent",
+                                                    DriveConstants.precisionPercent);
+                                    percents[1] =
+                                            TurboLogger.get(
+                                                    "DriveY_Percent",
+                                                    DriveConstants.precisionPercent);
+                                    percents[2] =
+                                            TurboLogger.get(
+                                                    "Steer_Percent",
+                                                    DriveConstants.precisionPercent);
+
+                                    TurboLogger.log(
+                                            "DriveX_Percent", DriveConstants.precisionPercent);
+                                    TurboLogger.log(
+                                            "DriveY_Percent", DriveConstants.precisionPercent);
+                                    TurboLogger.log(
+                                            "Steer_Percent", DriveConstants.precisionPercent);
+                                },
+                                () -> {
+                                    TurboLogger.log("DriveX_Percent", percents[0]);
+                                    TurboLogger.log("DriveY_Percent", percents[1]);
+                                    TurboLogger.log("Steer_Percent", percents[2]);
+                                }));
 
         // Reset gyro
         driverController.b().onTrue(Commands.runOnce(gyro::reset));
@@ -158,46 +199,63 @@ public class RobotContainer {
         // Override pathfinding by moving any joystick or by pressing button again.
 
         // Pathfind to left side of reef
-        driverController.back()
-            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Left)
-            .until(joystickOverride));
+        driverController
+                .back()
+                .toggleOnTrue(
+                        new PathFindToNearestPose(drive, Poses.REEF_Left).until(joystickOverride));
 
         // Pathfind to right side of reef.
-        driverController.start()
-            .toggleOnTrue(new PathFindToNearestPose(drive, Poses.REEF_Right)
-            .until(joystickOverride));
+        driverController
+                .start()
+                .toggleOnTrue(
+                        new PathFindToNearestPose(drive, Poses.REEF_Right).until(joystickOverride));
 
         // Intake Coral & Algae
-        driverController.leftTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis))
-            .whileTrue(new SetAlgaePercent(algae, driverController::getLeftTriggerAxis))
-            .whileTrue(new SetHopperPercent(hopper, driverController::getLeftTriggerAxis));
+        driverController
+                .leftTrigger(Constants.deadband)
+                .whileTrue(new SetCoralSpeed(coral, driverController::getLeftTriggerAxis))
+                .whileTrue(new SetAlgaePercent(algae, driverController::getLeftTriggerAxis))
+                .whileTrue(new SetHopperPercent(hopper, driverController::getLeftTriggerAxis));
 
         // Outtake Coral & Algae
-        driverController.rightTrigger(Constants.deadband)
-            .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis))
-            .whileTrue(new SetAlgaePercent(algae, driverController::getRightTriggerAxis))
-            .whileTrue(new SetHopperPercent(hopper, driverController::getRightTriggerAxis));
+        driverController
+                .rightTrigger(Constants.deadband)
+                .whileTrue(new SetCoralSpeed(coral, driverController::getRightTriggerAxis))
+                .whileTrue(new SetAlgaePercent(algae, driverController::getRightTriggerAxis))
+                .whileTrue(new SetHopperPercent(hopper, driverController::getRightTriggerAxis));
 
         // Operator Controls
 
         // Reset Elevator Encoder
-        operatorController.start().onTrue(Commands.run(elevator::resetEncoder).ignoringDisable(true));
-        operatorController.back().onTrue(Commands.run(elevator::resetEncoder).ignoringDisable(true));
+        operatorController
+                .start()
+                .onTrue(Commands.run(elevator::resetEncoder).ignoringDisable(true));
+        operatorController
+                .back()
+                .onTrue(Commands.run(elevator::resetEncoder).ignoringDisable(true));
 
         // Set Elevator Heights
-        operatorController.leftBumper().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
-        operatorController.leftTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
+        operatorController
+                .leftBumper()
+                .onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
+        operatorController
+                .leftTrigger(0.2)
+                .onTrue(new SetElevatorHeight(elevator, ElevatorPositions.STOW));
         operatorController.a().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L1));
         operatorController.b().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2));
         operatorController.x().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L3));
         operatorController.y().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L4));
-        operatorController.rightBumper().onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L3Algae));
-        operatorController.rightTrigger(0.2).onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
+        operatorController
+                .rightBumper()
+                .onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L3Algae));
+        operatorController
+                .rightTrigger(0.2)
+                .onTrue(new SetElevatorHeight(elevator, ElevatorPositions.L2Algae));
 
         // Elevator manual controls
-        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband)
-            .whileTrue(new SetElevatorVoltage(elevator, operatorController::getRightY));
+        operatorController
+                .axisMagnitudeGreaterThan(XboxController.Axis.kRightY.value, Constants.deadband)
+                .whileTrue(new SetElevatorVoltage(elevator, operatorController::getRightY));
 
         // Set Climb Positions
         operatorController.povLeft().onTrue(new SetClimbAngle(climb, ClimbPositions.GRAB));
@@ -205,8 +263,9 @@ public class RobotContainer {
         operatorController.povDown().onTrue(new SetClimbAngle(climb, ClimbPositions.STOW));
 
         // Climb manual controls
-        operatorController.axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband)
-            .whileTrue(new SetClimbVoltage(climb, operatorController::getLeftY));
+        operatorController
+                .axisMagnitudeGreaterThan(XboxController.Axis.kLeftY.value, Constants.deadband)
+                .whileTrue(new SetClimbVoltage(climb, operatorController::getLeftY));
     }
 
     public Command getAutonomousCommand() {

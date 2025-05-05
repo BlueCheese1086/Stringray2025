@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.hopper;
 
 import static edu.wpi.first.units.Units.*;
@@ -13,7 +12,10 @@ public class HopperIOSim implements HopperIO {
     private DCMotorSim track;
 
     public HopperIOSim() {
-        track = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1), DCMotor.getNEO(1));
+        track =
+                new DCMotorSim(
+                        LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1),
+                        DCMotor.getNEO(1));
     }
 
     @Override

@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.coral;
 
 import static edu.wpi.first.units.Units.*;
@@ -15,7 +14,10 @@ public class CoralSim extends Coral {
 
     /** Creates a simulated version of the coral subsystem. */
     public CoralSim() {
-        motorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1), DCMotor.getNEO(1));
+        motorSim =
+                new DCMotorSim(
+                        LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1),
+                        DCMotor.getNEO(1));
     }
 
     @Override

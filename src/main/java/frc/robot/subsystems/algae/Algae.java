@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.algae;
 
 import static edu.wpi.first.units.Units.*;
@@ -12,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Algae extends SubsystemBase {
     public void setPercent(double percent) {}
+
     public void setVoltage(Voltage voltage) {}
 
     public double getPercent() {

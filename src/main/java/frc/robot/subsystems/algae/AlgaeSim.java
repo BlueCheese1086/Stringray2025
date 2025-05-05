@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.algae;
 
 import static edu.wpi.first.units.Units.*;
@@ -15,7 +14,10 @@ public class AlgaeSim extends Algae {
     private DCMotorSim algae;
 
     public AlgaeSim() {
-        this.algae = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.02, 1), DCMotor.getKrakenX60(1));
+        this.algae =
+                new DCMotorSim(
+                        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.02, 1),
+                        DCMotor.getKrakenX60(1));
     }
 
     @Override

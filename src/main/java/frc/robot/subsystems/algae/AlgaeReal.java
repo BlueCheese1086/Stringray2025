@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.algae;
 
 import static edu.wpi.first.units.Units.*;
@@ -75,8 +74,10 @@ public class AlgaeReal extends Algae {
     public Distance getLaserDistance() {
         Measurement measure = laser.getMeasurement();
 
-        // Returns a ridiculously large measurement if the measure is null or if the reading isn't valid.
-        if (measure == null || measure.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return Meters.of(Double.MAX_VALUE);
+        // Returns a ridiculously large measurement if the measure is null or if the reading isn't
+        // valid.
+        if (measure == null || measure.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)
+            return Meters.of(Double.MAX_VALUE);
 
         return Millimeters.of(measure.distance_mm);
     }

@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.coral;
 
 import static edu.wpi.first.units.Units.*;

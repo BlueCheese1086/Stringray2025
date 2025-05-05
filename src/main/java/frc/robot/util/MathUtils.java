@@ -1,4 +1,3 @@
-
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -7,8 +6,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 public class MathUtils {
     /**
-     * Applies a deadband and offsets the output by the deadband.
-     * This allows you to still reach that lower range you would normally lose when using a normal deadband.
+     * Applies a deadband and offsets the output by the deadband. This allows you to still reach
+     * that lower range you would normally lose when using a normal deadband.
      *
      * @param value The number to apply a deadband to.
      * @param deadband The deadband.
@@ -20,16 +19,17 @@ public class MathUtils {
     }
 
     /**
-     * Applies a deadband and offsets the output by the deadband.
-     * This allows you to still reach that lower range you would normally lose when using a normal deadband.
-     * However, it also allows you to run at the higher range output that would be lost by the offset.
-     * Once the value exceeds vanillaVal, the offset is no longer applied to it.
+     * Applies a deadband and offsets the output by the deadband. This allows you to still reach
+     * that lower range you would normally lose when using a normal deadband. However, it also
+     * allows you to run at the higher range output that would be lost by the offset. Once the value
+     * exceeds vanillaVal, the offset is no longer applied to it.
      *
      * @param value The number to apply a deadband to.
      * @param deadband The deadband.
      * @param vanillaVal The value where the offset is no longer applied.
      */
-    public static double applyDeadbandWithOffsets(double value, double deadband, double vanillaVal) {
+    public static double applyDeadbandWithOffsets(
+            double value, double deadband, double vanillaVal) {
         if (Math.abs(value) < Math.abs(deadband)) return 0;
 
         if (Math.abs(value) >= Math.abs(vanillaVal)) return value;
@@ -48,8 +48,9 @@ public class MathUtils {
     }
 
     /**
-     * Finds the mean {@link Translation2d} between all of the parameters.
-     * I kinda just made this for fun at comp.  I was thinking it could be used for when you have multiple photon pose estimators running to combine multiple poses into one.
+     * Finds the mean {@link Translation2d} between all of the parameters. I kinda just made this
+     * for fun at comp. I was thinking it could be used for when you have multiple photon pose
+     * estimators running to combine multiple poses into one.
      *
      * @param translations The translations to analyze.
      */
@@ -70,8 +71,9 @@ public class MathUtils {
     }
 
     /**
-     * Finds the mean {@link Translation2d} between all of the parameters.
-     * I kinda just made this for fun at comp.  I was thinking it could be used for when you have multiple photon pose estimators running to combine multiple poses into one.
+     * Finds the mean {@link Translation2d} between all of the parameters. I kinda just made this
+     * for fun at comp. I was thinking it could be used for when you have multiple photon pose
+     * estimators running to combine multiple poses into one.
      *
      * @param rotations The translations to analyze.
      */

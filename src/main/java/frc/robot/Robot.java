@@ -1,4 +1,3 @@
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -33,7 +32,8 @@ public class Robot extends TimedRobot {
         // Logger.start();
 
         // Adding adjustable values
-        TurboLogger.log("/Adjustables/Algae/MaxPercent", AlgaeConstants.maxPercent, "Algae_Percent");
+        TurboLogger.log(
+                "/Adjustables/Algae/MaxPercent", AlgaeConstants.maxPercent, "Algae_Percent");
 
         TurboLogger.log("/Adjustables/AutoAlign/X/kP", DriveConstants.kPX, "X_kP");
         TurboLogger.log("/Adjustables/AutoAlign/X/kI", DriveConstants.kIX, "X_kI");
@@ -46,21 +46,64 @@ public class Robot extends TimedRobot {
         TurboLogger.log("/Adjustables/AutoAlign/Theta/kP", DriveConstants.kPTheta, "Theta_kP");
         TurboLogger.log("/Adjustables/AutoAlign/Theta/kI", DriveConstants.kITheta, "Theta_kI");
         TurboLogger.log("/Adjustables/AutoAlign/Theta/kD", DriveConstants.kDTheta, "Theta_kD");
-        
+
         TurboLogger.log("/Adjustables/Climb/kP", ClimbConstants.kPDefault, "Climb_kP");
         TurboLogger.log("/Adjustables/Climb/kI", ClimbConstants.kIDefault, "Climb_kI");
         TurboLogger.log("/Adjustables/Climb/kD", ClimbConstants.kDDefault, "Climb_kD");
-        TurboLogger.log("/Adjustables/Climb/MaxPercent", ClimbConstants.maxPercent, "Climb_Percent");
+        TurboLogger.log(
+                "/Adjustables/Climb/MaxPercent", ClimbConstants.maxPercent, "Climb_Percent");
 
-        TurboLogger.log("/Adjustables/Coral/MaxPercent", CoralConstants.maxPercent, "Coral_Percent");
+        TurboLogger.log(
+                "/Adjustables/Coral/MaxPercent", CoralConstants.maxPercent, "Coral_Percent");
 
-        TurboLogger.log("/Adjustables/Drive/kP", DriveConstants.kPDriveDefault, "Drive_kP", "Drive_kP_0", "Drive_kP_1", "Drive_kP_2", "Drive_kP_3");
-        TurboLogger.log("/Adjustables/Drive/kI", DriveConstants.kIDriveDefault, "Drive_kI", "Drive_kI_0", "Drive_kI_1", "Drive_kI_2", "Drive_kI_3");
-        TurboLogger.log("/Adjustables/Drive/kD", DriveConstants.kDDriveDefault, "Drive_kD", "Drive_kD_0", "Drive_kD_1", "Drive_kD_2", "Drive_kD_3");
-        TurboLogger.log("/Adjustables/Drive/kS", DriveConstants.kSDriveDefault, "Drive_kS", "Drive_kS_0", "Drive_kS_1", "Drive_kS_2", "Drive_kS_3");
-        TurboLogger.log("/Adjustables/Drive/kV", DriveConstants.kVDriveDefault, "Drive_kV", "Drive_kV_0", "Drive_kV_1", "Drive_kV_2", "Drive_kV_3");
-        TurboLogger.log("/Adjustables/Drive/MaxDriveXPercent", DriveConstants.driveXPercent, "DriveX_Percent");
-        TurboLogger.log("/Adjustables/Drive/MaxDriveYPercent", DriveConstants.driveYPercent, "DriveY_Percent");
+        TurboLogger.log(
+                "/Adjustables/Drive/kP",
+                DriveConstants.kPDriveDefault,
+                "Drive_kP",
+                "Drive_kP_0",
+                "Drive_kP_1",
+                "Drive_kP_2",
+                "Drive_kP_3");
+        TurboLogger.log(
+                "/Adjustables/Drive/kI",
+                DriveConstants.kIDriveDefault,
+                "Drive_kI",
+                "Drive_kI_0",
+                "Drive_kI_1",
+                "Drive_kI_2",
+                "Drive_kI_3");
+        TurboLogger.log(
+                "/Adjustables/Drive/kD",
+                DriveConstants.kDDriveDefault,
+                "Drive_kD",
+                "Drive_kD_0",
+                "Drive_kD_1",
+                "Drive_kD_2",
+                "Drive_kD_3");
+        TurboLogger.log(
+                "/Adjustables/Drive/kS",
+                DriveConstants.kSDriveDefault,
+                "Drive_kS",
+                "Drive_kS_0",
+                "Drive_kS_1",
+                "Drive_kS_2",
+                "Drive_kS_3");
+        TurboLogger.log(
+                "/Adjustables/Drive/kV",
+                DriveConstants.kVDriveDefault,
+                "Drive_kV",
+                "Drive_kV_0",
+                "Drive_kV_1",
+                "Drive_kV_2",
+                "Drive_kV_3");
+        TurboLogger.log(
+                "/Adjustables/Drive/MaxDriveXPercent",
+                DriveConstants.driveXPercent,
+                "DriveX_Percent");
+        TurboLogger.log(
+                "/Adjustables/Drive/MaxDriveYPercent",
+                DriveConstants.driveYPercent,
+                "DriveY_Percent");
 
         TurboLogger.log("/Adjustables/Elevator/kP", ElevatorConstants.kPDefault, "Elev_kP");
         TurboLogger.log("/Adjustables/Elevator/kI", ElevatorConstants.kIDefault, "Elev_kI");
@@ -69,16 +112,56 @@ public class Robot extends TimedRobot {
         TurboLogger.log("/Adjustables/Elevator/kG", ElevatorConstants.kGDefault, "Elev_kG");
         TurboLogger.log("/Adjustables/Elevator/kV", ElevatorConstants.kVDefault, "Elev_kV");
         TurboLogger.log("/Adjustables/Elevator/kA", ElevatorConstants.kADefault, "Elev_kA");
-        TurboLogger.log("/Adjustables/Elevator/MaxPercent", ElevatorConstants.maxPercent, "Elevator_Percent");
-        
-        TurboLogger.log("/Adjustables/Hopper/MaxPercent", HopperConstants.maxPercent, "Hopper_Percent");
+        TurboLogger.log(
+                "/Adjustables/Elevator/MaxPercent",
+                ElevatorConstants.maxPercent,
+                "Elevator_Percent");
 
-        TurboLogger.log("/Adjustables/Steer/kP", DriveConstants.kPSteerDefault, "Steer_kP", "Steer_kP_0", "Steer_kP_1", "Steer_kP_2", "Steer_kP_3");
-        TurboLogger.log("/Adjustables/Steer/kI", DriveConstants.kISteerDefault, "Steer_kI", "Steer_kI_0", "Steer_kI_1", "Steer_kI_2", "Steer_kI_3");
-        TurboLogger.log("/Adjustables/Steer/kD", DriveConstants.kDSteerDefault, "Steer_kD", "Steer_kD_0", "Steer_kD_1", "Steer_kD_2", "Steer_kD_3");
-        TurboLogger.log("/Adjustables/Steer/kS", DriveConstants.kSSteerDefault, "Steer_kS", "Steer_kS_0", "Steer_kS_1", "Steer_kS_2", "Steer_kS_3");
-        TurboLogger.log("/Adjustables/Steer/kV", DriveConstants.kVSteerDefault, "Steer_kV", "Steer_kV_0", "Steer_kV_1", "Steer_kV_2", "Steer_kV_3");
-        TurboLogger.log("/Adjustables/Steer/MaxSteerPercent", DriveConstants.steerPercent, "Steer_Percent");
+        TurboLogger.log(
+                "/Adjustables/Hopper/MaxPercent", HopperConstants.maxPercent, "Hopper_Percent");
+
+        TurboLogger.log(
+                "/Adjustables/Steer/kP",
+                DriveConstants.kPSteerDefault,
+                "Steer_kP",
+                "Steer_kP_0",
+                "Steer_kP_1",
+                "Steer_kP_2",
+                "Steer_kP_3");
+        TurboLogger.log(
+                "/Adjustables/Steer/kI",
+                DriveConstants.kISteerDefault,
+                "Steer_kI",
+                "Steer_kI_0",
+                "Steer_kI_1",
+                "Steer_kI_2",
+                "Steer_kI_3");
+        TurboLogger.log(
+                "/Adjustables/Steer/kD",
+                DriveConstants.kDSteerDefault,
+                "Steer_kD",
+                "Steer_kD_0",
+                "Steer_kD_1",
+                "Steer_kD_2",
+                "Steer_kD_3");
+        TurboLogger.log(
+                "/Adjustables/Steer/kS",
+                DriveConstants.kSSteerDefault,
+                "Steer_kS",
+                "Steer_kS_0",
+                "Steer_kS_1",
+                "Steer_kS_2",
+                "Steer_kS_3");
+        TurboLogger.log(
+                "/Adjustables/Steer/kV",
+                DriveConstants.kVSteerDefault,
+                "Steer_kV",
+                "Steer_kV_0",
+                "Steer_kV_1",
+                "Steer_kV_2",
+                "Steer_kV_3");
+        TurboLogger.log(
+                "/Adjustables/Steer/MaxSteerPercent", DriveConstants.steerPercent, "Steer_Percent");
 
         // Enabling DataLog recording
         TurboLogger.enableDataLogs("test.wpilog");

@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.coral;
 
 import static edu.wpi.first.units.Units.*;
@@ -18,7 +17,6 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.TurboLogger;
-
 import java.util.Objects;
 
 public class CoralReal extends Coral {
@@ -29,9 +27,9 @@ public class CoralReal extends Coral {
     /**
      * Creates a new coral subsystem with real hardware.
      *
-     * @param coralId  The CAN ID of the {@link TalonFX} motor that puts coral on the reef.
+     * @param coralId The CAN ID of the {@link TalonFX} motor that puts coral on the reef.
      * @param sensorId The CAN ID of the {@link CANandcolor} sensor to read.
-     * @param laserId  The CAN ID of the {@link LaserCan} sensor under the roller.
+     * @param laserId The CAN ID of the {@link LaserCan} sensor under the roller.
      */
     public CoralReal(int coralId, int sensorId, int laserId) {
         coral = new TalonFX(coralId);
@@ -90,7 +88,11 @@ public class CoralReal extends Coral {
 
     /** Gets the color seen by the CANandColor. */
     public String getSensorColor() {
-        return String.format("#%x%x%x", (int) (sensor.getRed() * 255), (int) (sensor.getGreen() * 255), (int) (sensor.getBlue() * 255));
+        return String.format(
+                "#%x%x%x",
+                (int) (sensor.getRed() * 255),
+                (int) (sensor.getGreen() * 255),
+                (int) (sensor.getBlue() * 255));
     }
 
     /** Gets the distance seen by the LaserCan. */
@@ -98,7 +100,8 @@ public class CoralReal extends Coral {
         // This can be null, check before using
         Measurement measure = laser.getMeasurement();
 
-        if (Objects.isNull(measure) || measure.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return Meters.of(Double.MAX_VALUE);
+        if (Objects.isNull(measure) || measure.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)
+            return Meters.of(Double.MAX_VALUE);
 
         return Millimeters.of(measure.distance_mm);
     }

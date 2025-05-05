@@ -1,13 +1,11 @@
-
 package frc.robot.subsystems.coral.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.util.TurboLogger;
-import frc.robot.util.MathUtils;
 import frc.robot.Constants;
 import frc.robot.subsystems.coral.Coral;
 import frc.robot.subsystems.coral.CoralConstants;
-
+import frc.robot.util.MathUtils;
+import frc.robot.util.TurboLogger;
 import java.util.function.Supplier;
 
 public class SetCoralSpeed extends Command {
@@ -15,8 +13,8 @@ public class SetCoralSpeed extends Command {
     private Supplier<Double> throttle;
 
     /**
-     * Creates a new {@link SetCoralSpeed} command.
-     * It sets the percent output of the coral motor and sets it back to 0 when the command is cancelled.
+     * Creates a new {@link SetCoralSpeed} command. It sets the percent output of the coral motor
+     * and sets it back to 0 when the command is cancelled.
      *
      * @param coral The {@link coral} subsystem to control.
      * @param throttle The percent speed to run at.

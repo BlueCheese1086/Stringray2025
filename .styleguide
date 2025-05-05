@@ -1,6 +1,0 @@
-modifiableFileExclude {
-  cmake/toolchains/
-  thirdparty/
-  \.patch$
-  gradlew
-}

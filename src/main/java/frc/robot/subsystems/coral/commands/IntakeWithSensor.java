@@ -1,9 +1,8 @@
-
 package frc.robot.subsystems.coral.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.coral.CoralConstants;
 import frc.robot.subsystems.coral.Coral;
+import frc.robot.subsystems.coral.CoralConstants;
 import java.util.function.Supplier;
 
 public class IntakeWithSensor extends Command {
@@ -11,8 +10,8 @@ public class IntakeWithSensor extends Command {
     private Supplier<Double> percentSupplier;
 
     /**
-     * Creates a new {@link IntakeWithSensor} command.
-     * It runs the coral motor at some speed and cancels itself when the CANandColor sensor detects an object.
+     * Creates a new {@link IntakeWithSensor} command. It runs the coral motor at some speed and
+     * cancels itself when the CANandColor sensor detects an object.
      *
      * @param coral The {@link Coral} subsystem to control.
      * @param percentSupplier The percent speed to run at.

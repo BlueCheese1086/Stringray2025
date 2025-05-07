@@ -1,30 +1,40 @@
 package frc.robot.subsystems.hopper;
 
+import static edu.wpi.first.units.Units.*;
+
+import au.grapplerobotics.LaserCan;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.Logger;
 
 public class Hopper extends SubsystemBase {
-    private HopperIO io;
-    public HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
-
-    public Hopper(HopperIO io) {
-        this.io = io;
+    public Current getCurrent() {
+        return Amps.zero();
     }
 
-    @Override
-    public void periodic() {
-        io.updateInputs(inputs);
-        Logger.processInputs("/RealOutputs/Hopper", inputs);
+    public double getPercent() {
+        return 0;
     }
 
-    public void setPercent(double percent) {
-        Logger.recordOutput("/Hopper/PercentSetpoint", percent);
-        io.setPercent(percent);
+    public Temperature getTemperature() {
+        return Celsius.zero();
     }
 
-    public void setVoltage(Voltage voltage) {
-        Logger.recordOutput("/Hopper/VoltageSetpoint", voltage);
-        io.setVoltage(voltage);
+    public Voltage getVoltage() {
+        return Volts.zero();
     }
+
+    public Distance getLaserReading() {
+        return Inches.zero();
+    }
+
+    public int getLaserStatus() {
+        return LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
+    }
+
+    public void setPercent(double percent) {}
+
+    public void setVoltage(Voltage voltage) {}
 }

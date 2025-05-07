@@ -8,23 +8,16 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-public class HopperIOSim implements HopperIO {
+public class HopperSim extends Hopper {
     private DCMotorSim track;
 
-    public HopperIOSim() {
-        track =
-                new DCMotorSim(
-                        LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1),
-                        DCMotor.getNEO(1));
+    public HopperSim() {
+        track = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.02, 1), DCMotor.getNEO(1));
     }
 
     @Override
-    public void updateInputs(HopperIOInputs inputs) {
+    public void periodic() {
         track.update(0.02);
-
-        inputs.current = Amps.of(track.getCurrentDrawAmps());
-        inputs.percent = track.getInputVoltage() / RobotController.getInputVoltage();
-        inputs.voltage = Volts.of(track.getInputVoltage());
     }
 
     @Override

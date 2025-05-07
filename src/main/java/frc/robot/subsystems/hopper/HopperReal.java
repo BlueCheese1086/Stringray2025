@@ -11,10 +11,13 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class HopperIOReal implements HopperIO {
+public class HopperReal extends Hopper {
     private TalonFX track;
     private LaserCan laser;
 
@@ -22,7 +25,10 @@ public class HopperIOReal implements HopperIO {
     private DutyCycleOut percentControl = new DutyCycleOut(0);
     private VoltageOut voltageControl = new VoltageOut(0);
 
-    public HopperIOReal(int trackId, int laserId) {
+    private int laserStatus = LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
+    private Distance laserReading = Millimeters.zero();
+
+    public HopperReal(int trackId, int laserId) {
         track = new TalonFX(trackId);
         laser = new LaserCan(laserId);
 
@@ -47,23 +53,48 @@ public class HopperIOReal implements HopperIO {
     }
 
     @Override
-    public void updateInputs(HopperIOInputs inputs) {
-        inputs.current = track.getStatorCurrent().getValue();
-        inputs.percent = track.getDutyCycle().getValue();
-        inputs.temperature = track.getDeviceTemp().getValue();
-        inputs.voltage = track.getMotorVoltage().getValue();
-
+    public void periodic() {
         // This can be null, check before using
         Measurement measure = laser.getMeasurement();
 
         if (measure == null) return;
 
-        inputs.laserStatus = measure.status;
+        laserStatus = measure.status;
 
         // Only updating the reading if the sensor has a good read.
-        if (inputs.laserStatus != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return;
+        if (laserStatus != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) return;
 
-        inputs.laserReading = Millimeters.of(measure.distance_mm);
+        laserReading = Millimeters.of(measure.distance_mm);
+    }
+
+    @Override
+    public Current getCurrent() {
+        return track.getStatorCurrent().getValue();
+    }
+
+    @Override
+    public double getPercent() {
+        return track.getDutyCycle().getValue();
+    }
+
+    @Override
+    public Temperature getTemperature() {
+        return track.getDeviceTemp().getValue();
+    }
+
+    @Override
+    public Voltage getVoltage() {
+        return track.getMotorVoltage().getValue();
+    }
+
+    @Override
+    public Distance getLaserReading() {
+        return laserReading;
+    }
+
+    @Override
+    public int getLaserStatus() {
+        return laserStatus;
     }
 
     @Override

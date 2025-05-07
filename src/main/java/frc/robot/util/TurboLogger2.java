@@ -1,15 +1,17 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class TurboLogger {
+public class TurboLogger2 {
     // Hashmaps for NT logging
     private static HashMap<String, Publisher> pubs = new HashMap<String, Publisher>();
     private static HashMap<String, Subscriber> subs = new HashMap<String, Subscriber>();
@@ -118,6 +120,7 @@ public class TurboLogger {
             // Reporting if the publisher type doesn't match up.
             // If the key is an alias, then change the message reported to DriverStation.
             pubsubTypeMismatch(key, "BooleanArray", true);
+
             return;
         }
 
@@ -605,8 +608,7 @@ public class TurboLogger {
      * @param value The struct array to log.
      * @param aliases Any aliases to add to the ntPath.
      */
-    public static <T extends StructSerializable> void log(
-            String key, T[] value, String... aliases) {
+    public static <T extends StructSerializable> void log(String key, T[] value, String... aliases) {
         // Adding any aliases for the NT path.
         if (aliases.length > 0) addAliases(key, aliases);
 
@@ -633,8 +635,7 @@ public class TurboLogger {
                 }
 
                 // Reports if the struct array being pushed doesn't match the type of the existing
-                // struct
-                // array.
+                // struct array.
                 // If the key is an alias, then change the message reported to DriverStation.
                 structTypeMismatch(key, sub.get().getClass().getName());
 
@@ -740,10 +741,21 @@ public class TurboLogger {
     /**
      * Gets a boolean array from NetworkTables.
      *
+     * By default, it will return an empty boolean array.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static boolean[] getBooleanArray(String key) {
+        return getBooleanArray(key, new boolean[0]);
+    }
+
+    /**
+     * Gets a boolean array from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static boolean[] get(String key, boolean[] defaultValue) {
+    public static boolean[] getBooleanArray(String key, boolean[] defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof BooleanArraySubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -764,10 +776,21 @@ public class TurboLogger {
     /**
      * Gets a boolean from NetworkTables.
      *
+     * It returns false by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static boolean getBoolean(String key) {
+        return getBoolean(key, false);
+    }
+
+    /**
+     * Gets a boolean from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static boolean get(String key, boolean defaultValue) {
+    public static boolean getBoolean(String key, boolean defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof BooleanSubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -788,10 +811,21 @@ public class TurboLogger {
     /**
      * Gets a double array from NetworkTables.
      *
+     * It returns an empty double array by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static double[] getDoubleArray(String key) {
+        return getDoubleArray(key, new double[0]);
+    }
+
+    /**
+     * Gets a double array from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static double[] get(String key, double[] defaultValue) {
+    public static double[] getDoubleArray(String key, double[] defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof DoubleArraySubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -812,10 +846,21 @@ public class TurboLogger {
     /**
      * Gets a double from NetworkTables.
      *
+     * It returns 0 by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static double getDouble(String key) {
+        return getDouble(key, 0);
+    }
+
+    /**
+     * Gets a double from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static double get(String key, double defaultValue) {
+    public static double getDouble(String key, double defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof DoubleSubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -825,7 +870,7 @@ public class TurboLogger {
 
         // Reporting if the logged data type is different or the publisher doesn't exist.
         if (pubs.containsKey(key)) {
-            pubsubTypeMismatch(key, "BooleanArray", false);
+            pubsubTypeMismatch(key, "Double", false);
         } else {
             noSub(key);
         }
@@ -836,10 +881,21 @@ public class TurboLogger {
     /**
      * Gets a float array from NetworkTables.
      *
+     * It returns an empty float array by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static float[] getFloatArray(String key) {
+        return getFloatArray(key, new float[0]);
+    }
+
+    /**
+     * Gets a float array from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static float[] get(String key, float[] defaultValue) {
+    public static float[] getFloatArray(String key, float[] defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof FloatArraySubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -860,10 +916,21 @@ public class TurboLogger {
     /**
      * Gets a float from NetworkTables.
      *
+     * It returns 0 by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static float getFloat(String key) {
+        return getFloat(key, 0);
+    }
+
+    /**
+     * Gets a float from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static float get(String key, float defaultValue) {
+    public static float getFloat(String key, float defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof FloatSubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -884,10 +951,21 @@ public class TurboLogger {
     /**
      * Gets an int array from NetworkTables.
      *
+     * It returns an empty integer array by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static int[] getIntegerArray(String key) {
+        return getIntegerArray(key, new int[0]);
+    }
+
+    /**
+     * Gets an int array from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static int[] get(String key, int[] defaultValue) {
+    public static int[] getIntegerArray(String key, int[] defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof IntegerArraySubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -919,10 +997,21 @@ public class TurboLogger {
     /**
      * Gets an int from NetworkTables.
      *
+     * It returns 0 by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static int getInteger(String key) {
+        return getInteger(key, 0);
+    }
+
+    /**
+     * Gets an int from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static int get(String key, int defaultValue) {
+    public static int getInteger(String key, int defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof IntegerSubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -949,10 +1038,21 @@ public class TurboLogger {
     /**
      * Gets a string array from NetworkTables.
      *
+     * It returns an empty string array by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static String[] getStringArray(String key) {
+        return getStringArray(key, new String[0]);
+    }
+
+    /**
+     * Gets a string array from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static String[] get(String key, String[] defaultValue) {
+    public static String[] getStringArray(String key, String[] defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof StringArraySubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -973,10 +1073,21 @@ public class TurboLogger {
     /**
      * Gets a string from NetworkTables.
      *
+     * It returns an empty string by default.
+     * 
+     * @param key The key to find the value under.
+     */
+    public static String getString(String key) {
+        return getString(key, "");
+    }
+
+    /**
+     * Gets a string from NetworkTables.
+     *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static String get(String key, String defaultValue) {
+    public static String getString(String key, String defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof StringSubscriber sub) {
             lastReads.put(key, sub.getLastChange());
@@ -1000,17 +1111,18 @@ public class TurboLogger {
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static <T extends StructSerializable> T[] get(String key, T[] defaultValue) {
+    public static <T extends StructSerializable> T[] getStructArray(String key, T[] defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof StructArraySubscriber sub) {
-            if (sub.get().getClass().getName().equals(defaultValue.getClass().getName())) {
+            if (sub.get().getClass().getComponentType().getName().equals(defaultValue.getClass().getComponentType().getName())) {
                 lastReads.put(key, sub.getLastChange());
                 return (T[]) sub.get();
             }
 
             // Reporting if the class of the StructArraySubscriber doesn't match the class passed in
             // as the defaultValue.
-            structTypeMismatch(key, defaultValue.getClass().getComponentType().getName());
+            structTypeMismatch(key, sub.get().getClass().getName());
+
             return defaultValue;
         }
 
@@ -1024,24 +1136,21 @@ public class TurboLogger {
         return defaultValue;
     }
 
+    public static <T extends StructSerializable> T getStruct(String key) {
+        return getStruct(key, null);
+    }
+
     /**
      * Gets a struct serialized object from NetworkTables.
      *
      * @param key The key to find the value under.
      * @param defaultValue The value to return if the subscriber doesn't exist.
      */
-    public static <T extends StructSerializable> T get(String key, T defaultValue) {
+    public static <T extends StructSerializable> T getStruct(String key, T defaultValue) {
         // If the subscriber already exists under the same type, return the value.
         if (subs.get(key) instanceof StructSubscriber sub) {
-            if (sub.get().getClass().getName().equals(defaultValue.getClass().getName())) {
-                lastReads.put(key, sub.getLastChange());
-                return (T) sub.get();
-            }
-
-            // Reporting if the class of the StructSubscriber doesn't match the class passed in
-            // as the defaultValue.
-            structTypeMismatch(key, defaultValue.getClass().getName());
-            return defaultValue;
+            // Trying to return the sub, but if the types don't match, then it will throw an error.
+            return (T) sub.get();
         }
 
         // Reporting if the logged data type is different or the publisher doesn't exist.
@@ -1067,21 +1176,31 @@ public class TurboLogger {
     public static void addAliases(String ntPath, String... aliases) {
         // This check isn't necessary, but I want it to report a warning if someone tried it.
         if (aliases.length == 0) {
-            DriverStation.reportWarning("Please don't use addAliases with no alias parameters", false);
+            DriverStation.reportWarning(
+                    "Please don't use addAliases with no alias parameters", false);
             return;
         }
 
         for (String alias : aliases) {
             // Skipping if the alias is the same as the path.
             if (alias.equals(ntPath)) {
-                DriverStation.reportWarning("Alias cannot have the same name as the NT path.  Skipping creation", false);
+                DriverStation.reportWarning(
+                        "Alias cannot have the same name as the NT path.  Skipping creation",
+                        false);
                 continue;
             }
 
             // If the alias has already been assigned, it reports an error and doesn't add an entry
-            // for this ntPath.
+            // for
+            // this ntPath.
             if (aliasToNTPath.containsKey(alias)) {
-                DriverStation.reportWarning("Alias \"" + alias + "\" has already been assigned to key \"" + aliasToNTPath.get(alias) + "\".  Skipping creation", false);
+                DriverStation.reportWarning(
+                        "Alias \""
+                                + alias
+                                + "\" has already been assigned to key \""
+                                + aliasToNTPath.get(alias)
+                                + "\".  Skipping creation",
+                        false);
                 continue;
             }
 
@@ -1113,6 +1232,10 @@ public class TurboLogger {
      * @param key The key to check the status of. This can be the path in NetworkTables or an alias.
      */
     public static boolean hasChanged(String key) {
+        System.out.println(lastReads.containsKey(key));
+        System.out.println(lastReads.get(key));
+        System.out.println(subs.get(key).getLastChange());
+
         return lastReads.containsKey(key) && (lastReads.get(key) < subs.get(key).getLastChange());
     }
 

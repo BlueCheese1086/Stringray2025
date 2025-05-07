@@ -42,27 +42,21 @@ public class RobotContainer {
     public RobotContainer() {
         // Initializing subsystems
         if (Robot.isReal()) {
-            gyro = new Gyro(new GyroIOPigeon2(RobotMap.GYRO_Pigeon2Id));
+            gyro = new GyroPigeon2(RobotMap.GYRO_Pigeon2Id);
 
-            vision =
-                    new Vision(
-                            new CameraIOReal(
-                                    VisionConstants.lCameraName, VisionConstants.lCameraTransform),
-                            new CameraIOReal(
-                                    VisionConstants.rCameraName, VisionConstants.rCameraTransform));
+            vision = new Vision(
+                    new CameraReal(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
+                    new CameraReal(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
-            drive =
-                    new Drive(
-                            gyro,
-                            vision,
-                            new ModuleSparkMax(0),
-                            new ModuleSparkMax(1),
-                            new ModuleSparkMax(2),
-                            new ModuleSparkMax(3));
+            drive = new Drive(gyro, vision,
+                    new ModuleSparkMax(0),
+                    new ModuleSparkMax(1),
+                    new ModuleSparkMax(2),
+                    new ModuleSparkMax(3));
 
             algae = new AlgaeReal(RobotMap.ALGAE_MotorId, RobotMap.ALGAE_LaserId);
 
-            hopper = new Hopper(new HopperIOReal(RobotMap.HOPPER_MotorId, RobotMap.HOPPER_LaserId));
+            hopper = new HopperReal(RobotMap.HOPPER_MotorId, RobotMap.HOPPER_LaserId);
 
             coral =
                     new CoralReal(
@@ -71,34 +65,28 @@ public class RobotContainer {
                             RobotMap.CORAL_LaserId);
 
             elevator =
-                    new Elevator(new ElevatorIOReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId));
+                    new ElevatorReal(RobotMap.ELEV_LeftId, RobotMap.ELEV_RightId);
 
             climb = new ClimbReal(RobotMap.CLIMB_MotorId);
         } else {
             // Reminder that this does nothing.
-            gyro = new Gyro(new GyroIOSim());
+            gyro = new GyroSim();
 
-            vision =
-                    new Vision(
-                            new CameraIOSim(
-                                    VisionConstants.lCameraName, VisionConstants.lCameraTransform),
-                            new CameraIOSim(
-                                    VisionConstants.rCameraName, VisionConstants.rCameraTransform));
+            vision = new Vision(
+                    new CameraSim(VisionConstants.lCameraName, VisionConstants.lCameraTransform),
+                    new CameraSim(VisionConstants.rCameraName, VisionConstants.rCameraTransform));
 
-            drive =
-                    new Drive(
-                            gyro,
-                            vision,
-                            new ModuleSim(0),
-                            new ModuleSim(1),
-                            new ModuleSim(2),
-                            new ModuleSim(3));
+            drive = new Drive(gyro, vision,
+                    new ModuleSim(0),
+                    new ModuleSim(1),
+                    new ModuleSim(2),
+                    new ModuleSim(3));
 
             coral = new CoralSim();
 
-            hopper = new Hopper(new HopperIOSim());
+            hopper = new HopperSim();
 
-            elevator = new Elevator(new ElevatorIOSim());
+            elevator = new SimElevator();
 
             algae = new AlgaeSim();
 
